@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <title>Playground - IntentSpider</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css" />
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
 </head>
 <body>
     <div id="wrap">
+        <div id="error-banner" style="display: none; background: #0031A7; color: #FFFFFF; padding: 10px; margin-bottom: 20px; font-weight: bold; align-items: center; justify-content: flex-start;">
+            <svg style="width: 20px; height: 20px; margin-right: 10px; fill: #FFFFFF;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <span id="error-text"></span>
+        </div>
         <header>
             <div id="logo">
                 <a href="index.html"><img src="assets/873547485784.png" alt="IntentSpider"></a>
@@ -26,12 +32,10 @@
 
         <main>
             <div class="playground-container">
-                <div id="engine-status" class="status-badge loading">Loading [placeholder]...</div>
-                
                 <div class="phone-frame">
-                    <div class="phone-notch"></div>
-                    
-                    <div class="app-switcher">
+                    <img class="phone-bg" src="assets/intetnspiderframe-67584.png" alt="Phone">
+                    <div class="phone-screen">
+                        <div class="app-switcher">
                         <button class="active" id="btn-chat">Chat</button>
                         <button id="btn-search">Search</button>
                     </div>
@@ -92,10 +96,7 @@
                     </div>
                 </div>
 
-                <div class="terminal-panel" id="terminal-panel">
-                    <div class="terminal-line info">>> IntentSpider WASM Bridge Initializing...</div>
-                    <div class="terminal-line info">>> Waiting for engine connection...</div>
-                </div>
+                <div class="terminal-panel" id="terminal-panel"></div>
             </div>
         </main>
 

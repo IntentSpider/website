@@ -9,24 +9,50 @@
     const inputDisplay  = document.getElementById('input-display');
     const chatContent   = document.getElementById('chat-content');
     const terminalPanel = document.getElementById('terminal-panel');
+    let term = null;
+    if (typeof Terminal !== 'undefined') {
+        term = new Terminal({
+            theme: { background: '#000000', foreground: '#ffffff' },
+            fontFamily: 'monospace',
+            fontSize: 12,
+            convertEol: true
+        });
+        term.open(terminalPanel);
+        term.writeln('>> IntentSpider WASM Bridge Initializing...');
+        term.writeln('>> Waiting for engine connection...');
+    }
+
     const suggestions   = [
         document.getElementById('sug-1'),
         document.getElementById('sug-2'),
         document.getElementById('sug-3')
     ];
-    const statusBadge   = document.getElementById('engine-status');
+
+    const errorBanner = document.getElementById('error-banner');
+    const errorText = document.getElementById('error-text');
 
     let currentText = "";
     let shiftActive = false;
 
+    function showError(msg) {
+        if (!errorBanner) return;
+        errorText.textContent = msg;
+        errorBanner.style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => {
+            errorBanner.style.display = 'none';
+        }, 5000);
+    }
+
     // ---- Terminal output ----
     function logTerminal(msg, type = "info") {
-        const line = document.createElement('div');
-        line.className = `terminal-line ${type}`;
         const ts = new Date().toLocaleTimeString('en-US', { hour12: false });
-        line.textContent = `[${ts}] ${msg}`;
-        terminalPanel.appendChild(line);
-        terminalPanel.scrollTop = terminalPanel.scrollHeight;
+        const line = `[${ts}] ${msg}`;
+        if (term) {
+            term.writeln(line);
+        } else {
+            console.log(line);
+        }
     }
 
     // ---- WASM Engine Bridge ----
@@ -88,13 +114,12 @@
                 await this.loadStateFile();
 
                 this.ready = true;
-                setStatus("connected");
                 logTerminal("Engine is LIVE — type to predict.", "predict");
 
             } catch (err) {
                 logTerminal(`WASM init failed: ${err.message}`, "error");
                 logTerminal("Falling back to demo mode.", "error");
-                setStatus("demo");
+                showError("WASM connection failed. Falling back to demo mode.");
             }
         },
 
@@ -119,10 +144,12 @@
                     this.showDebug();
                 } else {
                     logTerminal("engine_load_state returned failure.", "error");
+                    showError("Failed to load state into engine.");
                 }
             } catch (err) {
                 logTerminal(`Could not load state: ${err.message}`, "error");
                 logTerminal("Engine will start with empty state.", "error");
+                showError("Could not load state file.");
             }
         },
 
@@ -225,13 +252,6 @@
 
     function clearSuggestions() {
         suggestions.forEach(s => { s.textContent = '—'; s.title = ''; });
-    }
-
-    function setStatus(state) {
-        if (!statusBadge) return;
-        statusBadge.className = `status-badge ${state}`;
-        const labels = { loading: '⏳ Loading…', connected: '🟢 Engine Live', demo: '🔵 Demo Mode' };
-        statusBadge.textContent = labels[state] || state;
     }
 
     // ---- Input handling ----
