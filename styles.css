@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #fffbd9;
+  background: #ebebeb;
   margin: 0;
   font: 16px/24px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: #000000;
@@ -16,7 +16,8 @@ body {
 /* Centered container with blue top strip */
 #wrap {
   margin: 0 auto;
-  width: 760px;
+  width: 770px;
+  padding: 0px 10px;
   text-align: left;
   border-top: 5px solid #0031A7;
   background-color: rgb(255, 255, 255);
