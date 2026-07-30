@@ -383,9 +383,13 @@
         }
 
         if (virtualKey) {
-            let btn = $(`#mottie-keyboard-container .ui-keyboard-button[data-value="${virtualKey}"]`);
-            if (!btn.length) btn = $(`#mottie-keyboard-container .ui-keyboard-button[data-name="${virtualKey}"]`);
-            if (btn.length) btn.addClass('ui-state-active');
+            // Mottie uses .ui-keyboard-[key] classes for all buttons reliably
+            const safeKey = virtualKey.replace(/[^a-zA-Z0-9]/g, '');
+            let btn = $(`#mottie-keyboard-container .ui-keyboard-${safeKey}`);
+            
+            if (btn.length) {
+                btn.addClass('ui-state-active ui-state-hover');
+            }
         }
     });
 
@@ -398,9 +402,12 @@
         else if (e.key === 'Shift') virtualKey = 'shift';
 
         if (virtualKey) {
-            let btn = $(`#mottie-keyboard-container .ui-keyboard-button[data-value="${virtualKey}"]`);
-            if (!btn.length) btn = $(`#mottie-keyboard-container .ui-keyboard-button[data-name="${virtualKey}"]`);
-            if (btn.length) btn.removeClass('ui-state-active');
+            const safeKey = virtualKey.replace(/[^a-zA-Z0-9]/g, '');
+            let btn = $(`#mottie-keyboard-container .ui-keyboard-${safeKey}`);
+            
+            if (btn.length) {
+                btn.removeClass('ui-state-active ui-state-hover');
+            }
         }
     });
 
