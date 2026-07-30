@@ -265,22 +265,25 @@
         if (key === 'backspace') {
             if (currentText.length > 0) {
                 currentText = currentText.slice(0, -1);
-                Engine.onKey(8); // backspace ASCII
+                Engine.onKey(8); // ASCII backspace
             }
         } else if (key === 'space') {
-            // Commit the current word
-            Engine.onKey(32);
+            if (currentText.length >= 200) return;
+            currentText += ' ';
+            Engine.onKey(32); // Space
+            
             if (!Engine.ready) {
                 mockPredict();
-                logTerminal(`Word committed: "${currentText.split(' ').pop()}"`, "info");
+                logTerminal(`Word committed: "${currentText.trim().split(' ').pop()}"`, "info");
+            } else {
+                Engine.commit();
             }
-            const result = Engine.commit();
-            currentText += ' ';
         } else if (key === 'enter') {
             submitMessage();
         } else if (key === 'shift') {
             // Mottie Keyboard handles layout switching internally
         } else {
+            if (currentText.length >= 200) return;
             let ch = key;
             currentText += ch;
             Engine.onKey(ch.charCodeAt(0));
@@ -291,6 +294,40 @@
         updateDisplay();
     }
 
+    function appendChatLog(user, message) {
+        const chatLog = document.getElementById('chat-log');
+        if (!chatLog) return;
+        
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        const timeString = `[${hours}:${minutes} ${ampm}]`;
+
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'chat-msg';
+
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'chat-timestamp';
+        timeSpan.textContent = timeString + " ";
+        msgDiv.appendChild(timeSpan);
+
+        const authorB = document.createElement('b');
+        authorB.className = user === 'Console' ? 'chat-system' : 'chat-user';
+        authorB.textContent = user + ": ";
+        msgDiv.appendChild(authorB);
+
+        const textSpan = document.createElement('span');
+        textSpan.textContent = message;
+        msgDiv.appendChild(textSpan);
+
+        chatLog.appendChild(msgDiv);
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
     function submitMessage() {
         const text = currentText.trim();
         if (text === '') return;
@@ -299,12 +336,7 @@
         Engine.onKey(32);
         Engine.commit();
 
-        // Add user message bubble
-        const msg = document.createElement('div');
-        msg.className = 'message-bubble user';
-        msg.textContent = text;
-        chatContent.appendChild(msg);
-        chatContent.scrollTop = chatContent.scrollHeight;
+        appendChatLog('User', text);
 
         // Start new sentence
         currentText = "";
@@ -314,11 +346,7 @@
 
         // System response
         setTimeout(() => {
-            const reply = document.createElement('div');
-            reply.className = 'message-bubble system';
-            reply.textContent = "Intent recognized.";
-            chatContent.appendChild(reply);
-            chatContent.scrollTop = chatContent.scrollHeight;
+            appendChatLog('Console', 'Intent recognized.');
         }, 400);
     }
 
@@ -334,14 +362,20 @@
                 'q w e r t y u i o p',
                 'a s d f g h j k l',
                 '{shift} z x c v b n m {bksp}',
-                '{accept} {space} {cancel}'
+                '{space} {enter}'
             ],
             'shift': [
                 'Q W E R T Y U I O P',
                 'A S D F G H J K L',
                 '{shift} Z X C V B N M {bksp}',
-                '{accept} {space} {cancel}'
+                '{space} {enter}'
             ]
+        },
+        display: {
+            'bksp': 'Del',
+            'enter': 'Send 💬',
+            'shift': 'Shift',
+            'space': 'Space'
         }
     }).on('keyboardChange', function(e, keyboard, el) {
         let key = keyboard.last.key;
@@ -356,9 +390,39 @@
     });
 
     // ---- Physical Keyboard Integration ----
+    document.getElementById('input-display').tabIndex = 0; // Make it focusable for Ctrl+A
+    
     document.addEventListener('keydown', (e) => {
         if (document.activeElement.tagName === 'INPUT' ||
             document.activeElement.tagName === 'TEXTAREA') return;
+
+        // Native shortcut support
+        if (e.ctrlKey || e.metaKey) {
+            if (e.code === 'KeyA') {
+                e.preventDefault();
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(document.getElementById('input-display'));
+                selection.removeAllRanges();
+                selection.addRange(range);
+                return;
+            } else if (e.code === 'KeyX' || e.code === 'Backspace') {
+                const selection = window.getSelection();
+                if (selection.toString().trim().length > 0) {
+                    if (e.code === 'KeyX') navigator.clipboard.writeText(selection.toString());
+                    // Since the C engine only handles backspace iteratively, if they clear a large chunk, we just reset the sentence.
+                    currentText = "";
+                    Engine.newSentence();
+                    updateDisplay();
+                    e.preventDefault();
+                    return;
+                }
+            } else if (e.code === 'KeyC') {
+                return; // Let browser natively copy the selected text in the div
+            } else if (e.code === 'KeyV') {
+                return; // Handled by paste event
+            }
+        }
 
         let virtualKey = null;
 
@@ -421,15 +485,18 @@
                 // Accept through the engine (1-based index)
                 const result = Engine.acceptSuggestion(idx + 1);
                 if (result && result.sentence) {
-                    // Replace current text with the engine's sentence
-                    currentText = result.sentence + ' ';
+                    let newText = result.sentence + ' ';
+                    if (newText.length > 200) newText = newText.substring(0, 200);
+                    currentText = newText;
                 }
             } else {
                 // Demo mode: just append the word
                 const words = currentText.trim().split(' ');
                 if (words.length > 0 && words[words.length - 1] === '') words.pop();
                 words.push(word);
-                currentText = words.join(' ') + ' ';
+                let newText = words.join(' ') + ' ';
+                if (newText.length > 200) newText = newText.substring(0, 200);
+                currentText = newText;
                 mockPredict();
             }
             updateDisplay();
@@ -437,10 +504,29 @@
     });
 
     // ---- App Switcher ----
+    document.addEventListener('paste', (e) => {
+        if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+        e.preventDefault();
+        let paste = (e.clipboardData || window.clipboardData).getData('text');
+        for (let i = 0; i < paste.length; i++) {
+            handleKey(paste[i]);
+        }
+    });
+
     document.getElementById('btn-chat').addEventListener('click', (e) => {
         document.querySelectorAll('.app-switcher button').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
-        chatContent.innerHTML = '<div class="message-bubble system">Hello! Type below to test the IntentSpider prediction engine.</div>';
+        chatContent.innerHTML = `
+            <div class="ui-widget-header chat-header">
+                <span class="chat-title">System Console</span>
+            </div>
+            <div class="ui-widget-content chat-log" id="chat-log">
+                <div class="chat-msg">
+                    <span class="chat-timestamp">[System]</span> 
+                    <b class="chat-system">Console:</b> 
+                    <span>Hello! Type below to test the IntentSpider prediction engine.</span>
+                </div>
+            </div>`;
         currentText = "";
         updateDisplay();
         Engine.newSentence();
@@ -449,7 +535,17 @@
     document.getElementById('btn-search').addEventListener('click', (e) => {
         document.querySelectorAll('.app-switcher button').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
-        chatContent.innerHTML = '<div class="message-bubble system">Search Intent mode active. Type your query.</div>';
+        chatContent.innerHTML = `
+            <div class="ui-widget-header chat-header">
+                <span class="chat-title">Search Engine</span>
+            </div>
+            <div class="ui-widget-content chat-log" id="chat-log">
+                <div class="chat-msg">
+                    <span class="chat-timestamp">[System]</span> 
+                    <b class="chat-system">Console:</b> 
+                    <span>Search Intent mode active. Type your query.</span>
+                </div>
+            </div>`;
         currentText = "";
         updateDisplay();
         Engine.newSentence();
