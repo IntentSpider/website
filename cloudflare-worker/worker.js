@@ -1,5 +1,5 @@
-// IntentSpider State API — Cloudflare Worker
-// Handles GET/POST for the collective engine state file stored in R2.
+// IntentSpider State API — Cloudflare Worker (KV Storage)
+// Handles GET/POST for the collective engine state file stored in KV.
 // Deploy to: projectsapis.nekshadesilva.com
 
 const CORS_ORIGIN = 'https://intentspider.nekshadesilva.com';
@@ -40,9 +40,10 @@ export default {
 
 async function handleGet(env) {
   try {
-    const object = await env.STATE_BUCKET.get(STATE_KEY);
+    // Read the file as an ArrayBuffer from KV
+    const buffer = await env.STATE_KV.get(STATE_KEY, { type: 'arrayBuffer' });
 
-    if (!object) {
+    if (!buffer) {
       return new Response(JSON.stringify({ error: 'No state file found' }), {
         status: 404,
         headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
@@ -51,12 +52,10 @@ async function handleGet(env) {
 
     const headers = corsHeaders();
     headers['Content-Type'] = 'application/octet-stream';
-    headers['Content-Length'] = object.size;
-    headers['ETag'] = object.httpEtag;
-    headers['Last-Modified'] = object.uploaded.toUTCString();
+    headers['Content-Length'] = buffer.byteLength;
     headers['Cache-Control'] = 'no-cache';
 
-    return new Response(object.body, { status: 200, headers });
+    return new Response(buffer, { status: 200, headers });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
@@ -85,15 +84,8 @@ async function handlePost(request, env) {
       });
     }
 
-    await env.STATE_BUCKET.put(STATE_KEY, body, {
-      httpMetadata: {
-        contentType: 'application/octet-stream',
-      },
-      customMetadata: {
-        updatedAt: new Date().toISOString(),
-        sizeBytes: String(body.byteLength),
-      },
-    });
+    // Write to KV
+    await env.STATE_KV.put(STATE_KEY, body);
 
     return new Response(JSON.stringify({
       ok: true,
