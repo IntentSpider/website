@@ -263,25 +263,52 @@
         },
 
         async loadCollectiveState() {
-            logTerminal("Fetching collective state from R2...", "info");
+            logTerminal("Fetching collective state manifest...", "info");
             try {
-                const resp = await fetch(STATE_API_URL, {
+                // Fetch Manifest
+                const manifestResp = await fetch(STATE_API_URL + '/manifest', {
                     method: 'GET',
                     headers: { 'X-API-Key': STATE_API_KEY },
                 });
 
-                if (resp.status === 404) {
+                if (manifestResp.status === 404) {
                     logTerminal("No collective state found — trying local fallback.", "info");
                     await this.loadLocalState();
                     return;
                 }
+                if (!manifestResp.ok) throw new Error(`HTTP ${manifestResp.status}`);
 
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const manifest = await manifestResp.json();
+                const numChunks = manifest.chunks || 1;
+                const isLegacy = manifest.legacy === true;
+                
+                logTerminal(`Manifest found: ${numChunks} chunks, ${(manifest.totalSize / 1024 / 1024).toFixed(2)} MB total. Downloading...`, "info");
 
-                const data = new Uint8Array(await resp.arrayBuffer());
-                logTerminal(`Collective state downloaded (${(data.length / 1024).toFixed(1)} KB).`, "info");
+                // Download all chunks
+                const chunkPromises = [];
+                for (let i = 0; i < numChunks; i++) {
+                    const chunkUrl = `${STATE_API_URL}/chunk/${i}${isLegacy ? '?legacy=true' : ''}`;
+                    chunkPromises.push(fetch(chunkUrl, {
+                        headers: { 'X-API-Key': STATE_API_KEY }
+                    }).then(r => {
+                        if (!r.ok) throw new Error(`Chunk ${i} failed`);
+                        return r.arrayBuffer();
+                    }));
+                }
 
-                this.mod.FS.writeFile('/intentspider.state', data);
+                const chunkBuffers = await Promise.all(chunkPromises);
+                
+                // Stitch chunks together
+                const totalBuffer = new Uint8Array(manifest.totalSize);
+                let offset = 0;
+                for (let i = 0; i < chunkBuffers.length; i++) {
+                    totalBuffer.set(new Uint8Array(chunkBuffers[i]), offset);
+                    offset += chunkBuffers[i].byteLength;
+                }
+
+                logTerminal(`All chunks downloaded and stitched.`, "info");
+
+                this.mod.FS.writeFile('/intentspider.state', totalBuffer);
                 const ok = this._loadState(this.ptr, '/intentspider.state');
                 if (ok) {
                     logTerminal("Collective state loaded into engine.", "predict");
@@ -291,7 +318,7 @@
                     await this.loadLocalState();
                 }
             } catch (err) {
-                logTerminal(`R2 fetch failed: ${err.message} — trying local fallback.`, "error");
+                logTerminal(`Fetch failed: ${err.message} — trying local fallback.`, "error");
                 await this.loadLocalState();
             }
         },
@@ -322,31 +349,57 @@
         async saveCollectiveState() {
             if (!this.ready) return;
             try {
-                // Save to virtual FS
                 const ok = this._saveState(this.ptr, '/intentspider_out.state');
                 if (!ok) {
                     logTerminal("engine_save_state failed.", "error");
                     return;
                 }
 
-                // Read from virtual FS
                 const data = this.mod.FS.readFile('/intentspider_out.state');
-                logTerminal(`Uploading state (${(data.length / 1024).toFixed(1)} KB) to R2...`, "info");
+                const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB
+                const numChunks = Math.ceil(data.length / CHUNK_SIZE);
+                
+                logTerminal(`Uploading state (${(data.length / 1024 / 1024).toFixed(2)} MB) in ${numChunks} chunk(s)...`, "info");
 
-                const resp = await fetch(STATE_API_URL, {
+                const uploadPromises = [];
+                for (let i = 0; i < numChunks; i++) {
+                    const start = i * CHUNK_SIZE;
+                    const end = Math.min(start + CHUNK_SIZE, data.length);
+                    const chunkData = data.slice(start, end);
+                    
+                    uploadPromises.push(
+                        fetch(`${STATE_API_URL}/chunk/${i}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-API-Key': STATE_API_KEY,
+                                'Content-Type': 'application/octet-stream',
+                            },
+                            body: chunkData,
+                        }).then(r => {
+                            if (!r.ok) throw new Error(`Chunk ${i} HTTP ${r.status}`);
+                        })
+                    );
+                }
+
+                await Promise.all(uploadPromises);
+
+                // Upload manifest
+                const manifestResp = await fetch(`${STATE_API_URL}/manifest`, {
                     method: 'POST',
                     headers: {
                         'X-API-Key': STATE_API_KEY,
-                        'Content-Type': 'application/octet-stream',
+                        'Content-Type': 'application/json',
                     },
-                    body: data,
+                    body: JSON.stringify({
+                        totalSize: data.length,
+                        chunks: numChunks
+                    }),
                 });
 
-                if (resp.ok) {
-                    const result = await resp.json();
-                    logTerminal(`State saved to R2 (${result.size} bytes).`, "predict");
+                if (manifestResp.ok) {
+                    logTerminal(`State successfully saved globally.`, "predict");
                 } else {
-                    logTerminal(`R2 save failed: HTTP ${resp.status}`, "error");
+                    logTerminal(`Manifest save failed: HTTP ${manifestResp.status}`, "error");
                 }
             } catch (err) {
                 logTerminal(`State sync error: ${err.message}`, "error");
@@ -745,24 +798,10 @@
     // Modern way to save on page exit
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden' && Engine.ready && lastActivityTime > 0) {
-            try {
-                const ok = Engine._saveState(Engine.ptr, '/intentspider_out.state');
-                if (ok) {
-                    const data = Engine.mod.FS.readFile('/intentspider_out.state');
-                    
-                    fetch(STATE_API_URL, {
-                        method: 'POST',
-                        keepalive: true,
-                        headers: {
-                            'X-API-Key': STATE_API_KEY,
-                            'Content-Type': 'application/octet-stream',
-                        },
-                        body: data,
-                    });
-                }
-            } catch (e) {
-                // Best effort
-            }
+            // Because chunked uploads are async and large, visibilitychange is unreliable for saving.
+            // We rely on the 10-second auto-save loop to guarantee integrity.
+            // But we can trigger a best-effort save here if we want.
+            Engine.saveCollectiveState();
         }
     });
 
