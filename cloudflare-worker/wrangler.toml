@@ -9,7 +9,7 @@ binding = "STATE_KV"
 id = "ece31c6c33ff4409b57c8f79566a27fc" 
 
 [vars]
-API_KEY = "is_demo_2025_xyz"
+STATE_AUTH_KEY = "is_demo_2025_xyz"
 # Custom domain route
 # Configure in Cloudflare Dashboard:
 #   Workers > intentspider-state-api > Settings > Domains & Routes
