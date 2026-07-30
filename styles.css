@@ -139,8 +139,6 @@ footer a {
   margin-top: 20px;
 }
 
-/* Removed status badge */
-
 .phone-frame {
   width: 650px;
   height: 906px;
@@ -171,68 +169,32 @@ footer a {
   overflow: hidden;
 }
 
-.app-switcher {
-  display: flex;
-  border-bottom: 1px solid #000000;
-  flex-shrink: 0;
-}
-
-.app-switcher button {
+/* Quiz Terminal (replaces chat UI) */
+#quiz-terminal {
   flex: 1;
-  padding: 10px;
-  border: none;
+  overflow: hidden;
   background: #FFFFFF;
-  color: #000000;
-  font: inherit;
-  font-weight: bold;
-  cursor: pointer;
-  border-right: 1px solid #000000;
+  min-height: 0; /* allow flex shrink */
 }
-.app-switcher button:last-child {
-  border-right: none;
+#quiz-terminal .xterm {
+  height: 100%;
 }
-.app-switcher button.active {
-  background: #0031A7;
-  color: #FFFFFF;
+#quiz-terminal .xterm-viewport {
+  overflow-y: auto !important;
 }
 
-.phone-content {
-  flex-grow: 1;
-  padding: 15px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.message-bubble {
-  max-width: 80%;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-.message-bubble.system {
-  align-self: flex-start;
-  border: 1px solid #000000;
-  background: #FFFFFF;
-  color: #000000;
-}
-.message-bubble.user {
-  align-self: flex-end;
-  background: #0031A7;
-  color: #FFFFFF;
-}
-
+/* Keyboard area */
 .keyboard-area {
   border-top: 1px solid #000000;
   background: #FFFFFF;
 }
 
 .input-display {
-  flex: 1;
+  min-height: 28px;
+  max-height: 60px;
   border-bottom: 1px solid #E5E7EB;
-  padding: 15px;
-  font-size: 18px;
+  padding: 8px 10px;
+  font-size: 15px;
   background: #F9FAFB;
   word-wrap: break-word;
   word-break: break-word;
@@ -290,17 +252,30 @@ footer a {
   background: #f6a828 !important; /* ui-darkness orange */
   color: white !important;
 }
-/* Removed custom flexbox overrides so Mottie can render its keys properly */
 
+/* Debug terminal (bottom panel) */
 .terminal-panel {
   width: 100%;
   background: #000000;
-  
   border-radius: 0;
   padding: 10px;
   text-align: left;
   box-sizing: border-box;
   min-height: 250px;
+}
+
+/* Question methodology citation */
+.methodology-citation {
+  font-size: 11px;
+  color: #666;
+  margin-top: 15px;
+  line-height: 1.5;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+}
+.methodology-citation strong {
+  color: #333;
 }
 
 /* ============================================ */

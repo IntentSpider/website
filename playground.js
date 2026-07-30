@@ -1,26 +1,25 @@
-// playground.js — IntentSpider Webnet Playground
-// Connects virtual/physical keyboard to the WASM engine via cwrap,
-// with graceful fallback when the WASM binary isn't served.
+// playground.js — IntentSpider Webnet Playground v2.0
+// Xterm.js quiz terminal + Mottie keyboard + WASM engine + Cloudflare R2 state sync.
 
 (() => {
     "use strict";
 
-    // ---- DOM handles ----
+    // ================================================================
+    // Configuration
+    // ================================================================
+
+    const STATE_API_URL = 'https://projectsapis.nekshadesilva.com/state';
+    const STATE_API_KEY = 'REPLACE_WITH_YOUR_API_KEY'; // Set this to match your Cloudflare Worker env var
+    const STATE_SYNC_INTERVAL_MS = 60000; // Save state every 60 seconds of activity
+    const CHAR_LIMIT = 200;
+
+    // ================================================================
+    // DOM handles
+    // ================================================================
+
     const inputDisplay  = document.getElementById('input-display');
-    const chatContent   = document.getElementById('chat-content');
     const terminalPanel = document.getElementById('terminal-panel');
-    let term = null;
-    if (typeof Terminal !== 'undefined') {
-        term = new Terminal({
-            theme: { background: '#000000', foreground: '#ffffff' },
-            fontFamily: 'monospace',
-            fontSize: 12,
-            convertEol: true
-        });
-        term.open(terminalPanel);
-        term.writeln('>> IntentSpider WASM Bridge Initializing...');
-        term.writeln('>> Waiting for engine connection...');
-    }
+    const quizContainer = document.getElementById('quiz-terminal');
 
     const suggestions   = [
         document.getElementById('sug-1'),
@@ -32,7 +31,6 @@
     const notificationText = document.getElementById('notification-text');
 
     let currentText = "";
-    let shiftActive = false;
 
     function showNotification(msg) {
         if (!notificationBanner) return;
@@ -44,26 +42,165 @@
         }, 5000);
     }
 
-    // ---- Terminal output ----
+    // ================================================================
+    // Debug Terminal (bottom black panel — unchanged)
+    // ================================================================
+
+    let debugTerm = null;
+    if (typeof Terminal !== 'undefined') {
+        debugTerm = new Terminal({
+            theme: { background: '#000000', foreground: '#ffffff' },
+            fontFamily: 'monospace',
+            fontSize: 12,
+            convertEol: true,
+            disableStdin: true,
+        });
+        debugTerm.open(terminalPanel);
+        debugTerm.writeln('>> IntentSpider WASM Bridge Initializing...');
+        debugTerm.writeln('>> Waiting for engine connection...');
+    }
+
     function logTerminal(msg, type = "info") {
         const ts = new Date().toLocaleTimeString('en-US', { hour12: false });
         const line = `[${ts}] ${msg}`;
-        if (term) {
-            term.writeln(line);
+        if (debugTerm) {
+            debugTerm.writeln(line);
         } else {
             console.log(line);
         }
     }
 
-    // ---- WASM Engine Bridge ----
+    // ================================================================
+    // Quiz Terminal (white terminal inside phone screen)
+    // ================================================================
+
+    let quizTerm = null;
+    let quizFitAddon = null;
+
+    function initQuizTerminal() {
+        if (typeof Terminal === 'undefined') return;
+
+        quizTerm = new Terminal({
+            theme: {
+                background: '#FFFFFF',
+                foreground: '#000000',
+                cursor: '#0031A7',
+                cursorAccent: '#FFFFFF',
+                selectionBackground: 'rgba(0, 49, 167, 0.3)',
+            },
+            fontFamily: '"Courier New", monospace',
+            fontSize: 11,
+            convertEol: true,
+            disableStdin: true, // We handle input ourselves
+            cursorBlink: false,
+            scrollback: 1000,
+            wordWrap: true,
+        });
+
+        // Fit addon to auto-resize to container
+        if (typeof FitAddon !== 'undefined') {
+            quizFitAddon = new FitAddon.FitAddon();
+            quizTerm.loadAddon(quizFitAddon);
+        }
+
+        quizTerm.open(quizContainer);
+
+        if (quizFitAddon) {
+            setTimeout(() => quizFitAddon.fit(), 100);
+            // Refit on window resize
+            window.addEventListener('resize', () => {
+                if (quizFitAddon) quizFitAddon.fit();
+            });
+        }
+
+        // Welcome message
+        quizTerm.writeln('\x1b[1;34m╔══════════════════════════╗\x1b[0m');
+        quizTerm.writeln('\x1b[1;34m║  IntentSpider Quiz v2.0  ║\x1b[0m');
+        quizTerm.writeln('\x1b[1;34m╚══════════════════════════╝\x1b[0m');
+        quizTerm.writeln('');
+        quizTerm.writeln('Type your answer below and');
+        quizTerm.writeln('press \x1b[1mSend\x1b[0m to submit.');
+        quizTerm.writeln('');
+    }
+
+    // ================================================================
+    // Quiz Manager
+    // ================================================================
+
+    const Quiz = {
+        questions: [],
+        shuffled: [],
+        currentIndex: 0,
+        totalAnswered: 0,
+        loaded: false,
+
+        async load() {
+            try {
+                const resp = await fetch('questions.json?v=11');
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const data = await resp.json();
+                this.questions = data.questions;
+                this.shuffle();
+                this.loaded = true;
+                logTerminal(`Loaded ${this.questions.length} quiz questions.`, "info");
+            } catch (err) {
+                logTerminal(`Failed to load questions: ${err.message}`, "error");
+                // Fallback to a single hardcoded question
+                this.questions = [
+                    { id: 0, cluster: "fallback", text: "Describe your favorite animal and explain what makes it special to you." }
+                ];
+                this.shuffle();
+                this.loaded = true;
+            }
+        },
+
+        shuffle() {
+            // Fisher-Yates shuffle
+            this.shuffled = [...this.questions];
+            for (let i = this.shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [this.shuffled[i], this.shuffled[j]] = [this.shuffled[j], this.shuffled[i]];
+            }
+            this.currentIndex = 0;
+        },
+
+        currentQuestion() {
+            if (this.currentIndex >= this.shuffled.length) {
+                this.shuffle(); // Wrap around with new shuffle
+            }
+            return this.shuffled[this.currentIndex];
+        },
+
+        advance() {
+            this.currentIndex++;
+            this.totalAnswered++;
+            if (this.currentIndex >= this.shuffled.length) {
+                this.shuffle();
+            }
+        },
+
+        showCurrentQuestion() {
+            if (!quizTerm) return;
+            const q = this.currentQuestion();
+            const num = this.totalAnswered + 1;
+            quizTerm.writeln(`\x1b[1;34mQ${num}:\x1b[0m ${q.text}`);
+            quizTerm.writeln('');
+            quizTerm.write('\x1b[32m> \x1b[0m'); // Green prompt
+        }
+    };
+
+    // ================================================================
+    // WASM Engine Bridge
+    // ================================================================
+
     const Engine = {
         ready: false,
-        ptr: null,      // opaque WasmEngine*
-        mod: null,      // Emscripten Module instance
+        ptr: null,
+        mod: null,
 
-        // cwrap'd functions (set after Module init)
         _create: null,
         _loadState: null,
+        _saveState: null,
         _onKey: null,
         _commit: null,
         _accept: null,
@@ -87,14 +224,13 @@
 
             try {
                 this.mod = await IntentSpiderModule({
-                    // Print/printErr go to terminal
                     print: (text) => logTerminal(text, "info"),
                     printErr: (text) => logTerminal(text, "error"),
                 });
 
-                // Wrap all exported C functions
                 this._create       = this.mod.cwrap('engine_create',        'number', []);
                 this._loadState    = this.mod.cwrap('engine_load_state',    'number', ['number', 'string']);
+                this._saveState    = this.mod.cwrap('engine_save_state',    'number', ['number', 'string']);
                 this._onKey        = this.mod.cwrap('engine_on_key',        null,     ['number', 'number', 'number']);
                 this._commit       = this.mod.cwrap('engine_commit',        'string', ['number', 'number']);
                 this._accept       = this.mod.cwrap('engine_accept',        'string', ['number', 'number', 'number']);
@@ -107,12 +243,11 @@
 
                 logTerminal("WASM module loaded successfully.", "info");
 
-                // Create engine instance
                 this.ptr = this._create();
                 logTerminal(`Engine instance created (ptr=0x${this.ptr.toString(16)}).`, "info");
 
-                // Load the state file
-                await this.loadStateFile();
+                // Try loading collective state from R2 first, fall back to local
+                await this.loadCollectiveState();
 
                 this.ready = true;
                 logTerminal("Engine is LIVE — type to predict.", "predict");
@@ -125,33 +260,94 @@
             }
         },
 
-        async loadStateFile() {
-            logTerminal("Fetching intentspider.state (~8.5 MB)...", "info");
+        async loadCollectiveState() {
+            logTerminal("Fetching collective state from R2...", "info");
+            try {
+                const resp = await fetch(STATE_API_URL, {
+                    method: 'GET',
+                    headers: { 'X-API-Key': STATE_API_KEY },
+                });
+
+                if (resp.status === 404) {
+                    logTerminal("No collective state found — trying local fallback.", "info");
+                    await this.loadLocalState();
+                    return;
+                }
+
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+                const data = new Uint8Array(await resp.arrayBuffer());
+                logTerminal(`Collective state downloaded (${(data.length / 1024).toFixed(1)} KB).`, "info");
+
+                this.mod.FS.writeFile('/intentspider.state', data);
+                const ok = this._loadState(this.ptr, '/intentspider.state');
+                if (ok) {
+                    logTerminal("Collective state loaded into engine.", "predict");
+                    this.showDebug();
+                } else {
+                    logTerminal("Collective state load failed — trying local fallback.", "error");
+                    await this.loadLocalState();
+                }
+            } catch (err) {
+                logTerminal(`R2 fetch failed: ${err.message} — trying local fallback.`, "error");
+                await this.loadLocalState();
+            }
+        },
+
+        async loadLocalState() {
+            logTerminal("Fetching local state file...", "info");
             try {
                 const response = await fetch('assets/intentspider.state');
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = new Uint8Array(await response.arrayBuffer());
-                logTerminal(`State file downloaded (${(data.length / 1048576).toFixed(1)} MB).`, "info");
+                logTerminal(`Local state file downloaded (${(data.length / 1048576).toFixed(1)} MB).`, "info");
 
-                // Write into Emscripten's virtual filesystem
                 this.mod.FS.writeFile('/intentspider.state', data);
-                logTerminal("State file written to virtual FS.", "info");
-
-                // Load via engine API
                 const ok = this._loadState(this.ptr, '/intentspider.state');
                 if (ok) {
-                    logTerminal("State loaded into engine successfully.", "predict");
-                    // Show initial debug
+                    logTerminal("Local state loaded into engine.", "predict");
                     this.showDebug();
                 } else {
                     logTerminal("engine_load_state returned failure.", "error");
-                    showNotification("Failed to load state into engine.");
                 }
             } catch (err) {
-                logTerminal(`Could not load state: ${err.message}`, "error");
+                logTerminal(`Could not load local state: ${err.message}`, "error");
                 logTerminal("Engine will start with empty state.", "error");
-                showNotification("Could not load state file.");
+            }
+        },
+
+        async saveCollectiveState() {
+            if (!this.ready) return;
+            try {
+                // Save to virtual FS
+                const ok = this._saveState(this.ptr, '/intentspider_out.state');
+                if (!ok) {
+                    logTerminal("engine_save_state failed.", "error");
+                    return;
+                }
+
+                // Read from virtual FS
+                const data = this.mod.FS.readFile('/intentspider_out.state');
+                logTerminal(`Uploading state (${(data.length / 1024).toFixed(1)} KB) to R2...`, "info");
+
+                const resp = await fetch(STATE_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'X-API-Key': STATE_API_KEY,
+                        'Content-Type': 'application/octet-stream',
+                    },
+                    body: data,
+                });
+
+                if (resp.ok) {
+                    const result = await resp.json();
+                    logTerminal(`State saved to R2 (${result.size} bytes).`, "predict");
+                } else {
+                    logTerminal(`R2 save failed: HTTP ${resp.status}`, "error");
+                }
+            } catch (err) {
+                logTerminal(`State sync error: ${err.message}`, "error");
             }
         },
 
@@ -239,7 +435,10 @@
         }
     };
 
-    // ---- Fallback mock predictions ----
+    // ================================================================
+    // Fallback mock predictions
+    // ================================================================
+
     const MOCK_WORDS = [
         "the", "of", "and", "to", "a", "in", "is", "that", "it", "for",
         "was", "on", "are", "with", "as", "at", "be", "this", "have", "from"
@@ -256,7 +455,13 @@
         suggestions.forEach(s => { s.textContent = '—'; s.title = ''; });
     }
 
-    // ---- Input handling ----
+    // ================================================================
+    // Input handling
+    // ================================================================
+
+    // Track what the user has typed for the current answer (separate from currentText for display)
+    let quizAnswerLine = "";
+
     function updateDisplay() {
         inputDisplay.textContent = currentText;
     }
@@ -265,67 +470,77 @@
         if (key === 'backspace') {
             if (currentText.length > 0) {
                 currentText = currentText.slice(0, -1);
-                Engine.onKey(8); // ASCII backspace
+                quizAnswerLine = quizAnswerLine.slice(0, -1);
+                Engine.onKey(8);
+                // Erase character in quiz terminal
+                if (quizTerm) quizTerm.write('\b \b');
             }
         } else if (key === 'space') {
-            if (currentText.length >= 200) return;
+            if (currentText.length >= CHAR_LIMIT) return;
             currentText += ' ';
-            Engine.onKey(32); // Space
-            
+            quizAnswerLine += ' ';
+            Engine.onKey(32);
+
             if (!Engine.ready) {
                 mockPredict();
                 logTerminal(`Word committed: "${currentText.trim().split(' ').pop()}"`, "info");
             } else {
                 Engine.commit();
             }
+            // Echo to quiz terminal
+            if (quizTerm) quizTerm.write(' ');
         } else if (key === 'enter') {
-            submitMessage();
+            submitAnswer();
         } else if (key === 'shift') {
             // Mottie Keyboard handles layout switching internally
         } else {
-            if (currentText.length >= 200) return;
+            if (currentText.length >= CHAR_LIMIT) return;
             let ch = key;
             currentText += ch;
+            quizAnswerLine += ch;
             Engine.onKey(ch.charCodeAt(0));
             if (!Engine.ready) {
                 logTerminal(`Key: '${ch}' (0x${ch.charCodeAt(0).toString(16)})`, "info");
             }
+            // Echo to quiz terminal
+            if (quizTerm) quizTerm.write(ch);
         }
         updateDisplay();
     }
 
-    function submitMessage() {
+    function submitAnswer() {
         const text = currentText.trim();
         if (text === '') return;
 
-        // Commit any pending word
+        // Commit any pending word to the engine
         Engine.onKey(32);
         Engine.commit();
 
-        // Add user message bubble
-        const msg = document.createElement('div');
-        msg.className = 'message-bubble user';
-        msg.textContent = text;
-        chatContent.appendChild(msg);
-        chatContent.scrollTop = chatContent.scrollHeight;
+        // Log the answer in the quiz terminal
+        if (quizTerm) {
+            quizTerm.writeln(''); // Newline after the answer
+            quizTerm.writeln(`\x1b[90m[Answer recorded]\x1b[0m`);
+            quizTerm.writeln('');
+        }
 
-        // Start new sentence
+        logTerminal(`Answer: "${text}"`, "info");
+
+        // Reset for next question
         currentText = "";
+        quizAnswerLine = "";
         updateDisplay();
         clearSuggestions();
         Engine.newSentence();
 
-        // System response
-        setTimeout(() => {
-            const reply = document.createElement('div');
-            reply.className = 'message-bubble system';
-            reply.textContent = "Intent recognized.";
-            chatContent.appendChild(reply);
-            chatContent.scrollTop = chatContent.scrollHeight;
-        }, 400);
+        // Advance to next question
+        Quiz.advance();
+        Quiz.showCurrentQuestion();
     }
 
-    // ---- Virtual Keyboard Events (Mottie Keyboard) ----
+    // ================================================================
+    // Mottie Virtual Keyboard
+    // ================================================================
+
     const mottieInput = $('#mottie-hidden-input');
     mottieInput.keyboard({
         alwaysOpen: true,
@@ -364,8 +579,11 @@
         handleKey(key);
     });
 
-    // ---- Physical Keyboard Integration ----
-    document.getElementById('input-display').tabIndex = 0; // Make it focusable for Ctrl+A
+    // ================================================================
+    // Physical Keyboard Integration
+    // ================================================================
+
+    document.getElementById('input-display').tabIndex = 0;
     
     document.addEventListener('keydown', (e) => {
         if (document.activeElement.tagName === 'INPUT' ||
@@ -385,17 +603,17 @@
                 const selection = window.getSelection();
                 if (selection.toString().trim().length > 0) {
                     if (e.code === 'KeyX') navigator.clipboard.writeText(selection.toString());
-                    // Since the C engine only handles backspace iteratively, if they clear a large chunk, we just reset the sentence.
                     currentText = "";
+                    quizAnswerLine = "";
                     Engine.newSentence();
                     updateDisplay();
                     e.preventDefault();
                     return;
                 }
             } else if (e.code === 'KeyC') {
-                return; // Let browser natively copy the selected text in the div
+                return;
             } else if (e.code === 'KeyV') {
-                return; // Handled by paste event
+                return;
             }
         }
 
@@ -408,7 +626,7 @@
         } else if (e.code === 'Enter') {
             e.preventDefault();
             handleKey('enter');
-            virtualKey = 'accept';
+            virtualKey = 'enter';
         } else if (e.code === 'Backspace') {
             e.preventDefault();
             handleKey('backspace');
@@ -422,10 +640,8 @@
         }
 
         if (virtualKey) {
-            // Mottie uses .ui-keyboard-[key] classes for all buttons reliably
             const safeKey = virtualKey.replace(/[^a-zA-Z0-9]/g, '');
             let btn = $(`#mottie-keyboard-container .ui-keyboard-${safeKey}`);
-            
             if (btn.length) {
                 btn.addClass('ui-state-active ui-state-hover');
             }
@@ -435,7 +651,7 @@
     document.addEventListener('keyup', (e) => {
         let virtualKey = null;
         if (e.code === 'Space') virtualKey = 'space';
-        else if (e.code === 'Enter') virtualKey = 'accept';
+        else if (e.code === 'Enter') virtualKey = 'enter';
         else if (e.code === 'Backspace') virtualKey = 'bksp';
         else if (e.key.length === 1) virtualKey = e.key.toLowerCase();
         else if (e.key === 'Shift') virtualKey = 'shift';
@@ -443,42 +659,16 @@
         if (virtualKey) {
             const safeKey = virtualKey.replace(/[^a-zA-Z0-9]/g, '');
             let btn = $(`#mottie-keyboard-container .ui-keyboard-${safeKey}`);
-            
             if (btn.length) {
                 btn.removeClass('ui-state-active ui-state-hover');
             }
         }
     });
 
-    // ---- Suggestion Clicks ----
-    suggestions.forEach((btn, idx) => {
-        btn.addEventListener('click', () => {
-            const word = btn.textContent;
-            if (word === '—') return;
+    // ================================================================
+    // Paste handler
+    // ================================================================
 
-            if (Engine.ready) {
-                // Accept through the engine (1-based index)
-                const result = Engine.acceptSuggestion(idx + 1);
-                if (result && result.sentence) {
-                    let newText = result.sentence + ' ';
-                    if (newText.length > 200) newText = newText.substring(0, 200);
-                    currentText = newText;
-                }
-            } else {
-                // Demo mode: just append the word
-                const words = currentText.trim().split(' ');
-                if (words.length > 0 && words[words.length - 1] === '') words.pop();
-                words.push(word);
-                let newText = words.join(' ') + ' ';
-                if (newText.length > 200) newText = newText.substring(0, 200);
-                currentText = newText;
-                mockPredict();
-            }
-            updateDisplay();
-        });
-    });
-
-    // ---- App Switcher ----
     document.addEventListener('paste', (e) => {
         if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
         e.preventDefault();
@@ -488,34 +678,122 @@
         }
     });
 
-    document.getElementById('btn-chat').addEventListener('click', (e) => {
-        document.querySelectorAll('.app-switcher button').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        chatContent.innerHTML = '<div class="message-bubble system">Hello! Type below to test the IntentSpider prediction engine.</div>';
-        currentText = "";
-        updateDisplay();
-        Engine.newSentence();
+    // ================================================================
+    // Suggestion Clicks
+    // ================================================================
+
+    suggestions.forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+            const word = btn.textContent;
+            if (word === '—') return;
+
+            if (Engine.ready) {
+                const result = Engine.acceptSuggestion(idx + 1);
+                if (result && result.sentence) {
+                    let newText = result.sentence + ' ';
+                    if (newText.length > CHAR_LIMIT) newText = newText.substring(0, CHAR_LIMIT);
+
+                    // Calculate what was appended
+                    const added = newText.substring(currentText.length);
+                    currentText = newText;
+                    quizAnswerLine += added;
+
+                    // Echo the added text to quiz terminal
+                    if (quizTerm && added) quizTerm.write(added);
+                }
+            } else {
+                const words = currentText.trim().split(' ');
+                if (words.length > 0 && words[words.length - 1] === '') words.pop();
+                words.push(word);
+                let newText = words.join(' ') + ' ';
+                if (newText.length > CHAR_LIMIT) newText = newText.substring(0, CHAR_LIMIT);
+
+                const added = newText.substring(currentText.length);
+                currentText = newText;
+                quizAnswerLine += added;
+                mockPredict();
+
+                if (quizTerm && added) quizTerm.write(added);
+            }
+            updateDisplay();
+        });
     });
 
-    document.getElementById('btn-search').addEventListener('click', (e) => {
-        document.querySelectorAll('.app-switcher button').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        chatContent.innerHTML = '<div class="message-bubble system">Search Intent mode active. Type your query.</div>';
-        currentText = "";
-        updateDisplay();
-        Engine.newSentence();
+    // ================================================================
+    // State Sync Timer
+    // ================================================================
+
+    let lastActivityTime = 0;
+    let stateSyncTimer = null;
+
+    function trackActivity() {
+        lastActivityTime = Date.now();
+    }
+
+    function startStateSyncTimer() {
+        if (stateSyncTimer) return;
+        stateSyncTimer = setInterval(() => {
+            // Only save if there was activity in the last interval
+            if (Date.now() - lastActivityTime < STATE_SYNC_INTERVAL_MS * 2) {
+                Engine.saveCollectiveState();
+            }
+        }, STATE_SYNC_INTERVAL_MS);
+    }
+
+    // Save on page unload
+    window.addEventListener('beforeunload', () => {
+        if (Engine.ready && lastActivityTime > 0) {
+            // Use sendBeacon for reliability during unload
+            try {
+                const ok = Engine._saveState(Engine.ptr, '/intentspider_out.state');
+                if (ok) {
+                    const data = Engine.mod.FS.readFile('/intentspider_out.state');
+                    const blob = new Blob([data], { type: 'application/octet-stream' });
+
+                    // sendBeacon doesn't support custom headers, so we fall back to sync XHR
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', STATE_API_URL, false); // synchronous
+                    xhr.setRequestHeader('X-API-Key', STATE_API_KEY);
+                    xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+                    xhr.send(blob);
+                }
+            } catch (e) {
+                // Best effort — page is closing
+            }
+        }
     });
 
-    // ---- Boot ----
-    logTerminal("IntentSpider Webnet Playground v1.0", "info");
+    // ================================================================
+    // Boot Sequence
+    // ================================================================
+
+    logTerminal("IntentSpider Webnet Playground v2.0", "info");
     logTerminal("Initializing...", "info");
 
-    // Delay init slightly to let the DOM settle
+    // Initialize quiz terminal
+    initQuizTerminal();
+
+    // Boot everything
     setTimeout(async () => {
+        // Load questions
+        await Quiz.load();
+
+        // Initialize engine
         await Engine.init();
         if (!Engine.ready) {
             mockPredict();
         }
+
+        // Show first question
+        Quiz.showCurrentQuestion();
+
+        // Start state sync
+        startStateSyncTimer();
+
+        // Track activity on any keypress
+        document.addEventListener('keydown', trackActivity);
+        document.addEventListener('click', trackActivity);
+
     }, 500);
 
 })();

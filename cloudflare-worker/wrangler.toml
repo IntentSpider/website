@@ -1,0 +1,16 @@
+name = "intentspider-state-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# R2 bucket binding
+[[r2_buckets]]
+binding = "STATE_BUCKET"
+bucket_name = "intentspider-state"
+
+# Environment variables (set API_KEY via `wrangler secret put API_KEY`)
+# Or via Cloudflare Dashboard > Workers > Settings > Variables
+
+# Custom domain route
+# Configure in Cloudflare Dashboard:
+#   Workers > intentspider-state-api > Settings > Domains & Routes
+#   Add route: projectsapis.nekshadesilva.com/*
