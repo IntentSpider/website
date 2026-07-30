@@ -215,7 +215,7 @@
 
         async init() {
             logTerminal("Initializing WASM bridge...", "info");
-            showNotification("Initializing WASM Engine...");
+            showNotification("Loading Webassembly codes.");
 
             if (typeof IntentSpiderModule !== 'function') {
                 const type = typeof IntentSpiderModule;
