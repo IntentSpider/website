@@ -203,47 +203,24 @@ footer a {
   display: flex;
   flex-direction: column;
 }
-/* Authentic 2010s Chat UI Log */
-#chat-content {
-  padding: 0 !important; /* override phone-content padding */
-  display: flex;
-  flex-direction: column;
-}
-#chat-log {
-  flex-grow: 1;
+
+.message-bubble {
+  max-width: 80%;
   padding: 10px;
-  overflow-y: auto;
-  border-top: none;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
 }
-.chat-msg {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
-  line-height: 1.4;
-  margin-bottom: 6px;
-  word-wrap: break-word;
+.message-bubble.system {
+  align-self: flex-start;
+  border: 1px solid #000000;
+  background: #FFFFFF;
+  color: #000000;
 }
-.chat-timestamp {
-  font-size: 11px;
-  margin-right: 5px;
-  opacity: 0.7;
-}
-.chat-system {
-  color: #f6a828; /* Theme orange */
-  font-weight: bold;
-}
-.chat-user {
-  color: #aed0ea; /* Theme light blue */
-  font-weight: bold;
-}
-.chat-header {
-  padding: 8px 10px;
-  font-size: 13px;
-  font-weight: bold;
-  text-align: center;
-  border-radius: 0;
-  border-left: none;
-  border-right: none;
-  border-top: none;
+.message-bubble.user {
+  align-self: flex-end;
+  background: #0031A7;
+  color: #FFFFFF;
 }
 
 .keyboard-area {
