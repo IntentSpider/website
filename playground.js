@@ -13,7 +13,7 @@
     const STATE_SYNC_INTERVAL_MS = 60000; // Save state every 60 seconds of activity
     const CHAR_LIMIT = 200;
 
-    
+
     // ================================================================
     // DOM handles
     // ================================================================
@@ -28,6 +28,7 @@
         document.getElementById('sug-3')
     ];
 
+    
     const notificationBanner = document.getElementById('notification-banner');
     const notificationText = document.getElementById('notification-text');
 
