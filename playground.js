@@ -294,40 +294,6 @@
         updateDisplay();
     }
 
-    function appendChatLog(user, message) {
-        const chatLog = document.getElementById('chat-log');
-        if (!chatLog) return;
-        
-        const now = new Date();
-        let hours = now.getHours();
-        let minutes = now.getMinutes();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        hours = hours ? hours : 12;
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-        const timeString = `[${hours}:${minutes} ${ampm}]`;
-
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'chat-msg';
-
-        const timeSpan = document.createElement('span');
-        timeSpan.className = 'chat-timestamp';
-        timeSpan.textContent = timeString + " ";
-        msgDiv.appendChild(timeSpan);
-
-        const authorB = document.createElement('b');
-        authorB.className = user === 'Console' ? 'chat-system' : 'chat-user';
-        authorB.textContent = user + ": ";
-        msgDiv.appendChild(authorB);
-
-        const textSpan = document.createElement('span');
-        textSpan.textContent = message;
-        msgDiv.appendChild(textSpan);
-
-        chatLog.appendChild(msgDiv);
-        chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
     function submitMessage() {
         const text = currentText.trim();
         if (text === '') return;
@@ -336,7 +302,12 @@
         Engine.onKey(32);
         Engine.commit();
 
-        appendChatLog('User', text);
+        // Add user message bubble
+        const msg = document.createElement('div');
+        msg.className = 'message-bubble user';
+        msg.textContent = text;
+        chatContent.appendChild(msg);
+        chatContent.scrollTop = chatContent.scrollHeight;
 
         // Start new sentence
         currentText = "";
@@ -346,7 +317,11 @@
 
         // System response
         setTimeout(() => {
-            appendChatLog('Console', 'Intent recognized.');
+            const reply = document.createElement('div');
+            reply.className = 'message-bubble system';
+            reply.textContent = "Intent recognized.";
+            chatContent.appendChild(reply);
+            chatContent.scrollTop = chatContent.scrollHeight;
         }, 400);
     }
 
@@ -516,17 +491,7 @@
     document.getElementById('btn-chat').addEventListener('click', (e) => {
         document.querySelectorAll('.app-switcher button').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
-        chatContent.innerHTML = `
-            <div class="ui-widget-header chat-header">
-                <span class="chat-title">System Console</span>
-            </div>
-            <div class="ui-widget-content chat-log" id="chat-log">
-                <div class="chat-msg">
-                    <span class="chat-timestamp">[System]</span> 
-                    <b class="chat-system">Console:</b> 
-                    <span>Hello! Type below to test the IntentSpider prediction engine.</span>
-                </div>
-            </div>`;
+        chatContent.innerHTML = '<div class="message-bubble system">Hello! Type below to test the IntentSpider prediction engine.</div>';
         currentText = "";
         updateDisplay();
         Engine.newSentence();
@@ -535,17 +500,7 @@
     document.getElementById('btn-search').addEventListener('click', (e) => {
         document.querySelectorAll('.app-switcher button').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
-        chatContent.innerHTML = `
-            <div class="ui-widget-header chat-header">
-                <span class="chat-title">Search Engine</span>
-            </div>
-            <div class="ui-widget-content chat-log" id="chat-log">
-                <div class="chat-msg">
-                    <span class="chat-timestamp">[System]</span> 
-                    <b class="chat-system">Console:</b> 
-                    <span>Search Intent mode active. Type your query.</span>
-                </div>
-            </div>`;
+        chatContent.innerHTML = '<div class="message-bubble system">Search Intent mode active. Type your query.</div>';
         currentText = "";
         updateDisplay();
         Engine.newSentence();
