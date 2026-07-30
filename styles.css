@@ -19,7 +19,7 @@ body {
   width: 760px;
   text-align: left;
   border-top: 5px solid #0031A7;
-  padding-top: 20px;
+ 
   min-height: 100vh;
 }
 
@@ -303,7 +303,7 @@ footer a {
 .terminal-panel {
   width: 100%;
   background: #000000;
-  border: 2px solid #0031A7;
+  
   border-radius: 0;
   padding: 10px;
   text-align: left;
