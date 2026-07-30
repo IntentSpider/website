@@ -160,10 +160,10 @@ footer a {
 
 .phone-screen {
   position: absolute;
-  top: 11%;
+  top: 14%;
   left: 22.5%;
   width: 45%;
-  height: 59%;
+  height: 56%;
   z-index: 1;
   background: #FFFFFF;
   display: flex;
@@ -266,38 +266,16 @@ footer a {
   background: rgba(0, 49, 167, 0.1);
 }
 
-.simple-keyboard {
+#mottie-keyboard-container {
+  width: 100%;
+  text-align: center;
+  background: #E5E7EB;
   padding: 5px;
-  background: #D1D5DB;
   border-top: 1px solid #B0B5BA;
 }
-.hg-theme-default .hg-button {
-  border: none;
-  border-radius: 5px;
-  background: #FFFFFF;
-  color: #000000;
-  font-family: inherit;
-  font-size: 16px;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.3);
-  margin: 2px 1px;
-}
-.hg-theme-default .hg-button:active,
-.hg-theme-default .hg-button.hg-activeButton {
-  background: #B3B8C1;
-}
-.hg-theme-default .hg-button[data-skbtn="{shift}"],
-.hg-theme-default .hg-button[data-skbtn="{bksp}"],
-.hg-theme-default .hg-button[data-skbtn="{enter}"] {
-  background: #B3B8C1;
-  font-size: 14px;
-}
-.hg-theme-default .hg-button[data-skbtn="{shift}"]:active,
-.hg-theme-default .hg-button[data-skbtn="{bksp}"]:active,
-.hg-theme-default .hg-button[data-skbtn="{enter}"]:active {
-  background: #FFFFFF;
-}
-.hg-theme-default .hg-button.hg-standardBtn {
-  text-transform: uppercase;
+.ui-keyboard {
+  padding: 5px;
+  margin: 0 auto;
 }
 
 .terminal-panel {

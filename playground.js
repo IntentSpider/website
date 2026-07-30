@@ -279,24 +279,13 @@
         } else if (key === 'enter') {
             submitMessage();
         } else if (key === 'shift') {
-            shiftActive = !shiftActive;
+            // Mottie Keyboard handles layout switching internally
         } else {
-            // simple-keyboard emits uppercase letters when shifted.
-            // If it's a lowercase letter, check shiftActive.
             let ch = key;
-            if (ch.length === 1 && ch >= 'a' && ch <= 'z' && shiftActive) {
-                ch = ch.toUpperCase();
-            }
             currentText += ch;
             Engine.onKey(ch.charCodeAt(0));
             if (!Engine.ready) {
                 logTerminal(`Key: '${ch}' (0x${ch.charCodeAt(0).toString(16)})`, "info");
-            }
-            if (shiftActive) {
-                shiftActive = false;
-                if (window.myKeyboard) {
-                    window.myKeyboard.setOptions({ layoutName: "default" });
-                }
             }
         }
         updateDisplay();
@@ -333,44 +322,49 @@
         }, 400);
     }
 
-    // ---- Virtual Keyboard Events (simple-keyboard) ----
-    const Keyboard = window.SimpleKeyboard.default;
-    window.myKeyboard = new Keyboard({
-        onKeyPress: button => {
-            let key = button;
-            if (button === '{shift}') key = 'shift';
-            else if (button === '{bksp}') key = 'backspace';
-            else if (button === '{space}') key = 'space';
-            else if (button === '{enter}') key = 'enter';
-            
-            if (key === 'shift') {
-                const currentLayout = window.myKeyboard.options.layoutName;
-                const shiftToggle = currentLayout === "default" ? "shift" : "default";
-                window.myKeyboard.setOptions({ layoutName: shiftToggle });
-            }
-            
-            handleKey(key);
-        },
-        layout: {
-            'default': [
+    // ---- Virtual Keyboard Events (Mottie Keyboard) ----
+    const mottieInput = $('#mottie-hidden-input');
+    mottieInput.keyboard({
+        alwaysOpen: true,
+        usePreview: false,
+        appendTo: '#mottie-keyboard-container',
+        layout: 'custom',
+        customLayout: {
+            'normal': [
                 'q w e r t y u i o p',
                 'a s d f g h j k l',
                 '{shift} z x c v b n m {bksp}',
-                '{space} {enter}'
+                '{space} {accept}'
             ],
             'shift': [
                 'Q W E R T Y U I O P',
                 'A S D F G H J K L',
                 '{shift} Z X C V B N M {bksp}',
-                '{space} {enter}'
+                '{space} {accept}'
             ]
         },
         display: {
-            '{bksp}': '⌫',
-            '{enter}': 'return',
-            '{shift}': '⇧',
-            '{space}': 'space'
+            'bksp': 'Del',
+            'accept': 'Enter',
+            'shift': 'Shift',
+            'space': 'Space'
         }
+    });
+
+    // Intercept clicks on Mottie keyboard buttons to feed into our engine pipeline
+    $('#mottie-keyboard-container').on('mousedown', '.ui-keyboard-button', function(e) {
+        let action = $(this).attr('data-action');
+        let value = $(this).attr('data-value');
+        
+        let key = value || action;
+        if (!key) return;
+        
+        if (key === 'space') key = 'space';
+        else if (key === 'accept') key = 'enter';
+        else if (key === 'bksp') key = 'backspace';
+        else if (key === 'shift') key = 'shift';
+        
+        handleKey(key);
     });
 
     // ---- Physical Keyboard Integration ----
@@ -378,49 +372,18 @@
         if (document.activeElement.tagName === 'INPUT' ||
             document.activeElement.tagName === 'TEXTAREA') return;
 
-        let virtualKey = null;
-        
         if (e.code === 'Space') {
             e.preventDefault();
             handleKey('space');
-            virtualKey = '{space}';
         } else if (e.code === 'Enter') {
             e.preventDefault();
             handleKey('enter');
-            virtualKey = '{enter}';
         } else if (e.code === 'Backspace') {
             e.preventDefault();
             handleKey('backspace');
-            virtualKey = '{bksp}';
         } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
             e.preventDefault();
             handleKey(e.key);
-            virtualKey = e.key.toLowerCase();
-        } else if (e.key === 'Shift') {
-            window.myKeyboard.setOptions({ layoutName: "shift" });
-            virtualKey = '{shift}';
-        }
-
-        if (virtualKey) {
-            const btn = window.myKeyboard.getButtonElement(virtualKey);
-            if (btn) btn.classList.add('hg-activeButton');
-        }
-    });
-
-    document.addEventListener('keyup', (e) => {
-        let virtualKey = null;
-        if (e.code === 'Space') virtualKey = '{space}';
-        else if (e.code === 'Enter') virtualKey = '{enter}';
-        else if (e.code === 'Backspace') virtualKey = '{bksp}';
-        else if (e.key.length === 1) virtualKey = e.key.toLowerCase();
-        else if (e.key === 'Shift') {
-            window.myKeyboard.setOptions({ layoutName: "default" });
-            virtualKey = '{shift}';
-        }
-
-        if (virtualKey) {
-            const btn = window.myKeyboard.getButtonElement(virtualKey);
-            if (btn) btn.classList.remove('hg-activeButton');
         }
     });
 
