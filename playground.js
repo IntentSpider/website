@@ -10,7 +10,7 @@
 
     const STATE_API_URL = 'https://intentspider-state-api.rohandesilvahotmail.workers.dev/state';
     const STATE_API_KEY = 'is_demo_2025_xyz'; // Set this to match your Cloudflare Worker env var
-    const STATE_SYNC_INTERVAL_MS = 60000; // Save state every 60 seconds of activity
+    const STATE_SYNC_INTERVAL_MS = 10000; // Save state every 10 seconds of activity
     const CHAR_LIMIT = 200;
 
 
@@ -742,25 +742,26 @@
         }, STATE_SYNC_INTERVAL_MS);
     }
 
-    // Save on page unload
-    window.addEventListener('beforeunload', () => {
-        if (Engine.ready && lastActivityTime > 0) {
-            // Use sendBeacon for reliability during unload
+    // Modern way to save on page exit
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden' && Engine.ready && lastActivityTime > 0) {
             try {
                 const ok = Engine._saveState(Engine.ptr, '/intentspider_out.state');
                 if (ok) {
                     const data = Engine.mod.FS.readFile('/intentspider_out.state');
-                    const blob = new Blob([data], { type: 'application/octet-stream' });
-
-                    // sendBeacon doesn't support custom headers, so we fall back to sync XHR
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', STATE_API_URL, false); // synchronous
-                    xhr.setRequestHeader('X-API-Key', STATE_API_KEY);
-                    xhr.setRequestHeader('Content-Type', 'application/octet-stream');
-                    xhr.send(blob);
+                    
+                    fetch(STATE_API_URL, {
+                        method: 'POST',
+                        keepalive: true,
+                        headers: {
+                            'X-API-Key': STATE_API_KEY,
+                            'Content-Type': 'application/octet-stream',
+                        },
+                        body: data,
+                    });
                 }
             } catch (e) {
-                // Best effort — page is closing
+                // Best effort
             }
         }
     });
