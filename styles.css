@@ -269,14 +269,21 @@ footer a {
 #mottie-keyboard-container {
   width: 100%;
   text-align: center;
-  background: #E5E7EB;
-  padding: 5px;
-  border-top: 1px solid #B0B5BA;
+  background: transparent;
+  overflow: hidden;
+  font-size: 11px; /* Scale down Mottie keyboard which uses em sizing */
 }
-.ui-keyboard {
-  padding: 5px;
-  margin: 0 auto;
+#mottie-keyboard-container .ui-keyboard {
+  position: static !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  top: auto !important;
+  left: auto !important;
+  padding: 5px !important;
+  box-sizing: border-box;
 }
+/* Removed custom flexbox overrides so Mottie can render its keys properly */
 
 .terminal-panel {
   width: 100%;

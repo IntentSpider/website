@@ -334,33 +334,21 @@
                 'q w e r t y u i o p',
                 'a s d f g h j k l',
                 '{shift} z x c v b n m {bksp}',
-                '{space} {accept}'
+                '{accept} {space} {cancel}'
             ],
             'shift': [
                 'Q W E R T Y U I O P',
                 'A S D F G H J K L',
                 '{shift} Z X C V B N M {bksp}',
-                '{space} {accept}'
+                '{accept} {space} {cancel}'
             ]
-        },
-        display: {
-            'bksp': 'Del',
-            'accept': 'Enter',
-            'shift': 'Shift',
-            'space': 'Space'
         }
-    });
-
-    // Intercept clicks on Mottie keyboard buttons to feed into our engine pipeline
-    $('#mottie-keyboard-container').on('mousedown', '.ui-keyboard-button', function(e) {
-        let action = $(this).attr('data-action');
-        let value = $(this).attr('data-value');
-        
-        let key = value || action;
+    }).on('keyboardChange', function(e, keyboard, el) {
+        let key = keyboard.last.key;
         if (!key) return;
         
         if (key === 'space') key = 'space';
-        else if (key === 'accept') key = 'enter';
+        else if (key === 'accept' || key === 'enter') key = 'enter';
         else if (key === 'bksp') key = 'backspace';
         else if (key === 'shift') key = 'shift';
         
