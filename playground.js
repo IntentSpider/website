@@ -252,13 +252,13 @@
                 await this.loadCollectiveState();
 
                 this.ready = true;
-                logTerminal("Engine is LIVE — type to predict.", "predict");
-                showNotification("Engine is LIVE — type to predict.");
+                logTerminal("Data loaded. IntentSpider Engine Ready to Start. ", "predict");
+                showNotification("Data loaded. IntentSpider Engine Ready to Start.");
 
             } catch (err) {
-                logTerminal(`WASM init failed: ${err.message}`, "error");
-                logTerminal("Falling back to demo mode.", "error");
-                showNotification(`ERR: WASM failed: ${err.message}`);
+                logTerminal(`Error in loading function ${err.message}`, "error");
+                logTerminal("Failed.", "error");
+                showNotification(`Failed. ${err.message}`);
             }
         },
 
