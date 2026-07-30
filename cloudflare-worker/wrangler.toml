@@ -8,9 +8,8 @@ binding = "STATE_KV"
 # REPLACE WITH YOUR ACTUAL KV NAMESPACE ID FROM CLOUDFLARE DASHBOARD
 id = "ece31c6c33ff4409b57c8f79566a27fc" 
 
-# Environment variables (set API_KEY via `wrangler secret put API_KEY` or in dashboard)
-# Or via GitHub Secrets when deploying automatically
-
+[vars]
+API_KEY = "is_demo_2025_xyz"
 # Custom domain route
 # Configure in Cloudflare Dashboard:
 #   Workers > intentspider-state-api > Settings > Domains & Routes
