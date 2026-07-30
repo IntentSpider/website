@@ -2,13 +2,14 @@ name = "intentspider-state-api"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-# R2 bucket binding
-[[r2_buckets]]
-binding = "STATE_BUCKET"
-bucket_name = "intentspider-state"
+# KV namespace binding
+[[kv_namespaces]]
+binding = "STATE_KV"
+# REPLACE WITH YOUR ACTUAL KV NAMESPACE ID FROM CLOUDFLARE DASHBOARD
+id = "your_kv_namespace_id_here"
 
-# Environment variables (set API_KEY via `wrangler secret put API_KEY`)
-# Or via Cloudflare Dashboard > Workers > Settings > Variables
+# Environment variables (set API_KEY via `wrangler secret put API_KEY` or in dashboard)
+# Or via GitHub Secrets when deploying automatically
 
 # Custom domain route
 # Configure in Cloudflare Dashboard:
