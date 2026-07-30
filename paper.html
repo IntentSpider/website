@@ -40,7 +40,7 @@
         }, function (reason) {
             console.error(reason);
             const container = document.getElementById('pdf-viewer-container');
-            container.innerHTML = '<div class="pdf-loading">Error loading PDF. [placeholder]</div>';
+            container.innerHTML = '<div class="pdf-loading">Sorry. Please reload this page.</div>';
         });
     </script>
 </head>
@@ -68,7 +68,7 @@
             <p>Explore the mathematical foundations and architectural design of the IntentSpider engine.</p>
             
             <div id="pdf-viewer-container">
-                <div class="pdf-loading">Loading Research Paper...</div>
+                <div class="pdf-loading"><img src="/assets/spinner.gif" width="35px" alt=""></div>
             </div>
         </main>
 
