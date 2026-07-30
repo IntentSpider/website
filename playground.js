@@ -79,8 +79,9 @@
             showNotification("Initializing WASM Engine...");
 
             if (typeof IntentSpiderModule !== 'function') {
-                logTerminal("IntentSpiderModule not found — running in demo mode.", "error");
-                showNotification("Engine not found. Running in demo mode.");
+                const type = typeof IntentSpiderModule;
+                logTerminal(`IntentSpiderModule not found (type: ${type}) — running in demo mode.`, "error");
+                showNotification(`Engine not found (Type: ${type}). Running in demo mode.`);
                 return;
             }
 
@@ -120,7 +121,7 @@
             } catch (err) {
                 logTerminal(`WASM init failed: ${err.message}`, "error");
                 logTerminal("Falling back to demo mode.", "error");
-                showNotification("WASM connection failed. Falling back to demo mode.");
+                showNotification(`ERR: WASM failed: ${err.message}`);
             }
         },
 
