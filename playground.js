@@ -8,7 +8,7 @@
     // Configuration
     // ================================================================
 
-    const STATE_API_URL = 'https://projectsapis.nekshadesilva.com/state';
+    const STATE_API_URL = 'https://intentspider-state-api.rohandesilvahotmail.workers.dev/state';
     const STATE_API_KEY = 'is_demo_2025_xyz'; // Set this to match your Cloudflare Worker env var
     const STATE_SYNC_INTERVAL_MS = 60000; // Save state every 60 seconds of activity
     const CHAR_LIMIT = 200;
