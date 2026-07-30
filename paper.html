@@ -2,15 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research Paper - IntentSpider Webnet</title>
-    <link rel="icon" href="assets/873547485784.png" type="image/png">
+    <title>Research Paper - IntentSpider</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- PDF.js from CDN -->
     <script type="module">
         import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
         
-        // Setup worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
 
         const url = 'assets/intentspider_paper.pdf';
@@ -21,13 +17,11 @@
             const loadingEl = document.querySelector('.pdf-loading');
             if (loadingEl) loadingEl.remove();
 
-            // Render all pages
             for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
                 pdf.getPage(pageNum).then(function(page) {
                     const scale = 1.5;
                     const viewport = page.getViewport({scale: scale});
 
-                    // Prepare canvas using PDF page dimensions
                     const canvas = document.createElement('canvas');
                     canvas.className = 'pdf-page';
                     const context = canvas.getContext('2d');
@@ -36,7 +30,6 @@
 
                     container.appendChild(canvas);
 
-                    // Render PDF page into canvas context
                     const renderContext = {
                         canvasContext: context,
                         viewport: viewport
@@ -47,38 +40,41 @@
         }, function (reason) {
             console.error(reason);
             const container = document.getElementById('pdf-viewer-container');
-            container.innerHTML = '<div class="pdf-loading" style="color: red;">Error loading PDF. Please ensure the file exists at assets/intentspider_paper.pdf</div>';
+            container.innerHTML = '<div class="pdf-loading">Error loading PDF. [placeholder]</div>';
         });
     </script>
 </head>
 <body>
-    <div class="top-ribbon"></div>
-    <nav>
-        <div class="logo-container">
-            <a href="index.html">
-                <img src="assets/873547485784.png" alt="IntentSpider Logo">
-            </a>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="playground.html">Playground</a>
-            <a href="paper.html">Paper</a>
-            <a href="about.html">About</a>
-            <a href="#">GitHub</a>
-        </div>
-    </nav>
+    <div id="wrap">
+        <header>
+            <div id="logo">
+                <a href="index.html"><img src="assets/873547485784.png" alt="IntentSpider"></a>
+            </div>
+            <div id="nav-area">
+                <div class="stats">
+                    9 modules, [token count] tokens indexed
+                </div>
+                <nav>
+                    <a href="index.html">Home</a>
+                    <a href="playground.html">Playground</a>
+                    <a href="paper.html">Paper</a>
+                    <a href="about.html">About</a>
+                </nav>
+            </div>
+        </header>
 
-    <div class="container">
-        <h1>Research Paper</h1>
-        <p>Explore the mathematical foundations and architectural design of the IntentSpider engine.</p>
-        
-        <div id="pdf-viewer-container">
-            <div class="pdf-loading">Loading Research Paper...</div>
-        </div>
+        <main>
+            <h1>Research Paper</h1>
+            <p>Explore the mathematical foundations and architectural design of the IntentSpider engine.</p>
+            
+            <div id="pdf-viewer-container">
+                <div class="pdf-loading">Loading Research Paper...</div>
+            </div>
+        </main>
+
+        <footer>
+            &copy; 2025 GVMA Research Labs. Contact: [contact placeholder]
+        </footer>
     </div>
-
-    <footer>
-        GVMA Research Labs &copy; 2026. All rights reserved.
-    </footer>
 </body>
 </html>
