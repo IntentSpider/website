@@ -360,18 +360,47 @@
         if (document.activeElement.tagName === 'INPUT' ||
             document.activeElement.tagName === 'TEXTAREA') return;
 
+        let virtualKey = null;
+
         if (e.code === 'Space') {
             e.preventDefault();
             handleKey('space');
+            virtualKey = 'space';
         } else if (e.code === 'Enter') {
             e.preventDefault();
             handleKey('enter');
+            virtualKey = 'accept';
         } else if (e.code === 'Backspace') {
             e.preventDefault();
             handleKey('backspace');
+            virtualKey = 'bksp';
         } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
             e.preventDefault();
             handleKey(e.key);
+            virtualKey = e.key.toLowerCase();
+        } else if (e.key === 'Shift') {
+            virtualKey = 'shift';
+        }
+
+        if (virtualKey) {
+            let btn = $(`#mottie-keyboard-container .ui-keyboard-button[data-value="${virtualKey}"]`);
+            if (!btn.length) btn = $(`#mottie-keyboard-container .ui-keyboard-button[data-name="${virtualKey}"]`);
+            if (btn.length) btn.addClass('ui-state-active');
+        }
+    });
+
+    document.addEventListener('keyup', (e) => {
+        let virtualKey = null;
+        if (e.code === 'Space') virtualKey = 'space';
+        else if (e.code === 'Enter') virtualKey = 'accept';
+        else if (e.code === 'Backspace') virtualKey = 'bksp';
+        else if (e.key.length === 1) virtualKey = e.key.toLowerCase();
+        else if (e.key === 'Shift') virtualKey = 'shift';
+
+        if (virtualKey) {
+            let btn = $(`#mottie-keyboard-container .ui-keyboard-button[data-value="${virtualKey}"]`);
+            if (!btn.length) btn = $(`#mottie-keyboard-container .ui-keyboard-button[data-name="${virtualKey}"]`);
+            if (btn.length) btn.removeClass('ui-state-active');
         }
     });
 
