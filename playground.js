@@ -348,10 +348,7 @@
         const vKey = document.querySelector(keySelector);
         if (vKey) vKey.classList.add('pressed');
 
-        if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
-            e.preventDefault();
-            handleKey(key);
-        } else if (e.code === 'Space') {
+        if (e.code === 'Space') {
             e.preventDefault();
             handleKey('space');
         } else if (e.code === 'Enter') {
@@ -360,6 +357,9 @@
         } else if (e.code === 'Backspace') {
             e.preventDefault();
             handleKey('backspace');
+        } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+            e.preventDefault();
+            handleKey(key);
         }
     });
 
