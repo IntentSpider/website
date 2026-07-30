@@ -174,6 +174,7 @@ footer a {
 .app-switcher {
   display: flex;
   border-bottom: 1px solid #000000;
+  flex-shrink: 0;
 }
 
 .app-switcher button {
@@ -234,6 +235,7 @@ footer a {
   font-weight: bold;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 .input-display::after {
   content: '|';
@@ -244,6 +246,7 @@ footer a {
 .suggestion-bar {
   display: flex;
   border-bottom: 1px solid #000000;
+  flex-shrink: 0;
 }
 .suggestion-bar button {
   flex: 1;
@@ -265,20 +268,33 @@ footer a {
 
 .simple-keyboard {
   padding: 5px;
-  background: #FFFFFF;
+  background: #D1D5DB;
+  border-top: 1px solid #B0B5BA;
 }
 .hg-theme-default .hg-button {
-  border: 1px solid #000000;
-  border-radius: 4px;
+  border: none;
+  border-radius: 5px;
   background: #FFFFFF;
   color: #000000;
   font-family: inherit;
-  font-size: 13px;
-  box-shadow: none;
+  font-size: 16px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+  margin: 2px 1px;
 }
-.hg-theme-default .hg-button:active {
-  background: #000000;
-  color: #FFFFFF;
+.hg-theme-default .hg-button:active,
+.hg-theme-default .hg-button.hg-activeButton {
+  background: #B3B8C1;
+}
+.hg-theme-default .hg-button[data-skbtn="{shift}"],
+.hg-theme-default .hg-button[data-skbtn="{bksp}"],
+.hg-theme-default .hg-button[data-skbtn="{enter}"] {
+  background: #B3B8C1;
+  font-size: 14px;
+}
+.hg-theme-default .hg-button[data-skbtn="{shift}"]:active,
+.hg-theme-default .hg-button[data-skbtn="{bksp}"]:active,
+.hg-theme-default .hg-button[data-skbtn="{enter}"]:active {
+  background: #FFFFFF;
 }
 .hg-theme-default .hg-button.hg-standardBtn {
   text-transform: uppercase;
