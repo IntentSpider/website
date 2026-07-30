@@ -13,6 +13,7 @@
     const STATE_SYNC_INTERVAL_MS = 60000; // Save state every 60 seconds of activity
     const CHAR_LIMIT = 200;
 
+    
     // ================================================================
     // DOM handles
     // ================================================================
