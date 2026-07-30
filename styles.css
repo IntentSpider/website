@@ -82,10 +82,10 @@ footer a {
   font-weight: bold;
 }
 nav a:hover, nav a:active {
-  color: rgba(0, 49, 167, 0.5);
+  color: rgba(0, 49, 167, 0.5) !important;
 }
 footer a:hover, footer a:active {
-  color: rgba(0, 49, 167, 0.5);
+  color: rgba(0, 49, 167, 0.5) !important;
 }
 /* Global links */
 a {
@@ -93,7 +93,7 @@ a {
   text-decoration: none;
 }
 a:hover, a:active {
-  color: rgba(0, 49, 167, 0.5);
+  color: rgba(0, 49, 167, 0.5) !important;
 }
 
 /* Main content */
