@@ -169,18 +169,35 @@ footer a {
   overflow: hidden;
 }
 
-/* Quiz Terminal (replaces chat UI) */
-#quiz-terminal {
+/* Chat UI */
+#chat-container {
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
   background: #FFFFFF;
-  min-height: 0; /* allow flex shrink */
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-#quiz-terminal .xterm {
-  height: 100%;
+
+.chat-msg {
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 90%;
+  font-family: inherit;
+  word-wrap: break-word;
+  align-self: flex-start;
 }
-#quiz-terminal .xterm-viewport {
-  overflow-y: auto !important;
+
+.chat-user {
+  background: #000000;
+  color: #FFFFFF;
+}
+
+.chat-agent {
+  background: #FFFFFF;
+  color: #000000;
+  border: 1px solid #E5E7EB;
 }
 
 /* Keyboard area */
