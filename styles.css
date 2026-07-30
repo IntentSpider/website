@@ -15,7 +15,7 @@ body {
 
 /* Centered container with blue top strip */
 #wrap {
-  margin: 0 auto;
+  margin: 9px auto;
   width: 770px;
   padding: 0px 10px;
   text-align: left;
