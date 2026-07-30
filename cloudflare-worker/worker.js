@@ -25,7 +25,7 @@ export default {
     // API key check (simple bearer token)
     const apiKey = request.headers.get('X-API-Key');
     if (!apiKey || apiKey !== env.STATE_AUTH_KEY) {
-      return new Response('Unauthorized', { status: 401, headers: corsHeaders() });
+      return new Response('Unauthorized. Sent: ' + apiKey + ', Expected: ' + env.STATE_AUTH_KEY, { status: 401, headers: corsHeaders() });
     }
 
     if (request.method === 'GET') {
