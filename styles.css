@@ -154,7 +154,7 @@ footer a {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -164,7 +164,7 @@ footer a {
   left: 22.5%;
   width: 45%;
   height: 59%;
-  z-index: 2;
+  z-index: 1;
   background: #FFFFFF;
   display: flex;
   flex-direction: column;
@@ -263,34 +263,25 @@ footer a {
   background: rgba(0, 49, 167, 0.1);
 }
 
-.keyboard {
+.simple-keyboard {
   padding: 5px;
+  background: #FFFFFF;
 }
-.keyboard-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 5px;
-}
-.key {
+.hg-theme-default .hg-button {
   border: 1px solid #000000;
   border-radius: 4px;
-  margin: 0 1px;
-  padding: 8px 0;
-  flex: 1;
-  text-align: center;
-  cursor: pointer;
   background: #FFFFFF;
   color: #000000;
-  user-select: none;
+  font-family: inherit;
   font-size: 13px;
+  box-shadow: none;
 }
-.key:active, .key.pressed {
+.hg-theme-default .hg-button:active {
   background: #000000;
   color: #FFFFFF;
 }
-.key.special {
-  flex: 1.5;
-  font-size: 11px;
+.hg-theme-default .hg-button.hg-standardBtn {
+  text-transform: uppercase;
 }
 
 .terminal-panel {

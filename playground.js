@@ -281,13 +281,23 @@
         } else if (key === 'shift') {
             shiftActive = !shiftActive;
         } else {
-            const ch = shiftActive ? key.toUpperCase() : key;
+            // simple-keyboard emits uppercase letters when shifted.
+            // If it's a lowercase letter, check shiftActive.
+            let ch = key;
+            if (ch.length === 1 && ch >= 'a' && ch <= 'z' && shiftActive) {
+                ch = ch.toUpperCase();
+            }
             currentText += ch;
             Engine.onKey(ch.charCodeAt(0));
             if (!Engine.ready) {
                 logTerminal(`Key: '${ch}' (0x${ch.charCodeAt(0).toString(16)})`, "info");
             }
-            if (shiftActive) shiftActive = false;
+            if (shiftActive) {
+                shiftActive = false;
+                if (window.myKeyboard) {
+                    window.myKeyboard.setOptions({ layoutName: "default" });
+                }
+            }
         }
         updateDisplay();
     }
@@ -323,34 +333,44 @@
         }, 400);
     }
 
-    // ---- Virtual Keyboard Events ----
-    document.querySelectorAll('.key').forEach(keyEl => {
-        keyEl.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            const key = keyEl.getAttribute('data-key');
+    // ---- Virtual Keyboard Events (simple-keyboard) ----
+    const Keyboard = window.SimpleKeyboard.default;
+    window.myKeyboard = new Keyboard({
+        onKeyPress: button => {
+            let key = button;
+            if (button === '{shift}') key = 'shift';
+            else if (button === '{bksp}') key = 'backspace';
+            else if (button === '{space}') key = 'space';
+            else if (button === '{enter}') key = 'enter';
+            
+            if (key === 'shift') {
+                const currentLayout = window.myKeyboard.options.layoutName;
+                const shiftToggle = currentLayout === "default" ? "shift" : "default";
+                window.myKeyboard.setOptions({ layoutName: shiftToggle });
+            }
+            
             handleKey(key);
-            keyEl.classList.add('pressed');
-        });
-
-        keyEl.addEventListener('mouseup', () => {
-            keyEl.classList.remove('pressed');
-        });
-
-        keyEl.addEventListener('mouseleave', () => {
-            keyEl.classList.remove('pressed');
-        });
-
-        // Touch support
-        keyEl.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const key = keyEl.getAttribute('data-key');
-            handleKey(key);
-            keyEl.classList.add('pressed');
-        }, { passive: false });
-
-        keyEl.addEventListener('touchend', () => {
-            keyEl.classList.remove('pressed');
-        });
+        },
+        layout: {
+            'default': [
+                'q w e r t y u i o p',
+                'a s d f g h j k l',
+                '{shift} z x c v b n m {bksp}',
+                '{space} {enter}'
+            ],
+            'shift': [
+                'Q W E R T Y U I O P',
+                'A S D F G H J K L',
+                '{shift} Z X C V B N M {bksp}',
+                '{space} {enter}'
+            ]
+        },
+        display: {
+            '{bksp}': 'del',
+            '{enter}': 'enter',
+            '{shift}': 'shift',
+            '{space}': 'space'
+        }
     });
 
     // ---- Physical Keyboard Integration ----
@@ -358,43 +378,50 @@
         if (document.activeElement.tagName === 'INPUT' ||
             document.activeElement.tagName === 'TEXTAREA') return;
 
-        const key = e.key.toLowerCase();
-
-        // Map to virtual key selector
-        let keySelector = `[data-key="${key}"]`;
-        if (e.code === 'Space')      keySelector = `[data-key="space"]`;
-        if (e.code === 'Enter')      keySelector = `[data-key="enter"]`;
-        if (e.code === 'Backspace')  keySelector = `[data-key="backspace"]`;
-        if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') keySelector = `[data-key="shift"]`;
-
-        const vKey = document.querySelector(keySelector);
-        if (vKey) vKey.classList.add('pressed');
-
+        let virtualKey = null;
+        
         if (e.code === 'Space') {
             e.preventDefault();
             handleKey('space');
+            virtualKey = '{space}';
         } else if (e.code === 'Enter') {
             e.preventDefault();
             handleKey('enter');
+            virtualKey = '{enter}';
         } else if (e.code === 'Backspace') {
             e.preventDefault();
             handleKey('backspace');
+            virtualKey = '{bksp}';
         } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
             e.preventDefault();
-            handleKey(key);
+            handleKey(e.key);
+            virtualKey = e.key.toLowerCase();
+        } else if (e.key === 'Shift') {
+            window.myKeyboard.setOptions({ layoutName: "shift" });
+            virtualKey = '{shift}';
+        }
+
+        if (virtualKey) {
+            const btn = window.myKeyboard.getButtonElement(virtualKey);
+            if (btn) btn.classList.add('hg-activeButton');
         }
     });
 
     document.addEventListener('keyup', (e) => {
-        const key = e.key.toLowerCase();
-        let keySelector = `[data-key="${key}"]`;
-        if (e.code === 'Space')      keySelector = `[data-key="space"]`;
-        if (e.code === 'Enter')      keySelector = `[data-key="enter"]`;
-        if (e.code === 'Backspace')  keySelector = `[data-key="backspace"]`;
-        if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') keySelector = `[data-key="shift"]`;
+        let virtualKey = null;
+        if (e.code === 'Space') virtualKey = '{space}';
+        else if (e.code === 'Enter') virtualKey = '{enter}';
+        else if (e.code === 'Backspace') virtualKey = '{bksp}';
+        else if (e.key.length === 1) virtualKey = e.key.toLowerCase();
+        else if (e.key === 'Shift') {
+            window.myKeyboard.setOptions({ layoutName: "default" });
+            virtualKey = '{shift}';
+        }
 
-        const vKey = document.querySelector(keySelector);
-        if (vKey) vKey.classList.remove('pressed');
+        if (virtualKey) {
+            const btn = window.myKeyboard.getButtonElement(virtualKey);
+            if (btn) btn.classList.remove('hg-activeButton');
+        }
     });
 
     // ---- Suggestion Clicks ----
