@@ -134,9 +134,8 @@ footer a {
 /* ============================================ */
 
 .playground-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: block;
+  text-align: center;
   margin-top: 20px;
 }
 
@@ -146,9 +145,7 @@ footer a {
   width: 650px;
   height: 906px;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
+  margin: 0 auto;
 }
 
 .phone-bg {
