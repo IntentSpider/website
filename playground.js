@@ -366,9 +366,9 @@
             ]
         },
         display: {
-            '{bksp}': 'del',
-            '{enter}': 'enter',
-            '{shift}': 'shift',
+            '{bksp}': '⌫',
+            '{enter}': 'return',
+            '{shift}': '⇧',
             '{space}': 'space'
         }
     });
