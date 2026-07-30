@@ -28,19 +28,19 @@
         document.getElementById('sug-3')
     ];
 
-    const errorBanner = document.getElementById('error-banner');
-    const errorText = document.getElementById('error-text');
+    const notificationBanner = document.getElementById('notification-banner');
+    const notificationText = document.getElementById('notification-text');
 
     let currentText = "";
     let shiftActive = false;
 
-    function showError(msg) {
-        if (!errorBanner) return;
-        errorText.textContent = msg;
-        errorBanner.style.display = 'flex';
+    function showNotification(msg) {
+        if (!notificationBanner) return;
+        notificationText.textContent = msg;
+        notificationBanner.style.display = 'flex';
         window.scrollTo({ top: 0, behavior: 'smooth' });
         setTimeout(() => {
-            errorBanner.style.display = 'none';
+            notificationBanner.style.display = 'none';
         }, 5000);
     }
 
@@ -76,11 +76,11 @@
 
         async init() {
             logTerminal("Initializing WASM bridge...", "info");
-            setStatus("loading");
+            showNotification("Initializing WASM Engine...");
 
             if (typeof IntentSpiderModule !== 'function') {
                 logTerminal("IntentSpiderModule not found — running in demo mode.", "error");
-                setStatus("demo");
+                showNotification("Engine not found. Running in demo mode.");
                 return;
             }
 
@@ -115,11 +115,12 @@
 
                 this.ready = true;
                 logTerminal("Engine is LIVE — type to predict.", "predict");
+                showNotification("Engine is LIVE — type to predict.");
 
             } catch (err) {
                 logTerminal(`WASM init failed: ${err.message}`, "error");
                 logTerminal("Falling back to demo mode.", "error");
-                showError("WASM connection failed. Falling back to demo mode.");
+                showNotification("WASM connection failed. Falling back to demo mode.");
             }
         },
 
@@ -144,12 +145,12 @@
                     this.showDebug();
                 } else {
                     logTerminal("engine_load_state returned failure.", "error");
-                    showError("Failed to load state into engine.");
+                    showNotification("Failed to load state into engine.");
                 }
             } catch (err) {
                 logTerminal(`Could not load state: ${err.message}`, "error");
                 logTerminal("Engine will start with empty state.", "error");
-                showError("Could not load state file.");
+                showNotification("Could not load state file.");
             }
         },
 
