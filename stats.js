@@ -6,10 +6,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     statsContainers.forEach(container => {
         container.innerHTML = `
             <div>
-                <img src="assets/spinner.gif" alt="Loading" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;"> Webnets
+                <img src="assets/spinner.gif" alt="Loading" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Webnets
             </div>
             <div>
-                <img src="assets/spinner.gif" alt="Loading" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;"> Tokens
+                <img src="assets/spinner.gif" alt="Loading" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Tokens
             </div>
         `;
     });
