@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #FFFFFF;
+  background: #fffbd9;
   margin: 0;
   font: 16px/24px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color: #000000;
@@ -19,7 +19,7 @@ body {
   width: 760px;
   text-align: left;
   border-top: 5px solid #0031A7;
- 
+  background-color: rgb(255, 255, 255);
   min-height: 100vh;
 }
 
