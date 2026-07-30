@@ -13,4 +13,4 @@ STATE_AUTH_KEY = "is_demo_2025_xyz"
 # Custom domain route
 # Configure in Cloudflare Dashboard:
 #   Workers > intentspider-state-api > Settings > Domains & Routes
-#   Add route: projectsapis.nekshadesilva.com/*
+#   Add route: intentspiderapis.nekshadesilva.com/*
