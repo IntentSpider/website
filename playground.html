@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IntentSpider Playground</title>
-    <link rel="stylesheet" href="styles.css?v=11">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css" />
+    <link rel="stylesheet" href="styles.css?v=12">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/ui-darkness/jquery-ui.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/virtual-keyboard/1.30.4/css/keyboard.min.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/virtual-keyboard/1.30.4/js/jquery.keyboard.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
 </head>
 <body>
     <div id="wrap">
@@ -43,7 +40,7 @@
                     <img class="phone-bg" src="assets/intetnspiderframe-67584.png" alt="Phone">
                     <div class="phone-screen">
 
-                    <div id="quiz-terminal"></div>
+                    <div id="chat-container"></div>
 
                     <div class="keyboard-area">
                         <div class="input-display" id="input-display"></div>
@@ -71,14 +68,9 @@
             <br>
 
             <div class="methodology-citation">
-                <strong>Question Methodology</strong><br>
-                The 110 open-ended prompts used in this playground are designed following established Natural Language Elicitation protocols.
-                Question design draws from conversational persona-based prompts
-                (<a href="https://aclanthology.org/P18-1205/" target="_blank">Zhang et al., 2018, Persona-Chat, ACL</a>)
-                and structured free-writing elicitation protocols
-                (<a href="https://www.liwc.app/" target="_blank">Pennebaker et al., LIWC</a>).
-                Questions are intentionally open-ended across three topic clusters (Animals &amp; Nature, Daily Life &amp; Routines, Hobbies &amp; Creativity)
-                to elicit naturalistic, multi-clause descriptive sentences that exercise the full prediction pipeline.
+                <h3 style="color: #000; margin-bottom: 5px; font-size: 16px;">110 question database references</h3>
+                Zhang, S., Dinan, E., Urbanek, J., Szlam, A., Kiela, D., & Weston, J. (2018). Personalizing Dialogue Agents: I have a dog, do you have pets too?. In Proceedings of the 56th Annual Meeting of the Association for Computational Linguistics. <a href="https://aclanthology.org/P18-1205/">https://aclanthology.org/P18-1205/</a><br>
+                Pennebaker, J. W., Boyd, R. L., Jordan, K., & Blackburn, K. (2015). The development and psychometric properties of LIWC2015. <a href="https://www.liwc.app/">https://www.liwc.app/</a>
             </div>
 
             <br>
@@ -88,9 +80,6 @@
                 Mottie UI Keyboard (2013) : <a href="https://www.jqueryscript.net/other/jQuery-Virtual-Keyboard-Plugin-Keyboard.html">Link</a>
                 <br>
                 Emscripten C++ Engine: <a href="https://emscripten.org/">https://emscripten.org/</a>
-                <br>
-                Xterm.js Web Terminal: <a href="http://xtermjs.org/">http://xtermjs.org/</a>
-
             </span>
         </main>
 
@@ -100,7 +89,7 @@
         </footer>
     </div>
 
-    <script src="wasm/intentspider.js?v=11"></script>
-    <script src="playground.js?v=11"></script>
+    <script src="wasm/intentspider.js?v=12"></script>
+    <script src="playground.js?v=12"></script>
 </body>
 </html>

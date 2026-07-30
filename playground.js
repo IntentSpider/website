@@ -76,53 +76,20 @@
     // Quiz Terminal (white terminal inside phone screen)
     // ================================================================
 
-    let quizTerm = null;
-    let quizFitAddon = null;
+    const chatContainer = document.getElementById('chat-container');
 
-    function initQuizTerminal() {
-        if (typeof Terminal === 'undefined') return;
+    function appendChatBubble(text, sender) {
+        if (!chatContainer) return;
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-msg chat-${sender}`;
+        msgDiv.textContent = text;
+        chatContainer.appendChild(msgDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 
-        quizTerm = new Terminal({
-            theme: {
-                background: '#FFFFFF',
-                foreground: '#000000',
-                cursor: '#0031A7',
-                cursorAccent: '#FFFFFF',
-                selectionBackground: 'rgba(0, 49, 167, 0.3)',
-            },
-            fontFamily: '"Courier New", monospace',
-            fontSize: 11,
-            convertEol: true,
-            disableStdin: true, // We handle input ourselves
-            cursorBlink: false,
-            scrollback: 1000,
-            wordWrap: true,
-        });
-
-        // Fit addon to auto-resize to container
-        if (typeof FitAddon !== 'undefined') {
-            quizFitAddon = new FitAddon.FitAddon();
-            quizTerm.loadAddon(quizFitAddon);
-        }
-
-        quizTerm.open(quizContainer);
-
-        if (quizFitAddon) {
-            setTimeout(() => quizFitAddon.fit(), 100);
-            // Refit on window resize
-            window.addEventListener('resize', () => {
-                if (quizFitAddon) quizFitAddon.fit();
-            });
-        }
-
-        // Welcome message
-        quizTerm.writeln('\x1b[1;34m╔══════════════════════════╗\x1b[0m');
-        quizTerm.writeln('\x1b[1;34m║  IntentSpider Quiz v2.0  ║\x1b[0m');
-        quizTerm.writeln('\x1b[1;34m╚══════════════════════════╝\x1b[0m');
-        quizTerm.writeln('');
-        quizTerm.writeln('Type your answer below and');
-        quizTerm.writeln('press \x1b[1mSend\x1b[0m to submit.');
-        quizTerm.writeln('');
+    function initChatUI() {
+        appendChatBubble("Welcome to IntentSpider Chat v2.0!", "agent");
+        appendChatBubble("Type your answer below and press Send.", "agent");
     }
 
     // ================================================================
@@ -182,12 +149,9 @@
         },
 
         showCurrentQuestion() {
-            if (!quizTerm) return;
             const q = this.currentQuestion();
             const num = this.totalAnswered + 1;
-            quizTerm.writeln(`\x1b[1;34mQ${num}:\x1b[0m ${q.text}`);
-            quizTerm.writeln('');
-            quizTerm.write('\x1b[32m> \x1b[0m'); // Green prompt
+            appendChatBubble(`Q${num}: ${q.text}`, "agent");
         }
     };
 
@@ -504,8 +468,6 @@
             if (!Engine.ready) {
                 logTerminal(`Key: '${ch}' (0x${ch.charCodeAt(0).toString(16)})`, "info");
             }
-            // Echo to quiz terminal
-            if (quizTerm) quizTerm.write(ch);
         }
         updateDisplay();
     }
@@ -518,12 +480,8 @@
         Engine.onKey(32);
         Engine.commit();
 
-        // Log the answer in the quiz terminal
-        if (quizTerm) {
-            quizTerm.writeln(''); // Newline after the answer
-            quizTerm.writeln(`\x1b[90m[Answer recorded]\x1b[0m`);
-            quizTerm.writeln('');
-        }
+        // Log the answer in the chat
+        appendChatBubble(text, "user");
 
         logTerminal(`Answer: "${text}"`, "info");
 
@@ -774,7 +732,7 @@
     logTerminal("Initializing...", "info");
 
     // Initialize quiz terminal
-    initQuizTerminal();
+    initChatUI();
 
     // Boot everything
     setTimeout(async () => {
