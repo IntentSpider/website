@@ -80,13 +80,25 @@
 
     function addChatBubble(text, isUser = false) {
         const bubble = document.createElement('chat-bubble');
-        // Setting 'continued' removes the avatar/tail
-        bubble.setAttribute('continued', 'true');
         if (isUser) {
             bubble.setAttribute('right', '');
         }
         bubble.innerHTML = `<p>${text}</p>`;
         chatMessages.appendChild(bubble);
+
+        // Hide the avatar inside the Shadow DOM while keeping the tail
+        setTimeout(() => {
+            if (bubble.shadowRoot) {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .avatar-container { display: none !important; }
+                    svg { display: none !important; }
+                    img { display: none !important; }
+                `;
+                bubble.shadowRoot.appendChild(style);
+            }
+        }, 50);
+
         // Auto-scroll to bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
