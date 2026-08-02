@@ -38,7 +38,7 @@
         if (!notificationBanner) return;
         notificationText.textContent = msg;
         notificationBanner.style.display = 'flex';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo(0, 0);
         setTimeout(() => {
             notificationBanner.style.display = 'none';
         }, 5000);
@@ -461,7 +461,7 @@
                     suggestions[i].textContent = sugs[i].token;
                     suggestions[i].title = `Score: ${sugs[i].score?.toFixed(4)}`;
                 } else {
-                    suggestions[i].textContent = '—';
+                    suggestions[i].textContent = '';
                     suggestions[i].title = '';
                 }
             }
@@ -485,7 +485,7 @@
     }
 
     function clearSuggestions() {
-        suggestions.forEach(s => { s.textContent = '—'; s.title = ''; });
+        suggestions.forEach(s => { s.textContent = ''; s.title = ''; });
     }
 
     // ================================================================
@@ -540,6 +540,7 @@
     function submitAnswer() {
         const text = currentText.trim();
         if (text === '') return;
+        if (!Engine.ready) return; // Wait until ready
 
         // Commit any pending word to the engine
         Engine.onKey(32);
@@ -609,12 +610,19 @@
     // ================================================================
 
     document.getElementById('input-display').tabIndex = 0;
-    
+    // Physical keyboard handler
     document.addEventListener('keydown', (e) => {
-        if (document.activeElement.tagName === 'INPUT' ||
-            document.activeElement.tagName === 'TEXTAREA') return;
+        // If the user presses Enter while the hidden input is focused, make sure it fires.
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            if (e.code === 'Enter') {
+                e.preventDefault();
+                handleKey('enter');
+                return;
+            }
+            return;
+        }
 
-        // Native shortcut support
+        // Ignore if modifier keys are pressed (except for select all/copy/paste).
         if (e.ctrlKey || e.metaKey) {
             if (e.code === 'KeyA') {
                 e.preventDefault();
