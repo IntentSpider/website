@@ -2,14 +2,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const statsContainers = document.querySelectorAll('.stats');
     if (!statsContainers || statsContainers.length === 0) return;
 
+    const isSubdir = window.location.pathname.includes('/contactform/');
+    const spinnerSrc = isSubdir ? '../assets/spinner.gif' : 'assets/spinner.gif';
+
     // Immediately show loading state (if not already set in HTML)
     statsContainers.forEach(container => {
         container.innerHTML = `
             <div>
-                <img src="assets/spinner.gif" alt="Loading" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Webnets
+                <img src="${spinnerSrc}" alt="Loading" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Webnets
             </div>
             <div>
-                <img src="assets/spinner.gif" alt="Loading" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Tokens
+                <img src="${spinnerSrc}" alt="Loading" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Tokens
             </div>
         `;
     });
