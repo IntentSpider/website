@@ -184,6 +184,11 @@ footer {
   display: flex;
   flex-direction: column;
   position: relative;
+  /* Retro 2003-2007 embedded text area styling */
+  border: none;
+  box-shadow: inset 0 0 6px black;
+  margin: 4px;
+  border-radius: 3px;
 }
 
 #chat-loading {
@@ -240,9 +245,18 @@ footer {
   overflow-y: auto;
   cursor: text;
 }
-.input-display::after {
-  content: '|';
+.input-display .cursor {
+  display: inline-block;
+  width: 1px;
+  height: 1.1em;
+  background-color: black;
   animation: blink 1s step-end infinite;
+  vertical-align: middle;
+  margin: 0 -0.5px;
+}
+.input-display .selected-text {
+  background-color: #0078d7;
+  color: white;
 }
 @keyframes blink { 50% { opacity: 0; } }
 
