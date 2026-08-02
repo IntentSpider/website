@@ -174,18 +174,31 @@ footer {
   overflow: hidden;
 }
 
-/* Quiz Terminal (replaces chat UI) */
+/* Quiz Terminal — now a chat bubble container */
 #quiz-terminal {
   flex: 1;
   overflow: hidden;
   background: #FFFFFF;
-  min-height: 0; /* allow flex shrink */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
-#quiz-terminal .xterm {
-  height: 100%;
+#chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-#quiz-terminal .xterm-viewport {
-  overflow-y: auto !important;
+#chat-messages chat-bubble {
+  --chat-bubble-color: #F0F0F0;
+  --chat-bubble-right-color: #0031A7;
+  --chat-bubble-font-color: #000;
+  --chat-bubble-font-right-color: #fff;
+  --chat-bubble-delay: 0.15s;
+  font-size: 11px;
+  line-height: 1.35;
 }
 
 /* Keyboard area */
