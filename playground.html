@@ -19,10 +19,7 @@
 </head>
 <body>
     <div id="wrap">
-        <div id="notification-banner" style="display: none; background: #0031A7; color: #FFFFFF; padding: 5px 3px; ; align-items: center; justify-content: flex-start;">
-            <img src="assets/static/info-icon.png" alt="Info" style="width: 20px; height: auto; margin-right: 10px;">
-            <span id="notification-text"></span>
-        </div>
+        <!-- Notification banner moved -->
         <header>
             <div id="logo">
                 <a href="index.html"><img src="assets/873547485784.png" alt="IntentSpider"></a>
@@ -41,9 +38,16 @@
                 </nav>
             </div>
         </header>
-
+        <div id="notification-banner" style="display: none; width: 100%; clear: both; box-sizing: border-box; background: #0031A7; color: #FFFFFF; padding: 5px 10px; align-items: center; justify-content: flex-start; margin-bottom: 10px;">
+            <img src="assets/static/info-icon.png" alt="Info" style="width: 20px; height: auto; margin-right: 10px;">
+            <span id="notification-text"></span>
+        </div>
+ <style>.avatar{
+  visibility: hidden !important;
+  display: none !important;
+}</style>
         <main>
-            <h1>Playground</h1>
+            <h1>Research Preview / Playground</h1>
             <br>
             <div class="playground-container">
                 <div class="phone-frame">
@@ -61,9 +65,9 @@
                         <div class="input-display" id="input-display"></div>
                         
                         <div class="suggestion-bar">
-                            <button id="sug-1">—</button>
-                            <button id="sug-2">—</button>
-                            <button id="sug-3">—</button>
+                            <button id="sug-1"></button>
+                            <button id="sug-2"></button>
+                            <button id="sug-3"></button>
                         </div>
 
                         <div id="mottie-keyboard-container"></div>

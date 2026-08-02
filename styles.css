@@ -22,6 +22,7 @@ body {
   border-top: 5px solid #0031A7;
   background-color: rgb(255, 255, 255);
   min-height: 100vh;
+  box-shadow: 0 30px 15px rgb(159, 159, 159);
 }
 
 /* Header: logo left, nav right */
