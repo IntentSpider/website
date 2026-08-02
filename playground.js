@@ -80,6 +80,8 @@
 
     function addChatBubble(text, isUser = false) {
         const bubble = document.createElement('chat-bubble');
+        // Setting 'continued' removes the avatar/tail
+        bubble.setAttribute('continued', 'true');
         if (isUser) {
             bubble.setAttribute('right', '');
         }
@@ -783,8 +785,15 @@
             mockPredict();
         }
 
-        // Show first question
-        Quiz.showCurrentQuestion();
+        // Wait 3 seconds for the aesthetic loading screen
+        setTimeout(() => {
+            document.getElementById('chat-loading').style.display = 'none';
+            const chatMsgs = document.getElementById('chat-messages');
+            chatMsgs.style.display = 'flex';
+
+            // Show first question
+            Quiz.showCurrentQuestion();
+        }, 3000);
 
         // Start state sync
         startStateSyncTimer();
