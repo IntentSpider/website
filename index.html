@@ -14,32 +14,36 @@
         const url = 'assets/intentspider_paper.pdf';
 
         const loadingTask = pdfjsLib.getDocument(url);
-        loadingTask.promise.then(function(pdf) {
+        loadingTask.promise.then(async function(pdf) {
             const container = document.getElementById('pdf-viewer-container');
             const loadingEl = document.querySelector('.pdf-loading');
-            if (loadingEl) loadingEl.remove();
 
             for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                pdf.getPage(pageNum).then(function(page) {
-                    const scale = 1.5;
-                    const viewport = page.getViewport({scale: scale});
+                const page = await pdf.getPage(pageNum);
+                const scale = 1.5;
+                const viewport = page.getViewport({scale: scale});
 
-                    const canvas = document.createElement('canvas');
-                    canvas.className = 'pdf-page';
-                    const context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
+                const canvas = document.createElement('canvas');
+                canvas.className = 'pdf-page';
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
 
+                if (loadingEl) {
+                    container.insertBefore(canvas, loadingEl);
+                } else {
                     container.appendChild(canvas);
+                }
 
-                    const renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
-                    page.render(renderContext);
-                });
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                await page.render(renderContext).promise;
             }
-        }, function (reason) {
+            
+            if (loadingEl) loadingEl.remove();
+        }).catch(function (reason) {
             console.error(reason);
             const container = document.getElementById('pdf-viewer-container');
             container.innerHTML = '<div class="pdf-loading">Sorry. Please reload this page.</div>';
