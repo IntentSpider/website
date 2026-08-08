@@ -1,0 +1,35 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
+  workflow_dispatch: # Allows you to trigger it manually anytime
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Grants the built-in token permission to push
+
+    steps:
+      - name: Checkout Fork
+        uses: actions/checkout@v4
+
+      - name: Sync with Upstream
+        run: |
+          # 1. Configure Git identity
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@://github.com'
+          
+          # 2. Add the parent repository as a remote
+          git remote add upstream https://github.com
+          
+          # 3. Fetch the parent's latest updates
+          git fetch upstream
+          
+          # 4. Checkout your target branch and merge upstream changes
+          git checkout main
+          git merge upstream/main --ff-only || (echo "Conflict detected! Manual sync needed." && exit 1)
+          
+          # 5. Push the changes back to your fork using the built-in authentication
+          git push origin main
