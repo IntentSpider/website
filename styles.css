@@ -234,7 +234,7 @@ footer {
 
 .input-display {
   min-height: 28px;
-  max-height: 60px;
+  /* max-height: 60px; */
   /* Removed border-bottom */
   padding: 8px 10px;
   font-size: 15px;
@@ -247,16 +247,9 @@ footer {
 }
 .input-display .cursor {
   display: inline-block;
-  width: 1px;
-  height: 1.1em;
+  min-width: 2px;
   background-color: black;
   animation: blink 1s step-end infinite;
-  vertical-align: middle;
-  margin: 0 -0.5px;
-}
-.input-display .selected-text {
-  background-color: #0078d7;
-  color: white;
 }
 @keyframes blink { 50% { opacity: 0; } }
 
