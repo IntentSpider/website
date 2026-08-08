@@ -405,6 +405,19 @@
             }
         },
 
+        // Silent commit: rebuilds engine state without updating the UI suggestion bar.
+        // Used exclusively during syncEngine replay to avoid spurious prediction display.
+        commitSilent() {
+            if (!this.ready) return null;
+            const ts = performance.now() / 1000;
+            const json = this._commit(this.ptr, ts);
+            try {
+                return JSON.parse(json);
+            } catch (e) {
+                return null;
+            }
+        },
+
         acceptSuggestion(index) {
             if (!this.ready) return null;
             const ts = performance.now() / 1000;
@@ -489,91 +502,87 @@
     }
 
     // ================================================================
-    // Input handling (Custom Editor)
+    // Input handling
     // ================================================================
 
+    // Track what the user has typed for the current answer (separate from currentText for display)
     let quizAnswerLine = "";
     let cursorPos = 0;
     let selectAll = false;
 
-    function escapeHtml(str) {
-        if (!str) return "";
-        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    function escapeHTML(str) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     function updateDisplay() {
         if (selectAll) {
-            inputDisplay.innerHTML = `<span class="selected-text">${escapeHtml(currentText)}</span><span class="cursor"></span>`;
+            inputDisplay.innerHTML = `<span style="background-color: #b3d4fc; color: black;">${escapeHTML(currentText) || '&nbsp;'}</span>`;
         } else {
-            const before = escapeHtml(currentText.substring(0, cursorPos));
-            const after = escapeHtml(currentText.substring(cursorPos));
-            inputDisplay.innerHTML = `${before}<span class="cursor"></span>${after}`;
+            const left = currentText.substring(0, cursorPos);
+            const right = currentText.substring(cursorPos);
+            inputDisplay.innerHTML = `${escapeHTML(left)}<span class="cursor">|</span>${escapeHTML(right)}`;
         }
     }
 
-    function syncEngine() {
-        if (!Engine.ready) return;
-        Engine.newSentence();
-        const textToSync = currentText.substring(0, cursorPos);
-        const words = textToSync.split(' ');
-        
-        for (let i = 0; i < words.length; i++) {
-            const word = words[i];
-            for (let j = 0; j < word.length; j++) {
-                Engine.onKey(word.charCodeAt(j));
-            }
-            if (i < words.length - 1) {
-                Engine.onKey(32);
-                Engine.commit();
-            }
-        }
-        
-        if (words.length === 1 && words[0] === "") {
-            clearSuggestions();
-        }
-    }
-
-    function insertString(str) {
-        if (selectAll) {
-            currentText = str;
-            cursorPos = str.length;
-            selectAll = false;
-        } else {
-            if (currentText.length + str.length > CHAR_LIMIT) return;
-            currentText = currentText.slice(0, cursorPos) + str + currentText.slice(cursorPos);
-            cursorPos += str.length;
-        }
-        syncEngine();
-        updateDisplay();
-    }
-
+    // handleKey: processes a single key event.
+    // For normal typing (cursor at end), we use direct Engine.onKey/commit
+    // exactly like the native terminal — each word is observed ONCE.
+    // For editing in the middle (cursor not at end), we only update the text
+    // visually without touching the engine, to avoid re-reinforcing the graph.
     function handleKey(key) {
+        const atEnd = (cursorPos === currentText.length);
+
+        if (selectAll && key !== 'shift') {
+            // Clear everything: reset text, cursor, and engine
+            currentText = "";
+            cursorPos = 0;
+            selectAll = false;
+            if (Engine.ready) Engine.newSentence();
+            clearSuggestions();
+            updateDisplay();
+            return;
+        }
+
         if (key === 'backspace') {
-            if (selectAll) {
-                currentText = "";
-                cursorPos = 0;
-                selectAll = false;
-                syncEngine();
-                updateDisplay();
-            } else if (cursorPos > 0) {
-                currentText = currentText.slice(0, cursorPos - 1) + currentText.slice(cursorPos);
+            if (cursorPos > 0) {
+                currentText = currentText.substring(0, cursorPos - 1) + currentText.substring(cursorPos);
                 cursorPos--;
-                syncEngine();
-                updateDisplay();
+                if (atEnd) {
+                    Engine.onKey(8);
+                    clearSuggestions();
+                }
+            }
+        } else if (key === 'space') {
+            if (currentText.length >= CHAR_LIMIT) return;
+            currentText = currentText.substring(0, cursorPos) + ' ' + currentText.substring(cursorPos);
+            cursorPos++;
+            if (atEnd) {
+                Engine.onKey(32);
+                if (!Engine.ready) {
+                    mockPredict();
+                } else {
+                    Engine.commit();
+                }
             }
         } else if (key === 'enter') {
             submitAnswer();
         } else if (key === 'shift') {
-            // handled
+            // Mottie Keyboard handles layout switching internally
         } else {
-            insertString(key === 'space' ? ' ' : key);
+            if (currentText.length >= CHAR_LIMIT) return;
+            currentText = currentText.substring(0, cursorPos) + key + currentText.substring(cursorPos);
+            cursorPos++;
+            if (atEnd) {
+                Engine.onKey(key.charCodeAt(0));
+            }
         }
+        updateDisplay();
     }
 
     function submitAnswer() {
         const text = currentText.trim();
         if (text === '') return;
-        if (!Engine.ready) return;
+        if (!Engine.ready) return; // Wait until ready
 
         Engine.onKey(32);
         Engine.commit();
@@ -581,7 +590,6 @@
         logTerminal(`Answer: "${text}"`, "info");
 
         currentText = "";
-        quizAnswerLine = "";
         cursorPos = 0;
         selectAll = false;
         updateDisplay();
@@ -625,11 +633,12 @@
     }).on('keyboardChange', function(e, keyboard, el) {
         let key = keyboard.last.key;
         if (!key) return;
+        
         if (key === 'space') key = 'space';
         else if (key === 'accept' || key === 'enter') key = 'enter';
         else if (key === 'bksp') key = 'backspace';
         else if (key === 'shift') key = 'shift';
-        else key = key.toLowerCase();
+        
         handleKey(key);
     });
 
@@ -638,29 +647,8 @@
     // ================================================================
 
     document.getElementById('input-display').tabIndex = 0;
-
+    
     document.addEventListener('keydown', (e) => {
-        if (e.code === 'ArrowLeft') {
-            e.preventDefault();
-            if (cursorPos > 0) { cursorPos--; selectAll = false; syncEngine(); updateDisplay(); }
-            return;
-        }
-        if (e.code === 'ArrowRight') {
-            e.preventDefault();
-            if (cursorPos < currentText.length) { cursorPos++; selectAll = false; syncEngine(); updateDisplay(); }
-            return;
-        }
-        if (e.code === 'Delete') {
-            e.preventDefault();
-            if (selectAll) {
-                currentText = ""; cursorPos = 0; selectAll = false; syncEngine(); updateDisplay();
-            } else if (cursorPos < currentText.length) {
-                currentText = currentText.slice(0, cursorPos) + currentText.slice(cursorPos + 1);
-                syncEngine(); updateDisplay();
-            }
-            return;
-        }
-
         if (e.ctrlKey || e.metaKey) {
             if (e.code === 'KeyA') {
                 e.preventDefault();
@@ -668,18 +656,73 @@
                 updateDisplay();
                 return;
             }
-            if (e.code === 'KeyX' && selectAll) {
-                e.preventDefault();
-                navigator.clipboard.writeText(currentText);
-                currentText = ""; cursorPos = 0; selectAll = false; syncEngine(); updateDisplay();
-                return;
+            if (e.code === 'KeyX' || e.code === 'Backspace' || e.code === 'Delete') {
+                if (selectAll) {
+                    if (e.code === 'KeyX') navigator.clipboard.writeText(currentText);
+                    e.preventDefault();
+                    selectAll = false;
+                    currentText = '';
+                    cursorPos = 0;
+                    if (Engine.ready) Engine.newSentence();
+                    clearSuggestions();
+                    updateDisplay();
+                    return;
+                }
             }
-            if (e.code === 'KeyC' && selectAll) {
-                e.preventDefault();
-                navigator.clipboard.writeText(currentText);
-                return;
+            if (e.code === 'KeyC') {
+                if (selectAll) {
+                    e.preventDefault();
+                    navigator.clipboard.writeText(currentText);
+                    return;
+                }
             }
-            if (e.code === 'KeyV') return; // Handled by paste event
+        }
+
+        if (e.code === 'ArrowLeft') {
+            e.preventDefault();
+            if (selectAll) {
+                selectAll = false;
+                cursorPos = 0;
+            } else if (cursorPos > 0) {
+                cursorPos--;
+            }
+            updateDisplay();
+            return;
+        }
+
+        if (e.code === 'ArrowRight') {
+            e.preventDefault();
+            if (selectAll) {
+                selectAll = false;
+                cursorPos = currentText.length;
+            } else if (cursorPos < currentText.length) {
+                cursorPos++;
+            }
+            updateDisplay();
+            return;
+        }
+        
+        if (e.code === 'Delete') {
+            e.preventDefault();
+            if (selectAll) {
+                selectAll = false;
+                currentText = '';
+                cursorPos = 0;
+                if (Engine.ready) Engine.newSentence();
+                clearSuggestions();
+            } else if (cursorPos < currentText.length) {
+                currentText = currentText.substring(0, cursorPos) + currentText.substring(cursorPos + 1);
+                // Don't touch engine — visual edit only
+            }
+            updateDisplay();
+            return;
+        }
+
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            if (e.code === 'Enter') {
+                e.preventDefault();
+                handleKey('enter');
+            }
             return;
         }
 
@@ -697,7 +740,7 @@
             e.preventDefault();
             handleKey('backspace');
             virtualKey = 'bksp';
-        } else if (e.key.length === 1) {
+        } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
             e.preventDefault();
             handleKey(e.key);
             virtualKey = e.key.toLowerCase();
@@ -708,7 +751,9 @@
         if (virtualKey) {
             const safeKey = virtualKey.replace(/[^a-zA-Z0-9]/g, '');
             let btn = $(`#mottie-keyboard-container .ui-keyboard-${safeKey}`);
-            if (btn.length) btn.addClass('ui-state-active ui-state-hover');
+            if (btn.length) {
+                btn.addClass('ui-state-active ui-state-hover');
+            }
         }
     });
 
@@ -723,14 +768,23 @@
         if (virtualKey) {
             const safeKey = virtualKey.replace(/[^a-zA-Z0-9]/g, '');
             let btn = $(`#mottie-keyboard-container .ui-keyboard-${safeKey}`);
-            if (btn.length) btn.removeClass('ui-state-active ui-state-hover');
+            if (btn.length) {
+                btn.removeClass('ui-state-active ui-state-hover');
+            }
         }
     });
 
+    // ================================================================
+    // Paste handler
+    // ================================================================
+
     document.addEventListener('paste', (e) => {
+        if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
         e.preventDefault();
         let paste = (e.clipboardData || window.clipboardData).getData('text');
-        insertString(paste);
+        for (let i = 0; i < paste.length; i++) {
+            handleKey(paste[i]);
+        }
     });
 
     // ================================================================
@@ -741,34 +795,34 @@
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const word = btn.textContent;
-            if (word === '—') return;
+            if (word === '' || word === '—') return;
 
-            let textBeforeCursor = currentText.substring(0, cursorPos);
-            let textAfterCursor = currentText.substring(cursorPos);
-            
-            let lastSpaceIndex = textBeforeCursor.lastIndexOf(' ');
-            if (lastSpaceIndex === -1) {
-                textBeforeCursor = word + ' ';
+            if (Engine.ready) {
+                // Use the proper C++ engine_accept() API.
+                // This adds the accepted token to sent_ with exactly ONE reinforcement
+                // event (selectionEvent), matching the native terminal behavior.
+                // It also clears lastShown, so suggestions will be empty after this.
+                const result = Engine.acceptSuggestion(idx + 1);
+                if (result && result.sentence) {
+                    currentText = result.sentence + ' ';
+                    cursorPos = currentText.length;
+                }
             } else {
-                textBeforeCursor = textBeforeCursor.substring(0, lastSpaceIndex + 1) + word + ' ';
-            }
-            
-            let nextSpaceIndex = textAfterCursor.indexOf(' ');
-            if (nextSpaceIndex !== -1) {
-                textAfterCursor = textAfterCursor.substring(nextSpaceIndex);
-            } else {
-                textAfterCursor = "";
+                // Demo mode: manually append the suggestion word
+                const words = currentText.trim().split(' ');
+                if (words.length > 0 && words[words.length - 1] === '') words.pop();
+                words.push(word);
+                currentText = words.join(' ') + ' ';
+                cursorPos = currentText.length;
+                mockPredict();
             }
 
-            currentText = textBeforeCursor + textAfterCursor;
-            cursorPos = textBeforeCursor.length;
             selectAll = false;
-            
-            syncEngine();
-            if (!Engine.ready) mockPredict();
             updateDisplay();
 
+            const hiddenInput = document.getElementById('mottie-hidden-input');
             const displayInput = document.getElementById('input-display');
+            if (hiddenInput) hiddenInput.focus();
             if (displayInput) displayInput.focus();
         });
     });
