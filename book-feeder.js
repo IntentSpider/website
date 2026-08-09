@@ -26,22 +26,9 @@
     // Find more at: https://www.gutenberg.org/
     // ================================================================
 
-    const BOOKS = [
-        { id: 1342, title: "Pride and Prejudice — Jane Austen" },
-        { id: 11,   title: "Alice's Adventures in Wonderland — Lewis Carroll" },
-        { id: 1661, title: "The Adventures of Sherlock Holmes — Arthur Conan Doyle" },
-        { id: 84,   title: "Frankenstein — Mary Shelley" },
-        { id: 1232, title: "The Prince — Niccolò Machiavelli" },
-        { id: 174,  title: "The Picture of Dorian Gray — Oscar Wilde" },
-        { id: 2701, title: "Moby Dick — Herman Melville" },
-        { id: 98,   title: "A Tale of Two Cities — Charles Dickens" },
-        { id: 1080, title: "A Modest Proposal — Jonathan Swift" },
-        { id: 74,   title: "The Adventures of Tom Sawyer — Mark Twain" },
-        { id: 345,  title: "Dracula — Bram Stoker" },
-        { id: 16328,title: "Beowulf — Anonymous" },
-        { id: 2591, title: "Grimms' Fairy Tales — Brothers Grimm" },
-        { id: 1260, title: "Jane Eyre — Charlotte Brontë" },
-        { id: 1400, title: "Great Expectations — Charles Dickens" },
+    const DATASETS = [
+        { path: "assets/dataset.txt", title: "Alice's Adventures in Wonderland — Lewis Carroll" }
+        // Add more local datasets here if you download them
     ];
 
     // ================================================================
@@ -62,17 +49,6 @@
         progressEvery: 50,      // log progress every N sentences
         maxSentenceWords: 40,   // skip sentences longer than this (likely not real prose)
     };
-
-    // ================================================================
-    // CORS Proxy — Gutenberg doesn't send CORS headers, so we need a proxy.
-    // If the primary proxy is down, the script tries fallbacks.
-    // ================================================================
-
-    const CORS_PROXIES = [
-        (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-        (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-        (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-    ];
 
     // ================================================================
     // Stop flag — set window.__BOOK_FEEDER_STOP = true to abort
@@ -123,34 +99,17 @@
     }
 
     // ================================================================
-    // Fetch a book with CORS proxy fallback
+    // Fetch a local dataset
     // ================================================================
 
-    async function fetchBook(id) {
-        const url = `https://www.gutenberg.org/cache/epub/${id}/pg${id}.txt`;
-
-        // Try direct first (in case CORS is enabled)
-        try {
-            const resp = await fetch(url);
-            if (resp.ok) {
-                const text = await resp.text();
-                if (text.length > 1000) return text;
-            }
-        } catch (e) { /* CORS blocked — expected */ }
-
-        // Try each proxy
-        for (const proxyFn of CORS_PROXIES) {
-            try {
-                const proxyUrl = proxyFn(url);
-                const resp = await fetch(proxyUrl);
-                if (resp.ok) {
-                    const text = await resp.text();
-                    if (text.length > 1000) return text;
-                }
-            } catch (e) { /* try next proxy */ }
+    async function fetchDataset(path) {
+        // Fetch from the local path to avoid CORS issues entirely
+        const resp = await fetch(path);
+        if (resp.ok) {
+            const text = await resp.text();
+            if (text.length > 100) return text;
         }
-
-        throw new Error(`Could not fetch book ID ${id} — all proxies failed`);
+        throw new Error(`Could not fetch dataset from ${path}`);
     }
 
     // ================================================================
@@ -274,24 +233,24 @@
 
     console.log('%c🕷️ IntentSpider Book Feeder', style);
     console.log('%cTo stop: window.__BOOK_FEEDER_STOP = true', styleInfo);
-    console.log(`%cQueued ${BOOKS.length} books for processing.`, styleInfo);
+    console.log(`%cQueued ${DATASETS.length} datasets for processing.`, styleInfo);
     console.log('');
 
     let totalSentences = 0;
-    let totalBooks = 0;
+    let totalDatasets = 0;
     const startTime = Date.now();
 
-    for (let b = 0; b < BOOKS.length; b++) {
+    for (let b = 0; b < DATASETS.length; b++) {
         if (window.__BOOK_FEEDER_STOP) {
             console.log('%c⏹ Stopped by user.', styleRed);
             break;
         }
 
-        const book = BOOKS[b];
-        console.log(`%c📖 [${b + 1}/${BOOKS.length}] Fetching: ${book.title}...`, styleInfo);
+        const dataset = DATASETS[b];
+        console.log(`%c📖 [${b + 1}/${DATASETS.length}] Fetching: ${dataset.title}...`, styleInfo);
 
         try {
-            const raw = await fetchBook(book.id);
+            const raw = await fetchDataset(dataset.path);
             const clean = cleanGutenbergText(raw);
             const sentences = extractSentences(clean);
 
@@ -313,19 +272,19 @@
             }
 
             if (!window.__BOOK_FEEDER_STOP) {
-                console.log(`%c   ✅ Finished: ${book.title} (${fed} sentences)`, styleGreen);
-                totalBooks++;
+                console.log(`%c   ✅ Finished: ${dataset.title} (${fed} sentences)`, styleGreen);
+                totalDatasets++;
             }
 
         } catch (err) {
-            console.log(`%c   ❌ Failed: ${book.title} — ${err.message}`, styleRed);
+            console.log(`%c   ❌ Failed: ${dataset.title} — ${err.message}`, styleRed);
         }
     }
 
     const totalTime = ((Date.now() - startTime) / 1000).toFixed(1);
     console.log('');
     console.log(`%c🕷️ Book Feeder Complete`, style);
-    console.log(`%c   Books: ${totalBooks}/${BOOKS.length}`, styleGreen);
+    console.log(`%c   Datasets: ${totalDatasets}/${DATASETS.length}`, styleGreen);
     console.log(`%c   Sentences: ${totalSentences}`, styleGreen);
     console.log(`%c   Time: ${totalTime}s`, styleGreen);
     console.log(`%c   The engine's graph is now significantly richer!`, styleGreen);
