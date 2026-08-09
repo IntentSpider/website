@@ -492,14 +492,14 @@
 
                 if (manifestResp.status === 409) {
                     const conflict = await manifestResp.json().catch(() => ({}));
-                    throw new Error(`Are there multiple tabs open? (${conflict.currentGeneration || 'new gen'}); Fatal crash. Reload.`);
+                    throw new Error(`Are there multiple tabs open? (${conflict.currentGeneration || 'new gen'});`);
                 }
                 if (!manifestResp.ok) throw new Error(`Manifest HTTP ${manifestResp.status}`);
                 this.loadedGeneration = generation;
 
                 logTerminal(`Graph and IntentSpider/globalperson state saved as gen ${generation.slice(0, 8)}.`, "predict");
             } catch (err) {
-                logTerminal(`Fatal. State sync failed. reason - ${err.message}`, "error");
+                logTerminal(`State sync failed. reason - ${err.message}`, "error");
             } finally {
                 this.syncInFlight = false;
                 if (this.syncQueued) {
