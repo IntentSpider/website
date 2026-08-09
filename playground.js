@@ -110,18 +110,25 @@
         const toggleLink = document.getElementById('global-person-toggle');
         const toggleIcon = document.getElementById('global-toggle-icon');
         const toggleText = document.getElementById('global-toggle-text');
+        const profileModeText = document.getElementById('profile-mode-text');
         
         if (toggleLink) {
             if (isGlobalPerson) {
                 toggleIcon.src = 'assets/static/toggleon-playground-23.png';
-                toggleText.textContent = 'Switch to your profile';
+                toggleText.textContent = 'Turn off global user profile';
+                if (profileModeText) {
+                    profileModeText.innerHTML = `<strong>The global user mode is turned on.</strong> You are connected to the primary unified branch. Suggestions here incorporate contributions from all users globally, leading to more accurate predictions. However, these suggestions are not personalized to you and may include views that do not align with your own. To test IntentSpider with personalization enabled, please turn off global user mode.`;
+                }
                 toggleLink.onclick = (e) => {
                     e.preventDefault();
                     window.location.href = window.location.pathname; 
                 };
             } else {
                 toggleIcon.src = 'assets/static/toggleoff-playground-23.png';
-                toggleText.textContent = 'Continue typing as the global user';
+                toggleText.textContent = 'Turn on global user profile';
+                if (profileModeText) {
+                    profileModeText.innerHTML = `This is currently you are starting from the beginning so you have to answer at least 30 to 40 questions in order to <a href="about.html#heating-initial-start" id="heat-graph-link">heat the graph</a>.`;
+                }
                 toggleLink.onclick = (e) => {
                     e.preventDefault();
                     window.location.href = window.location.pathname + '?global_person=true';
