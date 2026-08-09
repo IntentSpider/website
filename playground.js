@@ -13,6 +13,11 @@
     const STATE_SYNC_INTERVAL_MS = 10000; // Save state every 10 seconds of activity
     const CHAR_LIMIT = 200;
 
+    // Global user mode: when ?globalPerson=true is in the URL, load the shared
+    // cloud state so the user gets the pre-trained graph immediately.
+    // In personal mode (default), the engine starts fresh.
+    const IS_GLOBAL_USER = new URLSearchParams(window.location.search).get('globalPerson') === 'true';
+
 
     // ================================================================
     // DOM handles
@@ -226,12 +231,20 @@
                 this.ptr = this._create();
                 logTerminal(`Engine instance created (ptr=0x${this.ptr.toString(16)}).`, "info");
 
-                // Try loading collective state from R2 first, fall back to local
-                await this.loadCollectiveState();
+                // In global user mode, load the shared cloud state.
+                // In personal mode, start with a fresh empty graph.
+                if (IS_GLOBAL_USER) {
+                    logTerminal("Global user mode — loading shared state...", "info");
+                    showNotification("Loading shared global user state...");
+                    await this.loadCollectiveState();
+                } else {
+                    logTerminal("Personal mode — starting with a fresh graph.", "info");
+                }
 
                 this.ready = true;
-                logTerminal("Data loaded. IntentSpider Engine Ready to Start. ", "predict");
-                showNotification("Data loaded. IntentSpider Engine Ready to Start.");
+                const modeLabel = IS_GLOBAL_USER ? 'Global User' : 'Personal';
+                logTerminal(`Data loaded. IntentSpider Engine Ready (${modeLabel}).`, "predict");
+                showNotification(`Engine ready (${modeLabel} mode).`);
 
             } catch (err) {
                 logTerminal(`Error in loading function ${err.message}`, "error");
@@ -897,5 +910,38 @@
         document.addEventListener('click', trackActivity);
 
     }, 500);
+
+    // ================================================================
+    // Global User Toggle
+    // ================================================================
+
+    (function initGlobalToggle() {
+        const toggleLink = document.getElementById('global-user-toggle');
+        const toggleIcon = document.getElementById('global-toggle-icon');
+        const toggleText = document.getElementById('global-toggle-text');
+        if (!toggleLink || !toggleIcon || !toggleText) return;
+
+        // Set initial state based on URL
+        if (IS_GLOBAL_USER) {
+            toggleIcon.src = 'assets/static/toggleon-playground-23.png';
+            toggleText.textContent = 'Switch to your profile';
+        } else {
+            toggleIcon.src = 'assets/static/toggleoff-playground-23.png';
+            toggleText.textContent = 'Continue typing as the global user';
+        }
+
+        toggleLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = new URL(window.location.href);
+            if (IS_GLOBAL_USER) {
+                // Switch to personal mode
+                url.searchParams.delete('globalPerson');
+            } else {
+                // Switch to global user mode
+                url.searchParams.set('globalPerson', 'true');
+            }
+            window.location.href = url.toString();
+        });
+    })();
 
 })();
