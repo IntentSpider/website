@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         spinnerSrc = '../../assets/spinner.gif';
     } else if (window.location.pathname.includes('/contactform/')) {
         spinnerSrc = '../assets/spinner.gif';
+    } else if (window.location.pathname.includes('/git/')) {
+         spinnerSrc = '../assets/spinner.gif';
+    } else if (window.location.pathname.includes('/research/uploads')) {
+         spinnerSrc = '../../assets/spinner.gif';
     }
 
     // Immediately show loading state (if not already set in HTML)
