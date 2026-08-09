@@ -5,6 +5,7 @@
  * It will fetch public-domain books from Project Gutenberg and feed them into
  * the IntentSpider engine word-by-word, exactly as if a human were typing them.
  *
+ * 
  * The engine learns graph structure (word associations) AND cadence/arousal patterns
  * from the simulated typing, making predictions dramatically richer.
  *
