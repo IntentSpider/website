@@ -5,7 +5,8 @@ const CORS_ORIGIN = 'https://intentspider.nekshadesilva.com';
 const STATE_KEY_LEGACY = 'collective_state.bin';
 const MANIFEST_KEY = 'collective_state.manifest';
 const CHUNK_PREFIX = 'collective_state.chunk_';
-const TRANSIENT_KEY = 'global_transient_state.bin';
+const TRANSIENT_KEY = 'global_transient_state.bin'; // legacy singleton
+const TRANSIENT_PREFIX = 'global_transient_state.';
 
 function stateMetaHeaders(metadata) {
   const headers = corsHeaders();
@@ -19,7 +20,8 @@ function corsHeaders() {
   return {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, X-API-Key',
+    'Access-Control-Allow-Headers': 'Content-Type, X-API-Key, X-State-Generation, X-Expected-Generation',
+    'Access-Control-Expose-Headers': 'X-State-Generation, X-State-Updated-At, X-State-Size',
   };
 }
 
@@ -44,7 +46,7 @@ export default {
       if (url.pathname === '/stats') return handleStats(env);
       if (url.pathname === '/state/manifest') return handleGetManifest(env);
       if (url.pathname.startsWith('/state/chunk/')) return handleGetChunk(url, env);
-      if (url.pathname === '/state/transient') return handleGetTransient(env);
+      if (url.pathname === '/state/transient') return handleGetTransient(url, env);
       
       // Backward compatibility for old fetch logic
       if (url.pathname === '/state') return handleGetLegacy(env);
@@ -68,26 +70,31 @@ export default {
 async function handleStats(env) {
   try {
     let size = 0;
-    // Try manifest first
+    let tokensIndexed = 0;
     const manifestStr = await env.STATE_KV.get(MANIFEST_KEY);
     if (manifestStr) {
-        const manifest = JSON.parse(manifestStr);
-        size = manifest.totalSize || 0;
+      const manifest = JSON.parse(manifestStr);
+      size = manifest.totalSize || 0;
+      // New clients persist the engine's real committed-token counter. Retain the
+      // historical size estimate only for snapshots created before state v4.
+      tokensIndexed = Number.isSafeInteger(manifest.tokensIndexed)
+        ? manifest.tokensIndexed
+        : (size > 0 ? Math.floor(size / 4) : 0);
     } else {
-        // Fallback to legacy
-        const { metadata } = await env.STATE_KV.getWithMetadata(STATE_KEY_LEGACY);
-        size = metadata ? metadata.size : 0;
+      const { metadata } = await env.STATE_KV.getWithMetadata(STATE_KEY_LEGACY);
+      size = metadata ? metadata.size : 0;
+      tokensIndexed = size > 0 ? Math.floor(size / 4) : 0;
     }
-    
+
     return new Response(JSON.stringify({
-        modules: 9, 
-        tokensIndexed: size > 0 ? Math.floor(size / 4) : 0, 
-        live: size > 0 
+      modules: 9,
+      tokensIndexed,
+      live: size > 0,
     }), {
       headers: { ...corsHeaders(), 'Content-Type': 'application/json' },
     });
-  } catch(err) {
-    return new Response(JSON.stringify({error: err.message}), {status: 500, headers: corsHeaders()});
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: corsHeaders() });
   }
 }
 
@@ -99,10 +106,10 @@ async function handleGetManifest(env) {
     }
     
     // Legacy migration check
-    const { metadata } = await env.STATE_KV.getWithMetadata(STATE_KEY_LEGACY);
-    if (metadata) {
+    const { metadata: legacyMetadata } = await env.STATE_KV.getWithMetadata(STATE_KEY_LEGACY);
+    if (legacyMetadata) {
       // Fake a manifest for the legacy file
-      const fakeManifest = { totalSize: metadata.size, chunks: 1, legacy: true };
+      const fakeManifest = { totalSize: legacyMetadata.size, chunks: 1, legacy: true };
       return new Response(JSON.stringify(fakeManifest), { status: 200, headers: { ...corsHeaders(), 'Content-Type': 'application/json' } });
     }
 
@@ -117,7 +124,10 @@ async function handleGetChunk(url, env) {
     const chunkIdStr = url.pathname.replace('/state/chunk/', '');
     const isLegacy = url.searchParams.get('legacy') === 'true';
     
-    let key = CHUNK_PREFIX + chunkIdStr;
+    const generation = url.searchParams.get('generation');
+    let key = generation
+      ? `${CHUNK_PREFIX}${generation}.${chunkIdStr}`
+      : CHUNK_PREFIX + chunkIdStr;
     if (isLegacy && chunkIdStr === '0') {
         key = STATE_KEY_LEGACY;
     }
@@ -149,6 +159,30 @@ async function handleGetLegacy(env) {
   }
 }
 
+async function handleGetTransient(url, env) {
+  try {
+    const { value: manifestStr, metadata: manifestMetadata } = await env.STATE_KV.getWithMetadata(MANIFEST_KEY);
+    const manifest = manifestStr ? JSON.parse(manifestStr) : null;
+    const currentGeneration = manifest?.generation || manifestMetadata?.generation || '';
+    const requestedGeneration = url.searchParams.get('generation') || currentGeneration;
+    if (currentGeneration && requestedGeneration !== currentGeneration) {
+      return new Response(JSON.stringify({ error: 'Requested transient is not current' }), {
+        status: 409,
+        headers: { ...stateMetaHeaders(manifestMetadata), 'Content-Type': 'application/json' },
+      });
+    }
+    const key = requestedGeneration ? TRANSIENT_PREFIX + requestedGeneration : TRANSIENT_KEY;
+    const { value: buffer, metadata } = await env.STATE_KV.getWithMetadata(key, { type: 'arrayBuffer' });
+    if (!buffer) return new Response('Not found', { status: 404, headers: corsHeaders() });
+    const headers = stateMetaHeaders(metadata || manifestMetadata);
+    headers['Content-Type'] = 'application/octet-stream';
+    headers['Content-Length'] = buffer.byteLength;
+    return new Response(buffer, { status: 200, headers });
+  } catch (err) {
+    return new Response(err.message, { status: 500, headers: corsHeaders() });
+  }
+}
+
 // ================================================================
 // POST HANDLERS
 // ================================================================
@@ -156,25 +190,73 @@ async function handleGetLegacy(env) {
 async function handlePostManifest(request, env) {
   try {
     const body = await request.json();
-    if (!body.totalSize || !body.chunks || !body.generation) throw new Error("Invalid manifest");
-
-    const expectedGeneration = request.headers.get('X-Expected-Generation') || '';
-    const { metadata: current } = await env.STATE_KV.getWithMetadata(MANIFEST_KEY);
-    const currentGeneration = current?.generation || '';
-    if (expectedGeneration !== currentGeneration) {
-      return new Response(JSON.stringify({
-        error: 'State changed since this tab loaded',
-        currentGeneration,
-      }), {
-        status: 409,
-        headers: { ...stateMetaHeaders(current), 'Content-Type': 'application/json' },
-      });
+    if (!body.totalSize || !body.chunks) throw new Error("Invalid manifest");
+    if (body.tokensIndexed !== undefined &&
+        (!Number.isSafeInteger(body.tokensIndexed) || body.tokensIndexed < 0)) {
+      throw new Error("Invalid token count");
     }
 
     const updatedAt = new Date().toISOString();
-    const metadata = { generation: body.generation, updatedAt, size: body.totalSize };
+    const metadata = { generation: body.generation || '', updatedAt, size: body.totalSize };
+
+    // Generation-aware clients get optimistic concurrency protection. Legacy
+    // v13 clients remain accepted until every cached page has upgraded.
+    if (body.generation) {
+      const expectedGeneration = request.headers.get('X-Expected-Generation') || '';
+      const { value: currentManifestStr, metadata: current } =
+        await env.STATE_KV.getWithMetadata(MANIFEST_KEY);
+      const currentGeneration = current?.generation || '';
+      // Empty expected generation is the controlled migration path for clients
+      // that loaded a legacy manifest with no generation. Once generations are
+      // present, only the exact reader generation may advance the state.
+      if (currentGeneration && expectedGeneration !== currentGeneration) {
+        return new Response(JSON.stringify({
+          error: 'State changed since this tab loaded',
+          currentGeneration,
+        }), {
+          status: 409,
+          headers: { ...stateMetaHeaders(current), 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Counts are cumulative. A format migration or stale client may know less
+      // history, but it must never make the public counter move backwards.
+      if (currentManifestStr) {
+        const currentManifest = JSON.parse(currentManifestStr);
+        const currentTokens = Number.isSafeInteger(currentManifest.tokensIndexed)
+          ? currentManifest.tokensIndexed
+          : (currentManifest.totalSize > 0 ? Math.floor(currentManifest.totalSize / 4) : 0);
+        if (body.tokensIndexed === undefined || body.tokensIndexed < currentTokens) {
+          body.tokensIndexed = currentTokens;
+        }
+
+        // Normal profiles update only the shared graph. Carry the current global
+        // person's package forward to the new tokenizer-identical generation so
+        // switching graph generations does not erase that persona.
+        if (body.updatesTransient !== true && currentGeneration) {
+          const currentTransient = await env.STATE_KV.get(
+            TRANSIENT_PREFIX + currentGeneration,
+            { type: 'arrayBuffer' }
+          );
+          if (currentTransient) {
+            const transientMetadata = {
+              generation: body.generation,
+              updatedAt,
+              size: currentTransient.byteLength,
+            };
+            await env.STATE_KV.put(
+              TRANSIENT_PREFIX + body.generation,
+              currentTransient,
+              { metadata: transientMetadata }
+            );
+          }
+        }
+      }
+    }
+
+    delete body.updatesTransient;
     await env.STATE_KV.put(MANIFEST_KEY, JSON.stringify({ ...body, updatedAt }), { metadata });
-    return new Response(JSON.stringify({ ok: true, generation: body.generation, updatedAt }), {
+    return new Response(JSON.stringify({ ok: true, generation: body.generation || '', updatedAt }), {
       status: 200,
       headers: { ...stateMetaHeaders(metadata), 'Content-Type': 'application/json' },
     });
@@ -186,13 +268,35 @@ async function handlePostManifest(request, env) {
 async function handlePostChunk(request, url, env) {
   try {
     const chunkId = url.pathname.replace('/state/chunk/', '');
+    const generation = request.headers.get('X-State-Generation');
     const body = await request.arrayBuffer();
     
+    if (!generation) throw new Error("Missing state generation");
     if (!body || body.byteLength === 0) throw new Error("Empty chunk");
 
-    await env.STATE_KV.put(CHUNK_PREFIX + chunkId, body);
+    await env.STATE_KV.put(`${CHUNK_PREFIX}${generation}.${chunkId}`, body);
     
-    return new Response(JSON.stringify({ ok: true, size: body.byteLength }), { status: 200, headers: { ...corsHeaders(), 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ ok: true, size: body.byteLength, generation }), { status: 200, headers: { ...corsHeaders(), 'Content-Type': 'application/json' } });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: { ...corsHeaders(), 'Content-Type': 'application/json' } });
+  }
+}
+
+async function handlePostTransient(request, env) {
+  try {
+    const generation = request.headers.get('X-State-Generation');
+    if (!generation) throw new Error('Missing state generation');
+    // Stage the person package under its immutable generation before publishing
+    // the manifest. If the manifest compare-and-swap later fails, this object is
+    // merely orphaned; readers can never observe a graph without its paired state.
+    const body = await request.arrayBuffer();
+    if (!body || body.byteLength === 0) throw new Error('Empty transient state');
+    const metadata = { generation, updatedAt: new Date().toISOString(), size: body.byteLength };
+    await env.STATE_KV.put(TRANSIENT_PREFIX + generation, body, { metadata });
+    return new Response(JSON.stringify({ ok: true, generation, size: body.byteLength }), {
+      status: 200,
+      headers: { ...stateMetaHeaders(metadata), 'Content-Type': 'application/json' },
+    });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: { ...corsHeaders(), 'Content-Type': 'application/json' } });
   }
