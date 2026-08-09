@@ -233,8 +233,6 @@
                 this._create       = this.mod.cwrap('engine_create',        'number', []);
                 this._loadState    = this.mod.cwrap('engine_load_state',    'number', ['number', 'string']);
                 this._saveState    = this.mod.cwrap('engine_save_state',    'number', ['number', 'string']);
-                this._loadTransientState = this.mod.cwrap('engine_load_transient_state', 'number', ['number', 'string']);
-                this._saveTransientState = this.mod.cwrap('engine_save_transient_state', 'number', ['number', 'string']);
                 this._onKey        = this.mod.cwrap('engine_on_key',        null,     ['number', 'number', 'number']);
                 this._commit       = this.mod.cwrap('engine_commit',        'string', ['number', 'number']);
                 this._accept       = this.mod.cwrap('engine_accept',        'string', ['number', 'number', 'number']);
@@ -244,6 +242,9 @@
                 this._getBuffer    = this.mod.cwrap('engine_get_buffer',    'string', ['number']);
                 this._getSuggestions= this.mod.cwrap('engine_get_suggestions','string',['number']);
                 this._destroy      = this.mod.cwrap('engine_destroy',       null,     ['number']);
+                // Transient state bindings (for global user heated state)
+                this._saveTransient = this.mod.cwrap('engine_save_transient', 'number', ['number', 'string']);
+                this._loadTransient = this.mod.cwrap('engine_load_transient', 'number', ['number', 'string']);
 
                 logTerminal("WASM module loaded successfully.", "info");
 
@@ -252,6 +253,11 @@
 
                 // Try loading collective state from R2 first, fall back to local
                 await this.loadCollectiveState();
+
+                // If global user mode, also load the heated transient state
+                if (isGlobalPerson) {
+                    await this.loadTransientState();
+                }
 
                 this.ready = true;
                 logTerminal("Data loaded. IntentSpider Engine Ready to Start. ", "predict");
@@ -314,23 +320,6 @@
                 const ok = this._loadState(this.ptr, '/intentspider.state');
                 if (ok) {
                     logTerminal("Collective state loaded into engine.", "predict");
-                    if (isGlobalPerson) {
-                        logTerminal("Fetching transient heated state...", "info");
-                        try {
-                            const transResp = await fetch(`${STATE_API_URL}/chunk/transient`, {
-                                headers: { 'X-API-Key': STATE_API_KEY }
-                            });
-                            if (transResp.ok) {
-                                const transData = new Uint8Array(await transResp.arrayBuffer());
-                                this.mod.FS.writeFile('/transient.state', transData);
-                                if (this._loadTransientState(this.ptr, '/transient.state')) {
-                                    logTerminal("Transient state loaded. You are now the Anonymous Squirrel.", "predict");
-                                }
-                            }
-                        } catch (e) {
-                            logTerminal("No transient state found or failed to load.", "info");
-                        }
-                    }
                     this.showDebug();
                 } else {
                     logTerminal("Collective state load failed — trying local fallback.", "error");
@@ -367,6 +356,10 @@
 
         async saveCollectiveState() {
             if (!this.ready) return;
+            // If global user, also save the heated transient state
+            if (isGlobalPerson) {
+                await this.saveTransientState();
+            }
             try {
                 const ok = this._saveState(this.ptr, '/intentspider_out.state');
                 if (!ok) {
@@ -416,26 +409,64 @@
                 });
 
                 if (manifestResp.ok) {
-                    if (isGlobalPerson) {
-                        const tOk = this._saveTransientState(this.ptr, '/transient_out.state');
-                        if (tOk) {
-                            const tData = this.mod.FS.readFile('/transient_out.state');
-                            await fetch(`${STATE_API_URL}/chunk/transient`, {
-                                method: 'POST',
-                                headers: {
-                                    'X-API-Key': STATE_API_KEY,
-                                    'Content-Type': 'application/octet-stream',
-                                },
-                                body: tData,
-                            });
-                        }
-                    }
                     logTerminal(`State successfully saved globally.`, "predict");
                 } else {
                     logTerminal(`Manifest save failed: HTTP ${manifestResp.status}`, "error");
                 }
             } catch (err) {
                 logTerminal(`State sync error: ${err.message}`, "error");
+            }
+        },
+
+        async loadTransientState() {
+            logTerminal("Loading global user transient (heated) state...", "info");
+            try {
+                const resp = await fetch(STATE_API_URL.replace('/state', '') + '/state/transient', {
+                    method: 'GET',
+                    headers: { 'X-API-Key': STATE_API_KEY },
+                });
+                if (!resp.ok) {
+                    logTerminal("No transient state found (fresh global session).", "info");
+                    return;
+                }
+                const data = new Uint8Array(await resp.arrayBuffer());
+                if (data.length === 0) return;
+                this.mod.FS.writeFile('/transient.state', data);
+                const ok = this._loadTransient(this.ptr, '/transient.state');
+                if (ok) {
+                    logTerminal(`Transient heated state loaded (${data.length} bytes).`, "predict");
+                } else {
+                    logTerminal("Transient state file was invalid, starting fresh.", "info");
+                }
+            } catch (err) {
+                logTerminal(`Transient state load skipped: ${err.message}`, "info");
+            }
+        },
+
+        async saveTransientState() {
+            if (!this.ready) return;
+            try {
+                const ok = this._saveTransient(this.ptr, '/transient_out.state');
+                if (!ok) {
+                    logTerminal("engine_save_transient failed.", "error");
+                    return;
+                }
+                const data = this.mod.FS.readFile('/transient_out.state');
+                const resp = await fetch(STATE_API_URL.replace('/state', '') + '/state/transient', {
+                    method: 'POST',
+                    headers: {
+                        'X-API-Key': STATE_API_KEY,
+                        'Content-Type': 'application/octet-stream',
+                    },
+                    body: data,
+                });
+                if (resp.ok) {
+                    logTerminal("Transient heated state saved.", "info");
+                } else {
+                    logTerminal(`Transient state save failed: HTTP ${resp.status}`, "error");
+                }
+            } catch (err) {
+                logTerminal(`Transient state save error: ${err.message}`, "error");
             }
         },
 
