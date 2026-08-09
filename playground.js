@@ -117,7 +117,7 @@
                 toggleIcon.src = 'assets/static/toggleon-playground-23.png';
                 toggleText.textContent = 'Turn off global user profile';
                 if (profileModeText) {
-                    profileModeText.innerHTML = `<strong>The global user mode is turned on.</strong> You are connected to the primary unified branch. Suggestions here incorporate contributions from all users globally, leading to more accurate predictions. However, these suggestions are not personalized to you and may include views that do not align with your own. To test IntentSpider with personalization enabled, please turn off global user mode.`;
+                    profileModeText.innerHTML = `The global user profile is turned on. This is the main branch of this research preview. All users share this single profile. This may lead to more accurate predictions, but the suggestions may not be personalized for you and may include unexpected results. To test personally, please turn off the global profile mode.`;
                 }
                 toggleLink.onclick = (e) => {
                     e.preventDefault();
