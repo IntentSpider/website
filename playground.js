@@ -54,15 +54,32 @@
     let debugTerm = null;
     if (typeof Terminal !== 'undefined') {
         debugTerm = new Terminal({
-            theme: { background: '#000000', foreground: '#ffffff' },
+            theme: { background: '#000000', foreground: '#ffffff', cursor: '#ffffff' },
             fontFamily: 'monospace',
             fontSize: 12,
             convertEol: true,
-            disableStdin: true,
+            cursorBlink: true,
+            disableStdin: false,
         });
         debugTerm.open(terminalPanel);
         debugTerm.writeln('Copyright (c) 2025 IntentSpider Webnet. ');
         debugTerm.writeln('Copyright (C) 2025 World Wide Web Consortium. Loading WebAssembly 3.0.');
+
+        debugTerm.onData(e => {
+            switch (e) {
+                case '\r': // Enter
+                    debugTerm.write('\r\n');
+                    break;
+                case '\u007F': // Backspace
+                    debugTerm.write('\b \b');
+                    break;
+                default: 
+                    // Print the character back to the terminal (dummy echo)
+                    if (e >= String.fromCharCode(0x20) && e <= String.fromCharCode(0x7E)) {
+                        debugTerm.write(e);
+                    }
+            }
+        });
     }
 
     function logTerminal(msg, type = "info") {
