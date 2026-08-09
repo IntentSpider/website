@@ -32,8 +32,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Wait for both the API fetch and the 3-second timer
         const [data] = await Promise.all([fetchPromise, waitPromise]);
         
-        let modulesText = `${data.modules || 9} Webnets`;
-        let tokenText = `${(data.tokensIndexed || 12450).toLocaleString()} tokens`;
+        let modulesText = `${data.modules ?? 9} Webnets`;
+        let tokenText = `${(data.tokensIndexed ?? 0).toLocaleString()} tokens`;
 
         statsContainers.forEach(container => {
             container.innerHTML = `

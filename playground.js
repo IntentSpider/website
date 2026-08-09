@@ -15,6 +15,7 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const isGlobalPerson = urlParams.get('global_person') === 'true';
+    const epochSeconds = () => Date.now() / 1000;
 
     // ================================================================
     // DOM handles
@@ -199,6 +200,10 @@
         ready: false,
         ptr: null,
         mod: null,
+        loadedGeneration: '',
+        loadedManifestTokens: null,
+        syncInFlight: false,
+        syncQueued: false,
 
         _create: null,
         _loadState: null,
@@ -233,6 +238,8 @@
                 this._create       = this.mod.cwrap('engine_create',        'number', []);
                 this._loadState    = this.mod.cwrap('engine_load_state',    'number', ['number', 'string']);
                 this._saveState    = this.mod.cwrap('engine_save_state',    'number', ['number', 'string']);
+                this._normalizeTimestamps = this.mod.cwrap('engine_normalize_timestamps', null, ['number', 'number']);
+                this._getTokensObserved = this.mod.cwrap('engine_get_tokens_observed', 'number', ['number']);
                 this._onKey        = this.mod.cwrap('engine_on_key',        null,     ['number', 'number', 'number']);
                 this._commit       = this.mod.cwrap('engine_commit',        'string', ['number', 'number']);
                 this._accept       = this.mod.cwrap('engine_accept',        'string', ['number', 'number', 'number']);
@@ -296,13 +303,21 @@
                 const manifest = await manifestResp.json();
                 const numChunks = manifest.chunks || 1;
                 const isLegacy = manifest.legacy === true;
+                this.loadedGeneration = manifest.generation || manifestResp.headers.get('X-State-Generation') || '';
+                this.loadedManifestTokens = Number.isSafeInteger(manifest.tokensIndexed)
+                    ? manifest.tokensIndexed
+                    : (manifest.totalSize > 0 ? Math.floor(manifest.totalSize / 4) : null);
                 
                 logTerminal(`Manifest found: ${numChunks} chunks, ${(manifest.totalSize / 1024 / 1024).toFixed(2)} MB total. Downloading...`, "info");
 
-                // Download all chunks
+                // Download the immutable chunks named by this exact manifest generation.
                 const chunkPromises = [];
                 for (let i = 0; i < numChunks; i++) {
-                    const chunkUrl = `${STATE_API_URL}/chunk/${i}${isLegacy ? '?legacy=true' : ''}`;
+                    const chunkParams = new URLSearchParams();
+                    if (isLegacy) chunkParams.set('legacy', 'true');
+                    if (this.loadedGeneration) chunkParams.set('generation', this.loadedGeneration);
+                    const query = chunkParams.toString();
+                    const chunkUrl = `${STATE_API_URL}/chunk/${i}${query ? `?${query}` : ''}`;
                     chunkPromises.push(fetch(chunkUrl, {
                         headers: { 'X-API-Key': STATE_API_KEY }
                     }).then(r => {
@@ -317,8 +332,15 @@
                 const totalBuffer = new Uint8Array(manifest.totalSize);
                 let offset = 0;
                 for (let i = 0; i < chunkBuffers.length; i++) {
-                    totalBuffer.set(new Uint8Array(chunkBuffers[i]), offset);
-                    offset += chunkBuffers[i].byteLength;
+                    const chunk = new Uint8Array(chunkBuffers[i]);
+                    if (offset + chunk.byteLength > totalBuffer.byteLength) {
+                        throw new Error(`Chunk ${i} exceeds manifest size`);
+                    }
+                    totalBuffer.set(chunk, offset);
+                    offset += chunk.byteLength;
+                }
+                if (offset !== manifest.totalSize) {
+                    throw new Error(`State size mismatch: expected ${manifest.totalSize}, received ${offset}`);
                 }
 
                 logTerminal(`All chunks downloaded and stitched.`, "info");
@@ -326,6 +348,7 @@
                 this.mod.FS.writeFile('/intentspider.state', totalBuffer);
                 const ok = this._loadState(this.ptr, '/intentspider.state');
                 if (ok) {
+                    this._normalizeTimestamps(this.ptr, epochSeconds());
                     logTerminal("Collective state loaded into engine.", "predict");
                     this.showDebug();
                 } else {
@@ -350,6 +373,8 @@
                 this.mod.FS.writeFile('/intentspider.state', data);
                 const ok = this._loadState(this.ptr, '/intentspider.state');
                 if (ok) {
+                    this._normalizeTimestamps(this.ptr, epochSeconds());
+                    this.loadedGeneration = '';
                     logTerminal("Local state loaded into engine.", "predict");
                     this.showDebug();
                 } else {
@@ -363,130 +388,157 @@
 
         async saveCollectiveState() {
             if (!this.ready) return;
-            // If global user, also save the heated transient state
-            if (isGlobalPerson) {
-                await this.saveTransientState();
+            if (this.syncInFlight) {
+                this.syncQueued = true;
+                return;
             }
+
+            this.syncInFlight = true;
             try {
-                const ok = this._saveState(this.ptr, '/intentspider_out.state');
-                if (!ok) {
-                    logTerminal("engine_save_state failed.", "error");
-                    return;
+                // Freeze the graph before any network await. Only global-person mode
+                // owns the separate heated package; normal profiles must not overwrite it.
+                const graphOk = this._saveState(this.ptr, '/intentspider_out.state');
+                if (!graphOk) throw new Error('engine_save_state failed');
+
+                let transientData = null;
+                if (isGlobalPerson) {
+                    const transientOk = this._saveTransient &&
+                        this._saveTransient(this.ptr, '/transient_out.state');
+                    if (!transientOk) throw new Error('engine_save_transient failed');
+                    transientData = this.mod.FS.readFile('/transient_out.state');
                 }
 
-                const data = this.mod.FS.readFile('/intentspider_out.state');
-                const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB
-                const numChunks = Math.ceil(data.length / CHUNK_SIZE);
-                
-                logTerminal(`Uploading state (${(data.length / 1024 / 1024).toFixed(2)} MB) in ${numChunks} chunk(s)...`, "info");
+                const graphData = this.mod.FS.readFile('/intentspider_out.state');
+                const generation = (crypto.randomUUID ? crypto.randomUUID() :
+                    `${Date.now()}-${Math.random().toString(16).slice(2)}`);
+                const CHUNK_SIZE = 10 * 1024 * 1024;
+                const numChunks = Math.ceil(graphData.length / CHUNK_SIZE);
+                const tokensIndexed = Math.max(0, Math.trunc(this._getTokensObserved(this.ptr)));
 
-                const uploadPromises = [];
-                for (let i = 0; i < numChunks; i++) {
+                logTerminal(`Uploading state (${(graphData.length / 1024 / 1024).toFixed(2)} MB) in ${numChunks} chunk(s)...`, "info");
+
+                await Promise.all(Array.from({ length: numChunks }, (_, i) => {
                     const start = i * CHUNK_SIZE;
-                    const end = Math.min(start + CHUNK_SIZE, data.length);
-                    const chunkData = data.slice(start, end);
-                    
-                    uploadPromises.push(
-                        fetch(`${STATE_API_URL}/chunk/${i}`, {
-                            method: 'POST',
-                            headers: {
-                                'X-API-Key': STATE_API_KEY,
-                                'Content-Type': 'application/octet-stream',
-                            },
-                            body: chunkData,
-                        }).then(r => {
-                            if (!r.ok) throw new Error(`Chunk ${i} HTTP ${r.status}`);
-                        })
-                    );
+                    const chunkData = graphData.slice(start, Math.min(start + CHUNK_SIZE, graphData.length));
+                    return fetch(`${STATE_API_URL}/chunk/${i}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-API-Key': STATE_API_KEY,
+                            'X-State-Generation': generation,
+                            'Content-Type': 'application/octet-stream',
+                        },
+                        body: chunkData,
+                    }).then(resp => {
+                        if (!resp.ok) throw new Error(`Chunk ${i} HTTP ${resp.status}`);
+                    });
+                }));
+
+                // A global-person writer stages its exact paired heated package. For a
+                // normal writer the Worker carries the existing package forward unchanged.
+                if (isGlobalPerson) {
+                    const transientResp = await fetch(`${STATE_API_URL}/transient`, {
+                        method: 'POST',
+                        headers: {
+                            'X-API-Key': STATE_API_KEY,
+                            'X-State-Generation': generation,
+                            'Content-Type': 'application/octet-stream',
+                        },
+                        body: transientData,
+                    });
+                    if (!transientResp.ok) throw new Error(`Transient HTTP ${transientResp.status}`);
                 }
 
-                await Promise.all(uploadPromises);
-
-                // Upload manifest
+                // The manifest is the atomic graph/person commit. A stale tab cannot
+                // replace a newer snapshot because it must name what it originally read.
                 const manifestResp = await fetch(`${STATE_API_URL}/manifest`, {
                     method: 'POST',
                     headers: {
                         'X-API-Key': STATE_API_KEY,
+                        'X-Expected-Generation': this.loadedGeneration,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        totalSize: data.length,
-                        chunks: numChunks
+                        totalSize: graphData.length,
+                        chunks: numChunks,
+                        generation,
+                        tokensIndexed,
+                        updatesTransient: isGlobalPerson,
                     }),
                 });
 
-                if (manifestResp.ok) {
-                    logTerminal(`State successfully saved globally.`, "predict");
-                } else {
-                    logTerminal(`Manifest save failed: HTTP ${manifestResp.status}`, "error");
+                if (manifestResp.status === 409) {
+                    const conflict = await manifestResp.json().catch(() => ({}));
+                    throw new Error(`state changed in another tab (${conflict.currentGeneration || 'new generation'}); refresh before taking over`);
                 }
+                if (!manifestResp.ok) throw new Error(`Manifest HTTP ${manifestResp.status}`);
+                this.loadedGeneration = generation;
+
+                logTerminal(`Graph and global-person state saved as generation ${generation.slice(0, 8)}.`, "predict");
             } catch (err) {
                 logTerminal(`State sync error: ${err.message}`, "error");
+            } finally {
+                this.syncInFlight = false;
+                if (this.syncQueued) {
+                    this.syncQueued = false;
+                    queueMicrotask(() => this.saveCollectiveState());
+                }
             }
         },
 
         async loadTransientState() {
-            if (!this._loadTransient) return;  // WASM build doesn't have this function
+            if (!this._loadTransient) return;
             logTerminal("Loading global user transient (heated) state...", "info");
             try {
-                const resp = await fetch(STATE_API_URL.replace('/state', '') + '/state/transient', {
+                const transientQuery = this.loadedGeneration
+                    ? `?generation=${encodeURIComponent(this.loadedGeneration)}`
+                    : '';
+                const resp = await fetch(`${STATE_API_URL}/transient${transientQuery}`, {
                     method: 'GET',
                     headers: { 'X-API-Key': STATE_API_KEY },
                 });
-                if (!resp.ok) {
+                if (resp.status === 404) {
                     logTerminal("No transient state found (fresh global session).", "info");
                     return;
                 }
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+                const transientGeneration = resp.headers.get('X-State-Generation') || '';
+                if (this.loadedGeneration && transientGeneration !== this.loadedGeneration) {
+                    logTerminal("Transient state belongs to a different graph generation; skipped safely.", "info");
+                    return;
+                }
+
                 const data = new Uint8Array(await resp.arrayBuffer());
                 if (data.length === 0) return;
                 this.mod.FS.writeFile('/transient.state', data);
                 const ok = this._loadTransient(this.ptr, '/transient.state');
-                if (ok) {
-                    logTerminal(`Transient heated state loaded (${data.length} bytes).`, "predict");
-                } else {
+                if (!ok) {
                     logTerminal("Transient state file was invalid, starting fresh.", "info");
+                    return;
                 }
+
+                const sentence = this._getSentence(this.ptr) || '';
+                const buffer = this._getBuffer(this.ptr) || '';
+                currentText = sentence + (sentence && buffer ? ' ' : '') + buffer;
+                cursorPos = currentText.length;
+                selectAll = false;
+                updateDisplay();
+                this.updateSuggestions(JSON.parse(this._getSuggestions(this.ptr) || '[]'));
+                logTerminal(`Transient heated state loaded (${data.length} bytes).`, "predict");
             } catch (err) {
                 logTerminal(`Transient state load skipped: ${err.message}`, "info");
             }
         },
 
-        async saveTransientState() {
-            if (!this.ready || !this._saveTransient) return;  // WASM build doesn't have this function
-            try {
-                const ok = this._saveTransient(this.ptr, '/transient_out.state');
-                if (!ok) {
-                    logTerminal("engine_save_transient failed.", "error");
-                    return;
-                }
-                const data = this.mod.FS.readFile('/transient_out.state');
-                const resp = await fetch(STATE_API_URL.replace('/state', '') + '/state/transient', {
-                    method: 'POST',
-                    headers: {
-                        'X-API-Key': STATE_API_KEY,
-                        'Content-Type': 'application/octet-stream',
-                    },
-                    body: data,
-                });
-                if (resp.ok) {
-                    logTerminal("Transient heated state saved.", "info");
-                } else {
-                    logTerminal(`Transient state save failed: HTTP ${resp.status}`, "error");
-                }
-            } catch (err) {
-                logTerminal(`Transient state save error: ${err.message}`, "error");
-            }
-        },
-
         onKey(charCode) {
             if (!this.ready) return;
-            const ts = performance.now() / 1000;
+            const ts = epochSeconds();
             this._onKey(this.ptr, charCode, ts);
         },
 
         commit() {
             if (!this.ready) return null;
-            const ts = performance.now() / 1000;
+            const ts = epochSeconds();
             const json = this._commit(this.ptr, ts);
             try {
                 const result = JSON.parse(json);
@@ -503,7 +555,7 @@
         // Used exclusively during syncEngine replay to avoid spurious prediction display.
         commitSilent() {
             if (!this.ready) return null;
-            const ts = performance.now() / 1000;
+            const ts = epochSeconds();
             const json = this._commit(this.ptr, ts);
             try {
                 return JSON.parse(json);
@@ -514,7 +566,7 @@
 
         acceptSuggestion(index) {
             if (!this.ready) return null;
-            const ts = performance.now() / 1000;
+            const ts = epochSeconds();
             const json = this._accept(this.ptr, index, ts);
             try {
                 const result = JSON.parse(json);
