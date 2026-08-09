@@ -233,6 +233,8 @@
                 this._create       = this.mod.cwrap('engine_create',        'number', []);
                 this._loadState    = this.mod.cwrap('engine_load_state',    'number', ['number', 'string']);
                 this._saveState    = this.mod.cwrap('engine_save_state',    'number', ['number', 'string']);
+                this._loadTransientState = this.mod.cwrap('engine_load_transient_state', 'number', ['number', 'string']);
+                this._saveTransientState = this.mod.cwrap('engine_save_transient_state', 'number', ['number', 'string']);
                 this._onKey        = this.mod.cwrap('engine_on_key',        null,     ['number', 'number', 'number']);
                 this._commit       = this.mod.cwrap('engine_commit',        'string', ['number', 'number']);
                 this._accept       = this.mod.cwrap('engine_accept',        'string', ['number', 'number', 'number']);
@@ -248,12 +250,8 @@
                 this.ptr = this._create();
                 logTerminal(`Engine instance created (ptr=0x${this.ptr.toString(16)}).`, "info");
 
-                if (isGlobalPerson) {
-                    // Load collective state from R2 first, fall back to local
-                    await this.loadCollectiveState();
-                } else {
-                    logTerminal("Local profile selected. Starting with fresh empty graph.", "info");
-                }
+                // Try loading collective state from R2 first, fall back to local
+                await this.loadCollectiveState();
 
                 this.ready = true;
                 logTerminal("Data loaded. IntentSpider Engine Ready to Start. ", "predict");
@@ -316,6 +314,23 @@
                 const ok = this._loadState(this.ptr, '/intentspider.state');
                 if (ok) {
                     logTerminal("Collective state loaded into engine.", "predict");
+                    if (isGlobalPerson) {
+                        logTerminal("Fetching transient heated state...", "info");
+                        try {
+                            const transResp = await fetch(`${STATE_API_URL}/chunk/transient`, {
+                                headers: { 'X-API-Key': STATE_API_KEY }
+                            });
+                            if (transResp.ok) {
+                                const transData = new Uint8Array(await transResp.arrayBuffer());
+                                this.mod.FS.writeFile('/transient.state', transData);
+                                if (this._loadTransientState(this.ptr, '/transient.state')) {
+                                    logTerminal("Transient state loaded. You are now the Anonymous Squirrel.", "predict");
+                                }
+                            }
+                        } catch (e) {
+                            logTerminal("No transient state found or failed to load.", "info");
+                        }
+                    }
                     this.showDebug();
                 } else {
                     logTerminal("Collective state load failed — trying local fallback.", "error");
@@ -351,7 +366,6 @@
         },
 
         async saveCollectiveState() {
-            if (!isGlobalPerson) return;
             if (!this.ready) return;
             try {
                 const ok = this._saveState(this.ptr, '/intentspider_out.state');
@@ -402,6 +416,20 @@
                 });
 
                 if (manifestResp.ok) {
+                    if (isGlobalPerson) {
+                        const tOk = this._saveTransientState(this.ptr, '/transient_out.state');
+                        if (tOk) {
+                            const tData = this.mod.FS.readFile('/transient_out.state');
+                            await fetch(`${STATE_API_URL}/chunk/transient`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-API-Key': STATE_API_KEY,
+                                    'Content-Type': 'application/octet-stream',
+                                },
+                                body: tData,
+                            });
+                        }
+                    }
                     logTerminal(`State successfully saved globally.`, "predict");
                 } else {
                     logTerminal(`Manifest save failed: HTTP ${manifestResp.status}`, "error");
