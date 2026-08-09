@@ -2,8 +2,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const statsContainers = document.querySelectorAll('.stats');
     if (!statsContainers || statsContainers.length === 0) return;
 
-    const isSubdir = window.location.pathname.includes('/contactform/');
-    const spinnerSrc = isSubdir ? '../assets/spinner.gif' : 'assets/spinner.gif';
+    let spinnerSrc = 'assets/spinner.gif';
+    if (window.location.pathname.includes('/git/externalfiles/')) {
+        spinnerSrc = '../../assets/spinner.gif';
+    } else if (window.location.pathname.includes('/contactform/')) {
+        spinnerSrc = '../assets/spinner.gif';
+    }
 
     // Immediately show loading state (if not already set in HTML)
     statsContainers.forEach(container => {
