@@ -117,7 +117,7 @@
                 toggleIcon.src = 'assets/static/toggleon-playground-23.png';
                 toggleText.textContent = 'Turn off global user profile';
                 if (profileModeText) {
-                    profileModeText.innerHTML = `The global user profile is turned on. This is the main branch of this research preview. All users share this single profile. This may lead to more accurate predictions, but the suggestions may not be personalized for you and may include unexpected results. To test personally, please turn off the global profile mode.`;
+                    profileModeText.innerHTML = `The global user profile is turned on. This is the main branch of this research preview. All users share this single profile. This may lead to more accurate predictions, but the suggestions may not be personalized for you and may include unexpected results. To test personally (fork), please turn off the global profile mode.`;
                 }
                 toggleLink.onclick = (e) => {
                     e.preventDefault();
