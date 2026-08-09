@@ -363,10 +363,9 @@
 
         async saveCollectiveState() {
             if (!this.ready) return;
-            // If global user, also save the heated transient state
-            if (isGlobalPerson) {
-                await this.saveTransientState();
-            }
+            // Always save the heated transient state so that the latest typing context 
+            // (e.g. from the book feeder) is always available to global users picking it up.
+            await this.saveTransientState();
             try {
                 const ok = this._saveState(this.ptr, '/intentspider_out.state');
                 if (!ok) {
