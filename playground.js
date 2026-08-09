@@ -61,8 +61,8 @@
             disableStdin: true,
         });
         debugTerm.open(terminalPanel);
-        debugTerm.writeln('>> IntentSpider WASM Bridge Initializing...');
-        debugTerm.writeln('>> Waiting for engine connection...');
+        debugTerm.writeln('Copyright (c) IntentSpider Webnet. ');
+        debugTerm.writeln('Copyright (C) World Wide Web Consortium. Loading WebAssembly.');
     }
 
     function logTerminal(msg, type = "info") {
@@ -156,9 +156,9 @@
                 this.questions = data.questions;
                 this.shuffle();
                 this.loaded = true;
-                logTerminal(`Loaded ${this.questions.length} quiz questions.`, "info");
+                logTerminal(`IntentSpider Q. set loaded. Number of Qs: ${this.questions.length}`, "info");
             } catch (err) {
-                logTerminal(`Failed to load questions: ${err.message}`, "error");
+                logTerminal(`IntentSpider Q laoding failed. Please restart. Reason: ${err.message}`, "error");
                 // Fallback to a single hardcoded question
                 this.questions = [
                     { id: 0, cluster: "fallback", text: "Describe your favorite animal and explain what makes it special to you." }
@@ -226,13 +226,13 @@
         _destroy: null,
 
         async init() {
-            logTerminal("Initializing WASM bridge...", "info");
-            showNotification("Loading Webassembly codes.");
+            logTerminal("WebAssembly", "info");
+            showNotification("IntentSpider Webnet V1");
 
             if (typeof IntentSpiderModule !== 'function') {
                 const type = typeof IntentSpiderModule;
-                logTerminal(`IntentSpiderModule not found (type: ${type}) — running in demo mode.`, "error");
-                showNotification(`Engine not found (Type: ${type}). Running in demo mode.`);
+                logTerminal(`Are you offline? IntentSpider fatal crash. reason: ${type}) so, running in offline, demo mode.`, "error");
+                showNotification(`Are you offline? Research preview needs internet connection to download the IntentSpider engine.`);
                 return;
             }
 
@@ -262,15 +262,15 @@
                     this._saveTransient = this.mod.cwrap('engine_save_transient', 'number', ['number', 'string']);
                     this._loadTransient = this.mod.cwrap('engine_load_transient', 'number', ['number', 'string']);
                 } catch (e) {
-                    logTerminal("Transient state functions not available in this WASM build.", "info");
+                    logTerminal("Temporary functions lead to a fatal crash.", "info");
                     this._saveTransient = null;
                     this._loadTransient = null;
                 }
 
-                logTerminal("WASM module loaded successfully.", "info");
+                logTerminal("Copyright (c) 2025 World Web Consortium. WebAssembly 3.0", "info");
 
                 this.ptr = this._create();
-                logTerminal(`Engine instance created (ptr=0x${this.ptr.toString(16)}).`, "info");
+                logTerminal(`IntentSpider C++ memory instance ${this.ptr.toString(16)}).`, "info");
 
                 // Try loading collective state from R2 first, fall back to local
                 await this.loadCollectiveState();
@@ -281,18 +281,18 @@
                 }
 
                 this.ready = true;
-                logTerminal("Data loaded. IntentSpider Engine Ready to Start. ", "predict");
-                showNotification("Data loaded. IntentSpider Engine Ready to Start.");
+                logTerminal("Copyright (c) IntentSpider Webnet version 1 ", "predict");
+                showNotification("All systems operational. Copyright (c) IntentSpider Webnet version 1");
 
             } catch (err) {
-                logTerminal(`Error in loading function ${err.message}`, "error");
-                logTerminal("Failed.", "error");
-                showNotification(`Failed. ${err.message}`);
+                logTerminal(`Runtime fatal crash ${err.message}`, "error");
+                logTerminal("Fatal crash.", "error");
+                showNotification(`Runtime fatal crash. Please reload.`);
             }
         },
 
         async loadCollectiveState() {
-            logTerminal("Fetching collective state manifest...", "info");
+            logTerminal("Loading Cloudflare(R) KV database.", "info");
             try {
                 // Fetch Manifest
                 const manifestResp = await fetch(STATE_API_URL + '/manifest', {
@@ -301,7 +301,7 @@
                 });
 
                 if (manifestResp.status === 404) {
-                    logTerminal("No collective state found — trying local fallback.", "info");
+                    logTerminal("Fatal crash. Cloudflare(R) KV loading failed.", "info");
                     await this.loadLocalState();
                     return;
                 }
@@ -315,7 +315,7 @@
                     ? manifest.tokensIndexed
                     : (manifest.totalSize > 0 ? Math.floor(manifest.totalSize / 4) : null);
                 
-                logTerminal(`Manifest found: ${numChunks} chunks, ${(manifest.totalSize / 1024 / 1024).toFixed(2)} MB total. Downloading...`, "info");
+                logTerminal(`Main branch data loaded. Stats - ${numChunks} parts, ${(manifest.totalSize / 1024 / 1024).toFixed(2)} Megabytes. Just a moment..`, "info");
 
                 // Download the immutable chunks named by this exact manifest generation.
                 const chunkPromises = [];
@@ -347,49 +347,49 @@
                     offset += chunk.byteLength;
                 }
                 if (offset !== manifest.totalSize) {
-                    throw new Error(`State size mismatch: expected ${manifest.totalSize}, received ${offset}`);
+                    throw new Error(`state size mismatch here. the expected amount: ${manifest.totalSize} but we got ${offset}`);
                 }
 
-                logTerminal(`All chunks downloaded and stitched.`, "info");
+                logTerminal(`You're now on the branch. Gotcha!`, "info");
 
                 this.mod.FS.writeFile('/intentspider.state', totalBuffer);
                 const ok = this._loadState(this.ptr, '/intentspider.state');
                 if (ok) {
                     this._normalizeTimestamps(this.ptr, epochSeconds());
-                    logTerminal("Collective state loaded into engine.", "predict");
+                    logTerminal("Branch data cloned to virtual system.", "predict");
                     this.showDebug();
                 } else {
-                    logTerminal("Collective state load failed — trying local fallback.", "error");
+                    logTerminal("Fatal. Branch connection failed. Reload.", "error");
                     await this.loadLocalState();
                 }
             } catch (err) {
-                logTerminal(`Fetch failed: ${err.message} — trying local fallback.`, "error");
+                logTerminal(`Fatal crash. Branch data cloning failed. ${err.message} Returning to normal version.`, "error");
                 await this.loadLocalState();
             }
         },
 
         async loadLocalState() {
-            logTerminal("Fetching local state file...", "info");
+            logTerminal("Loading the locally saved files. Just a moment.", "info");
             try {
                 const response = await fetch('assets/intentspider.state');
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
                 const data = new Uint8Array(await response.arrayBuffer());
-                logTerminal(`Local state file downloaded (${(data.length / 1048576).toFixed(1)} MB).`, "info");
+                logTerminal(`Local files downloaded. But you are disconnected from the research preview software and you will not be able to contribute. (${(data.length / 1048576).toFixed(1)} MB).`, "info");
 
                 this.mod.FS.writeFile('/intentspider.state', data);
                 const ok = this._loadState(this.ptr, '/intentspider.state');
                 if (ok) {
                     this._normalizeTimestamps(this.ptr, epochSeconds());
                     this.loadedGeneration = '';
-                    logTerminal("Local state loaded into engine.", "predict");
+                    logTerminal("Local files loaded to the engine.", "predict");
                     this.showDebug();
                 } else {
-                    logTerminal("engine_load_state returned failure.", "error");
+                    logTerminal("Fatal crash. Local file loading failed too. Unrecoverable.", "error");
                 }
             } catch (err) {
-                logTerminal(`Could not load local state: ${err.message}`, "error");
-                logTerminal("Engine will start with empty state.", "error");
+                logTerminal(`Fatal crash. Local file loading failed too. Unrecoverable. ${err.message}`, "error");
+                logTerminal("IntentSpider Version 1 (local edition)", "error");
             }
         },
 
@@ -422,7 +422,7 @@
                 const numChunks = Math.ceil(graphData.length / CHUNK_SIZE);
                 const tokensIndexed = Math.max(0, Math.trunc(this._getTokensObserved(this.ptr)));
 
-                logTerminal(`Uploading state (${(graphData.length / 1024 / 1024).toFixed(2)} MB) in ${numChunks} chunk(s)...`, "info");
+                logTerminal(`IntentSpider/sendapi (${(graphData.length / 1024 / 1024).toFixed(2)} Megabytes) in ${numChunks} part(s)`, "info");
 
                 await Promise.all(Array.from({ length: numChunks }, (_, i) => {
                     const start = i * CHUNK_SIZE;
@@ -475,14 +475,14 @@
 
                 if (manifestResp.status === 409) {
                     const conflict = await manifestResp.json().catch(() => ({}));
-                    throw new Error(`state changed in another tab (${conflict.currentGeneration || 'new generation'}); refresh before taking over`);
+                    throw new Error(`Are there multiple tabs open? (${conflict.currentGeneration || 'new gen'}); Fatal crash. Reload.`);
                 }
                 if (!manifestResp.ok) throw new Error(`Manifest HTTP ${manifestResp.status}`);
                 this.loadedGeneration = generation;
 
-                logTerminal(`Graph and global-person state saved as generation ${generation.slice(0, 8)}.`, "predict");
+                logTerminal(`Graph and IntentSpider/globalperson state saved as gen ${generation.slice(0, 8)}.`, "predict");
             } catch (err) {
-                logTerminal(`State sync error: ${err.message}`, "error");
+                logTerminal(`Fatal. State sync failed. reason - ${err.message}`, "error");
             } finally {
                 this.syncInFlight = false;
                 if (this.syncQueued) {
@@ -494,7 +494,7 @@
 
         async loadTransientState() {
             if (!this._loadTransient) return;
-            logTerminal("Loading global user transient (heated) state...", "info");
+            logTerminal("Executing command - IntentSpider/tempheat loading.", "info");
             try {
                 const transientQuery = this.loadedGeneration
                     ? `?generation=${encodeURIComponent(this.loadedGeneration)}`
@@ -504,14 +504,14 @@
                     headers: { 'X-API-Key': STATE_API_KEY },
                 });
                 if (resp.status === 404) {
-                    logTerminal("No transient state found (fresh global session).", "info");
+                    logTerminal("Cloudflare(R) KV Failed. If you are connecting this to your own database, please note that it is illegal to scrape copyrighted data.", "info");
                     return;
                 }
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
                 const transientGeneration = resp.headers.get('X-State-Generation') || '';
                 if (this.loadedGeneration && transientGeneration !== this.loadedGeneration) {
-                    logTerminal("Transient state belongs to a different graph generation; skipped safely.", "info");
+                    logTerminal("Temp states are from a seperate model version. Result - Skipped.", "info");
                     return;
                 }
 
@@ -520,7 +520,7 @@
                 this.mod.FS.writeFile('/transient.state', data);
                 const ok = this._loadTransient(this.ptr, '/transient.state');
                 if (!ok) {
-                    logTerminal("Transient state file was invalid, starting fresh.", "info");
+                    logTerminal("Temp State is not valid. Creating a new temp state.", "info");
                     return;
                 }
 
@@ -531,9 +531,9 @@
                 selectAll = false;
                 updateDisplay();
                 this.updateSuggestions(JSON.parse(this._getSuggestions(this.ptr) || '[]'));
-                logTerminal(`Transient heated state loaded (${data.length} bytes).`, "predict");
+                logTerminal(`Connected to the main branch. Additional data usage - (${data.length} bytes).`, "predict");
             } catch (err) {
-                logTerminal(`Transient state load skipped: ${err.message}`, "info");
+                logTerminal(`Maybe Fatal - Skipped connection to the main branch. ${err.message}`, "info");
             }
         },
 
@@ -553,7 +553,7 @@
                 this.showDebugFromResult(result);
                 return result;
             } catch (e) {
-                logTerminal(`commit parse error: ${e.message}`, "error");
+                logTerminal(`Commit failed. reason - ${e.message}`, "error");
                 return null;
             }
         },
@@ -581,19 +581,19 @@
                 this.showDebugFromResult(result);
                 return result;
             } catch (e) {
-                logTerminal(`accept parse error: ${e.message}`, "error");
+                logTerminal(`Commit failed but accepted. Reason - ${e.message}`, "error");
                 return null;
             }
         },
 
         newSentence() {
             if (!this.ready) {
-                logTerminal("New sentence (demo mode).", "info");
+                logTerminal("New message by user in the offline state (not connected)", "info");
                 return;
             }
             this._newSentence(this.ptr);
             clearSuggestions();
-            logTerminal("Started a new sentence", "predict");
+            logTerminal("New message by user. You are online.", "predict");
             this.showDebug();
         },
 
@@ -611,7 +611,7 @@
             const d = result.debug;
             logTerminal(
                 `Information only - value'=${d.val_prime?.toFixed(3)} H=${d.entropy?.toFixed(3)} ` +
-                `hexarousal=${d.arousal?.toFixed(3)} α_eff=${d.alpha_eff?.toFixed(3)} ` +
+                `hexarousal=${d.arousal?.toFixed(3)} alphaeff=${d.alpha_eff?.toFixed(3)} ` +
                 `streak=${d.streak} prey=${d.prey} nodes=${d.graph_nodes} edges=${d.graph_edges} ` +
                 `num of words=${d.vocabulary} ${d.gated ? 'Nec.gated' : ''} ${d.shock ? 'Shoc.gated' : ''}`,
                 "predict"
@@ -625,7 +625,7 @@
             for (let i = 0; i < 3; i++) {
                 if (sugs && sugs[i]) {
                     suggestions[i].textContent = sugs[i].token;
-                    suggestions[i].title = `Score: ${sugs[i].score?.toFixed(4)}`;
+                    suggestions[i].title = `Score val - ${sugs[i].score?.toFixed(4)}`;
                 } else {
                     suggestions[i].textContent = '';
                     suggestions[i].title = '';
@@ -740,7 +740,7 @@
         Engine.onKey(32);
         Engine.commit();
         addChatBubble(text, true);
-        logTerminal(`Answer: "${text}"`, "info");
+        logTerminal(`Used an answer from the premade answer list - "${text}"`, "info");
 
         currentText = "";
         cursorPos = 0;
