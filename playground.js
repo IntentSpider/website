@@ -593,7 +593,7 @@
             }
             this._newSentence(this.ptr);
             clearSuggestions();
-            logTerminal("--- NEW SENTENCE ---", "predict");
+            logTerminal("Started a new sentence", "predict");
             this.showDebug();
         },
 
@@ -610,14 +610,14 @@
             if (!result || !result.debug) return;
             const d = result.debug;
             logTerminal(
-                `[dbg] val'=${d.val_prime?.toFixed(3)} H=${d.entropy?.toFixed(3)} ` +
-                `arousal=${d.arousal?.toFixed(3)} α_eff=${d.alpha_eff?.toFixed(3)} ` +
+                `Information only - value'=${d.val_prime?.toFixed(3)} H=${d.entropy?.toFixed(3)} ` +
+                `hexarousal=${d.arousal?.toFixed(3)} α_eff=${d.alpha_eff?.toFixed(3)} ` +
                 `streak=${d.streak} prey=${d.prey} nodes=${d.graph_nodes} edges=${d.graph_edges} ` +
-                `vocab=${d.vocabulary} ${d.gated ? 'GATED' : ''} ${d.shock ? 'SHOCK' : ''}`,
+                `num of words=${d.vocabulary} ${d.gated ? 'Nec.gated' : ''} ${d.shock ? 'Shoc.gated' : ''}`,
                 "predict"
             );
             if (result.sentence) {
-                logTerminal(`[sent] "${result.sentence}"`, "info");
+                logTerminal(`Sending "${result.sentence}"`, "info");
             }
         },
 
