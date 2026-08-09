@@ -61,8 +61,8 @@
             disableStdin: true,
         });
         debugTerm.open(terminalPanel);
-        debugTerm.writeln('Copyright (c) IntentSpider Webnet. ');
-        debugTerm.writeln('Copyright (C) World Wide Web Consortium. Loading WebAssembly.');
+        debugTerm.writeln('Copyright (c) 2025 IntentSpider Webnet. ');
+        debugTerm.writeln('Copyright (C) 2025 World Wide Web Consortium. Loading WebAssembly 3.0.');
     }
 
     function logTerminal(msg, type = "info") {
@@ -385,10 +385,10 @@
                     logTerminal("Local files loaded to the engine.", "predict");
                     this.showDebug();
                 } else {
-                    logTerminal("Fatal crash. Local file loading failed too. Unrecoverable.", "error");
+                    logTerminal("Unresponsive behaviour.", "error");
                 }
             } catch (err) {
-                logTerminal(`Fatal crash. Local file loading failed too. Unrecoverable. ${err.message}`, "error");
+                logTerminal(`Unresponsive behaviour. ${err.message}`, "error");
                 logTerminal("IntentSpider Version 1 (local edition)", "error");
             }
         },
