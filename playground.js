@@ -14,7 +14,7 @@
     const CHAR_LIMIT = 200;
 
     const urlParams = new URLSearchParams(window.location.search);
-    const isGlobalPerson = urlParams.get('global_person') === 'true';
+    const isGlobalPerson = urlParams.get('global_person') !== 'false';
     const epochSeconds = () => Date.now() / 1000;
 
     // ================================================================
@@ -121,7 +121,7 @@
                 }
                 toggleLink.onclick = (e) => {
                     e.preventDefault();
-                    window.location.href = window.location.pathname; 
+                    window.location.href = window.location.pathname + '?global_person=false'; 
                 };
             } else {
                 toggleIcon.src = 'assets/static/toggleoff-playground-23.png';
@@ -131,7 +131,7 @@
                 }
                 toggleLink.onclick = (e) => {
                     e.preventDefault();
-                    window.location.href = window.location.pathname + '?global_person=true';
+                    window.location.href = window.location.pathname;
                 };
             }
         }
