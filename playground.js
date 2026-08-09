@@ -243,8 +243,15 @@
                 this._getSuggestions= this.mod.cwrap('engine_get_suggestions','string',['number']);
                 this._destroy      = this.mod.cwrap('engine_destroy',       null,     ['number']);
                 // Transient state bindings (for global user heated state)
-                this._saveTransient = this.mod.cwrap('engine_save_transient', 'number', ['number', 'string']);
-                this._loadTransient = this.mod.cwrap('engine_load_transient', 'number', ['number', 'string']);
+                // Wrapped in try/catch for backward compatibility with older WASM builds
+                try {
+                    this._saveTransient = this.mod.cwrap('engine_save_transient', 'number', ['number', 'string']);
+                    this._loadTransient = this.mod.cwrap('engine_load_transient', 'number', ['number', 'string']);
+                } catch (e) {
+                    logTerminal("Transient state functions not available in this WASM build.", "info");
+                    this._saveTransient = null;
+                    this._loadTransient = null;
+                }
 
                 logTerminal("WASM module loaded successfully.", "info");
 
@@ -419,6 +426,7 @@
         },
 
         async loadTransientState() {
+            if (!this._loadTransient) return;  // WASM build doesn't have this function
             logTerminal("Loading global user transient (heated) state...", "info");
             try {
                 const resp = await fetch(STATE_API_URL.replace('/state', '') + '/state/transient', {
@@ -444,7 +452,7 @@
         },
 
         async saveTransientState() {
-            if (!this.ready) return;
+            if (!this.ready || !this._saveTransient) return;  // WASM build doesn't have this function
             try {
                 const ok = this._saveTransient(this.ptr, '/transient_out.state');
                 if (!ok) {
