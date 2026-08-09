@@ -1,11 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
+<head>
     <meta charset="UTF-8">
-    <title>Experiments - IntentSpider</title>
-        <link rel="shortcut icon" href="../../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
-
+    <title>IntentSpider</title>
+    <link rel="shortcut icon" href="../../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="../../styles.css">
+    <script type="module">
+        import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
+        
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
+
+        const url = '../../assets/intentspider_paper.pdf';
+
+        const loadingTask = pdfjsLib.getDocument(url);
+        loadingTask.promise.then(async function(pdf) {
+            const container = document.getElementById('pdf-viewer-container');
+            const loadingEl = document.querySelector('.pdf-loading');
+
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                const page = await pdf.getPage(pageNum);
+                const scale = 1.5;
+                const viewport = page.getViewport({scale: scale});
+
+                const canvas = document.createElement('canvas');
+                canvas.className = 'pdf-page';
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                if (loadingEl) {
+                    container.insertBefore(canvas, loadingEl);
+                } else {
+                    container.appendChild(canvas);
+                }
+
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                await page.render(renderContext).promise;
+            }
+            
+            if (loadingEl) loadingEl.remove();
+        }).catch(function (reason) {
+            console.error(reason);
+            const container = document.getElementById('pdf-viewer-container');
+            container.innerHTML = '<div class="pdf-loading">Sorry. Please reload this page.</div>';
+        });
+    </script>
 </head>
 <body>
     <div id="wrap">
@@ -21,18 +63,20 @@
                     <a href="../../index.html">Home</a>
                     <a href="../../playground.html">Playground</a>
                     <a href="../../paper.html">Paper</a>
-                    <a href="./">Experiments</a>
+                    <a href="../../git/externalfiles/">Experiments</a>
                     <a href="../../about.html">About</a>
-                                        <a href="../../git/"><img src="../../assets/git-icon-logo.svg" width="20px" alt="">Git</a>
-
+                    <a href="../../git/"><img src="../../assets/git-icon-logo.svg" width="20px" alt="">Git</a>
                 </nav>
             </div>
         </header>
 
         <main>
-            <h1>Experiments</h1>
-            <br>
-            <p>Content coming soon.</p>
+            <h1>IntentSpider Research Paper</h1>
+            <p>IntentSpider Preprint Paper for Conference and Journal Reviewers (Submitted to Arxiv.org)</p>
+            
+            <div id="pdf-viewer-container">
+                <div class="pdf-loading"><img src="../../assets/spinner.gif" width="60" height="60" alt=""></div>
+            </div>
         </main>
 
         <footer>
