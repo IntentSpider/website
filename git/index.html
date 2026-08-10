@@ -32,12 +32,20 @@
             <h1>Git repositories and open source</h1>
             <br>
             <p>
-                The IntentSpider engine represents a completely new approach to predictive text, utilizing a dynamic, transient memory graph to capture textual tension and cadence. The core engine is open source and available for the public to inspect, modify, and build upon. You can explore the complete source code, mathematical foundations, and the WASM bridge directly in our <a href="https://github.com/IntentSpider/intentspider" style="color: #0031A7; font-weight: bold; text-decoration: none;">GitHub repository</a>, which hosts the raw C++ implementation of the webnet engine.
-            </p>
-            <br>
-            <p>
-                We encourage researchers, developers, and enthusiasts to dive into the codebase to better understand the algorithms powering IntentSpider. By open-sourcing the engine, we hope to foster a collaborative environment where the community can experiment with new dispersion mechanics, optimize the tensor operations, or adapt the architecture for entirely new predictive paradigms.
-            </p>
+              <img src="../assets/git-icon-logo.svg" width="20px" alt="">  <a href="https://github.com/intentspider/intentspiderengine">https://github.com/intentspider/intentspiderengine</a>
+<br><br><br>
+
+       IntentSpider is built using C++ and uses the Standard Template Library. It is a different approach from the ngram models used by Google Gboard, Microsoft SwiftKey, Apple QuickType, and Samsung Keyboard. This is an on-device engine with a runtime snapshot with no network egress or ingress. This system is not based on any Natural Language Processing technology or any type of artificial intelligence model. Processes are built from graph algorithms, dynamic programming, vectors, sets, arrays, and everything in general data structures. These algorithms were created and developed over several months and the passion of understanding how these extraordinarily complex communication patterns and word connections behave, manipulate other vectors, and change dynamics, and properties of them. The name IntentSpider came from a careful observation of the nature in the early days of this research. Information about this is available here. <a href="/about.html">More Information</a>
+
+The first IntentSpider legacy version, which is also referred to in the paper, was a single main.cpp file which contained all systems. Later, after learning how to include header files in order to migrate code and separate code files, I created the IntentSpider system as you would now see in the Git repository. The repository's source folder includes ten or eleven C++ files with header files. This folder also includes text files taken from Project Gutenberg which were used for testing the IntentSpider Legacy version. These are no longer used in version 1. The compiled intentspider.exe file is included.
+
+            <br><a href="https://github.com/intentspider/intentspiderengine">https://github.com/intentspider/intentspiderengine</a>
+<br><br>
+
+I am very grateful for the hard work and countless number of hours I spent solving problems on USACO, CF, atcoder, kattis, and USACO guide (+ cses.fi!, Calico and MITIT Spring!), which brought me from a USACO Bronze participant to USACO Gold Qualifier and National Olympiad in Informatics Finalist (1st day - 5th place, 2nd day - 11th place) and ended up this year participating in the Asia Pacific Olympiad in Informatics, in Taiwan.
+
+</p>
+        
             
             <br><br>
             <hr style="border: 0; border-top: 1px solid #eaecef;">
@@ -45,10 +53,7 @@
 
             <span>
                 <h3 style="color: #000; margin-bottom: 5px; font-size: 16px;">Open source licenses and 3rd party software that was contributed to the overall development of intent spider webnet engine</h3>
-                <p style="margin-top: 10px; font-size: 15px; line-height: 1.5;">
-                    The core IntentSpider Webnet engine is written entirely from scratch in C++. After a thorough inspection of the C implementation, we can confirm that the engine operates <strong>without a single third-party open-source dependency or library</strong>. It relies exclusively on the standard C++ library (STL). The only external open-source tool utilized during the engine's development is the compiler toolchain used to port the C++ code to the web:
-                </p>
-                <br>
+               
                 Emscripten (C++ to WebAssembly compiler) - <a href="https://emscripten.org/">https://emscripten.org/</a>
             </span>
         </main>
