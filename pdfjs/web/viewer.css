@@ -3880,3 +3880,7 @@ dialog :link{
     display:none;
   }
 }
+#sidebarContainer{
+  visibility: hidden !important;
+  display: none !important;
+}
