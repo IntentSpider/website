@@ -342,3 +342,6 @@ footer {
   font-weight: bold;
   padding: 40px;
 }
+#sidebarContainer{
+  display: none !important;
+}
