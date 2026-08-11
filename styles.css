@@ -336,6 +336,7 @@ footer {
   border: 1px solid #000000;
   margin-bottom: 20px;
   max-width: 100%;
+  background-color: white;
 }
 .pdf-loading {
   font-weight: bold;
