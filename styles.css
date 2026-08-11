@@ -344,4 +344,5 @@ footer {
 }
 #sidebarContainer{
   display: none !important;
+  visibility:  hidden !important;
 }
