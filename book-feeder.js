@@ -28,7 +28,7 @@
     // ================================================================
 
     const DATASETS = [
-        { path: "assets/dataset-3.txt", title: "Alice's Adventures in Wonderland — Lewis Carroll" }
+        { path: "assets/largedataset.txt", title: "Alice's Adventures in Wonderland — Lewis Carroll" }
         // Add more local datasets here if you download them
     ];
 
