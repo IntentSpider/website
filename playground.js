@@ -512,45 +512,58 @@
         async loadTransientState() {
             if (!this._loadTransient) return;
             logTerminal("Executing command - IntentSpider/tempheat loading.", "info");
-            try {
-                const transientQuery = this.loadedGeneration
-                    ? `?generation=${encodeURIComponent(this.loadedGeneration)}`
-                    : '';
-                const resp = await fetch(`${STATE_API_URL}/transient${transientQuery}`, {
-                    method: 'GET',
-                    headers: { 'X-API-Key': STATE_API_KEY },
-                });
-                if (resp.status === 404) {
-                    logTerminal("Cloudflare(R) KV Failed. If you are connecting this to your own database, please note that it is illegal to scrape copyrighted data.", "info");
-                    return;
-                }
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
-                const transientGeneration = resp.headers.get('X-State-Generation') || '';
-                if (this.loadedGeneration && transientGeneration !== this.loadedGeneration) {
-                    logTerminal("Temp states are from a seperate model version. Result - Skipped.", "info");
-                    return;
-                }
+            const maxRetries = 3;
+            const retryDelays = [0, 2000, 5000];
 
-                const data = new Uint8Array(await resp.arrayBuffer());
-                if (data.length === 0) return;
-                this.mod.FS.writeFile('/transient.state', data);
-                const ok = this._loadTransient(this.ptr, '/transient.state');
-                if (!ok) {
-                    logTerminal("Temp State is not valid. Creating a new temp state.", "info");
-                    return;
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                if (attempt > 0) {
+                    logTerminal(`IntentSpider. Retry function() (${attempt + 1}/${maxRetries})...`, "info");
+                    await new Promise(r => setTimeout(r, retryDelays[attempt]));
                 }
+                try {
+                    const transientQuery = this.loadedGeneration
+                        ? `?generation=${encodeURIComponent(this.loadedGeneration)}`
+                        : '';
+                    const resp = await fetch(`${STATE_API_URL}/transient${transientQuery}`, {
+                        method: 'GET',
+                        headers: { 'X-API-Key': STATE_API_KEY },
+                    });
+                    if (resp.status === 404) {
+                        logTerminal("Cloudflare(R) KV Failed. If you are connecting this to your own database, please note that it is illegal to scrape copyrighted data.", "info");
+                        return;
+                    }
+                    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 
-                const sentence = this._getSentence(this.ptr) || '';
-                const buffer = this._getBuffer(this.ptr) || '';
-                currentText = sentence + (sentence && buffer ? ' ' : '') + buffer;
-                cursorPos = currentText.length;
-                selectAll = false;
-                updateDisplay();
-                this.updateSuggestions(JSON.parse(this._getSuggestions(this.ptr) || '[]'));
-                logTerminal(`Connected to the main branch. Additional data usage - (${data.length} bytes).`, "predict");
-            } catch (err) {
-                logTerminal(`Maybe Fatal - Skipped connection to the main branch. ${err.message}`, "info");
+                    const transientGeneration = resp.headers.get('X-State-Generation') || '';
+                    if (this.loadedGeneration && transientGeneration !== this.loadedGeneration) {
+                        logTerminal("Temp states are from a seperate model version. Result - Skipped.", "info");
+                        return;
+                    }
+
+                    const data = new Uint8Array(await resp.arrayBuffer());
+                    if (data.length === 0) return;
+                    this.mod.FS.writeFile('/transient.state', data);
+                    const ok = this._loadTransient(this.ptr, '/transient.state');
+                    if (!ok) {
+                        if (attempt < maxRetries - 1) continue;
+                        logTerminal("Temp State is not valid. Creating a new temp state.", "info");
+                        return;
+                    }
+
+                    const sentence = this._getSentence(this.ptr) || '';
+                    const buffer = this._getBuffer(this.ptr) || '';
+                    currentText = sentence + (sentence && buffer ? ' ' : '') + buffer;
+                    cursorPos = currentText.length;
+                    selectAll = false;
+                    updateDisplay();
+                    this.updateSuggestions(JSON.parse(this._getSuggestions(this.ptr) || '[]'));
+                    logTerminal(`Connected to the main branch. Additional data usage - (${data.length} bytes).`, "predict");
+                    return;
+                } catch (err) {
+                    if (attempt < maxRetries - 1) continue;
+                    logTerminal(`Maybe Fatal - Skipped connection to the main branch. ${err.message}`, "info");
+                }
             }
         },
 
