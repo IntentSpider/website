@@ -168,7 +168,7 @@
         async load() {
             try {
                 const resp = await fetch('questions.json?v=11');
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                if (!resp.ok) throw new Error(`Errorvalue ${resp.status}`);
                 const data = await resp.json();
                 this.questions = data.questions;
                 this.shuffle();
@@ -322,7 +322,7 @@
                     await this.loadLocalState();
                     return;
                 }
-                if (!manifestResp.ok) throw new Error(`HTTP ${manifestResp.status}`);
+                if (!manifestResp.ok) throw new Error(`Errorvalue ${manifestResp.status}`);
 
                 const manifest = await manifestResp.json();
                 const numChunks = manifest.chunks || 1;
@@ -389,7 +389,7 @@
             logTerminal("Loading the locally saved files. Just a moment.", "info");
             try {
                 const response = await fetch('assets/intentspider.state');
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                if (!response.ok) throw new Error(`Errorvalue ${response.status}`);
 
                 const data = new Uint8Array(await response.arrayBuffer());
                 logTerminal(`Local files downloaded. But you are disconnected from the research preview software and you will not be able to contribute. (${(data.length / 1048576).toFixed(1)} MB).`, "info");
@@ -453,7 +453,7 @@
                         },
                         body: chunkData,
                     }).then(resp => {
-                        if (!resp.ok) throw new Error(`Chunk ${i} HTTP ${resp.status}`);
+                        if (!resp.ok) throw new Error(`Part ${i} and errorvalue ${resp.status}`);
                     });
                 }));
 
@@ -469,7 +469,7 @@
                         },
                         body: transientData,
                     });
-                    if (!transientResp.ok) throw new Error(`Transient HTTP ${transientResp.status}`);
+                    if (!transientResp.ok) throw new Error(`Temp errorvalue ${transientResp.status}`);
                 }
 
                 // The manifest is the atomic graph/person commit. A stale tab cannot
@@ -494,7 +494,7 @@
                     const conflict = await manifestResp.json().catch(() => ({}));
                     throw new Error(`Are there multiple tabs open? (${conflict.currentGeneration || 'new gen'});`);
                 }
-                if (!manifestResp.ok) throw new Error(`Manifest HTTP ${manifestResp.status}`);
+                if (!manifestResp.ok) throw new Error(`Commit errorvalue ${manifestResp.status}`);
                 this.loadedGeneration = generation;
 
                 logTerminal(`Graph and IntentSpider/globalperson state saved as gen ${generation.slice(0, 8)}.`, "predict");
@@ -533,7 +533,7 @@
                         logTerminal("Cloudflare(R) KV Failed. If you are connecting this to your own database, please note that it is illegal to scrape copyrighted data.", "info");
                         return;
                     }
-                    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                    if (!resp.ok) throw new Error(`Errorvalue ${resp.status}`);
 
                     const transientGeneration = resp.headers.get('X-State-Generation') || '';
                     if (this.loadedGeneration && transientGeneration !== this.loadedGeneration) {
