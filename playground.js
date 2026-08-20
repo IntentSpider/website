@@ -537,7 +537,7 @@
 
                     const transientGeneration = resp.headers.get('X-State-Generation') || '';
                     if (this.loadedGeneration && transientGeneration !== this.loadedGeneration) {
-                        logTerminal("Temp states are from a seperate model version. Result - Skipped.", "info");
+                        logTerminal("Temp states are from a seperate model version. Result is corrupted data. Preprogrammed to skip.", "info");
                         return;
                     }
 
@@ -547,7 +547,7 @@
                     const ok = this._loadTransient(this.ptr, '/transient.state');
                     if (!ok) {
                         if (attempt < maxRetries - 1) continue;
-                        logTerminal("Temp State is not valid. Creating a new temp state.", "info");
+                        logTerminal("Connecting to a new Temp state. This may take a moment.", "info");
                         return;
                     }
 
