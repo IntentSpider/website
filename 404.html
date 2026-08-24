@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>IntentSpider</title>
-    <link rel="shortcut icon" href="./assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
+    <script>
+      (function() {
+        var baseHref = '/';
+        if (window.location.hostname.includes('github.io')) {
+          var segment = window.location.pathname.split('/').filter(Boolean)[0];
+          baseHref = segment ? '/' + segment + '/' : '/';
+        }
+        document.write('<base href="' + baseHref + '">');
+      })();
+    </script>
+    <link rel="shortcut icon" href="assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
     <style>
-      /* Embedded style fallback to guarantee styling at any path depth */
+      /* Embedded style fallback */
       * { box-sizing: border-box; margin: 0; padding: 0; }
       body {
         background: #ebebeb;
