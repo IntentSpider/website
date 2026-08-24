@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IntentSpider</title>
+        <link rel="shortcut icon" href="/assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div id="wrap">
+        <header>
+            <div id="logo">
+                <a href="/index.html"><img src="/assets/873547485784.png" alt="IntentSpider"></a>
+            </div>
+            <div id="nav-area">
+                <div class="stats">
+                    
+                </div>
+                <nav>
+                    <a href="/index.html">Home</a>
+                    <a href="/playground.html">Playground</a>
+                    <a href="/paper.html">Paper</a>
+                    <a href="/git/externalfiles/">Experiments</a>
+                    <a href="/about.html">Essay</a>
+                    <a href="/git/"><img src="/assets/git-icon-logo.svg" width="20px" alt="">Git</a>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <h1 style="margin-bottom: 0;">IntentSpider Webnet</h1>
+            <p>The fluid language web for textual tension and prediction. <br><a href="/about.html">Read the essay</a></p>
+
+            <br>
+            <p><a href="/playground.html">Click here to visit Research Preview</a></p>
+            <br><br>
+
+        </main>
+
+        <footer>
+            &copy; 2025-2026 IntentSpider Webnet. Contact: <a href="/contactform/">Contact Form</a>
+        </footer>
+    </div>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const statsContainers = document.querySelectorAll('.stats');
+    if (!statsContainers || statsContainers.length === 0) return;
+    const spinnerSrc = '/assets/spinner.gif';
+    statsContainers.forEach(container => {
+        container.innerHTML = `
+            <div>
+                <img src="${spinnerSrc}" alt="Loading" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Webnets
+            </div>
+            <div>
+                <img src="${spinnerSrc}" alt="Loading" style="width:20px;height:20px;vertical-align:middle;margin-right:4px;"> Tokens
+            </div>
+        `;
+    });
+    try {
+        const fetchPromise = fetch('https://intentspiderapis.nekshadesilva.com/stats').then(r => r.json());
+        const waitPromise = new Promise(r => setTimeout(r, 3000));
+        const [data] = await Promise.all([fetchPromise, waitPromise]);
+        statsContainers.forEach(container => {
+            container.innerHTML = `
+                <div>${data.modules || 0} Webnets</div>
+                <div>${(data.tokensIndexed || 0).toLocaleString()} Tokens</div>
+            `;
+        });
+    } catch (err) {
+        statsContainers.forEach(container => {
+            container.innerHTML = `<div>Offline</div>`;
+        });
+    }
+});
+</script>
+</body>
+</html>
