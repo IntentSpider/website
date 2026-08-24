@@ -3,9 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>IntentSpider</title>
-        <link rel="shortcut icon" href="./assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
-
+    <link rel="shortcut icon" href="./assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
+    <style>
+      /* Embedded style fallback to guarantee styling at any path depth */
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        background: #ebebeb;
+        margin: 0;
+        font: 16px/24px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        color: #000000;
+        text-align: center;
+      }
+      #wrap {
+        margin: 9px auto;
+        width: 770px;
+        padding: 0px 10px;
+        text-align: left;
+        border-top: 5px solid #0031A7;
+        background-color: rgb(255, 255, 255);
+        min-height: 100vh;
+        box-shadow: 0 30px 15px rgb(159, 159, 159);
+      }
+      header { height: 90px; margin-bottom: 30px; }
+      header::after { content: ""; display: table; clear: both; }
+      #logo { float: left; width: 200px; padding-top: 0; }
+      #logo img { width: 150px; height: 150px; object-fit: contain; }
+      #nav-area {
+        float: right;
+        text-align: right;
+        color: #000000;
+        font-size: 15px;
+        margin-top: 43px;
+        margin-right: 10px;
+        padding-right: 10px;
+        width: 480px;
+      }
+      .stats { color: #000000; font-size: 12px; margin-bottom: 5px; }
+      nav { margin: 0; padding: 0; }
+      nav a, footer a, a {
+        color: #0031A7 !important;
+        text-decoration: none;
+        margin-left: 15px;
+        font-weight: bold;
+      }
+      nav a:hover, nav a:active, footer a:hover, footer a:active, a:hover, a:active {
+        color: rgba(0, 49, 167, 0.5) !important;
+      }
+      main { margin-top: 50px; padding-top: 20px; width: 760px; }
+      h1 { font-size: 22px; color: #000000; margin: 0 0 15px 0; }
+      p { margin-bottom: 15px; margin-right: 9px; }
+      footer {
+        text-align: center;
+        font-size: 12px;
+        padding: 40px 0 20px;
+        margin-top: 40px;
+        width: 100%;
+      }
+    </style>
 </head>
 <body>
     <div id="wrap">
@@ -23,8 +78,7 @@
                     <a href="paper.html">Paper</a>
                     <a href="git/externalfiles/">Experiments</a>
                     <a href="about.html">Essay</a>
-                                        <a href="git/"><img src="assets/git-icon-logo.svg" width="20px" alt="">Git</a>
-
+                    <a href="git/"><img src="assets/git-icon-logo.svg" width="20px" alt="">Git</a>
                 </nav>
             </div>
         </header>
@@ -43,5 +97,6 @@
             &copy; 2025-2026 IntentSpider Webnet. Contact: <a href="contactform/">Contact Form</a>
         </footer>
     </div>
-<script src="stats.js"></script></body>
+<script src="stats.js"></script>
+</body>
 </html>
