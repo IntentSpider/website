@@ -2,52 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>IntentSpider</title>
+    <title>Presentation and Paper | IntentSpider</title>
     <link rel="shortcut icon" href="./assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
-    <!-- <script type="module">
-        import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.mjs';
-        
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.mjs';
-
-        const url = 'assets/intentspider_paper.pdf';
-
-        const loadingTask = pdfjsLib.getDocument(url);
-        loadingTask.promise.then(async function(pdf) {
-            const container = document.getElementById('pdf-viewer-container');
-            const loadingEl = document.querySelector('.pdf-loading');
-
-            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                const page = await pdf.getPage(pageNum);
-                const scale = 1.5;
-                const viewport = page.getViewport({scale: scale});
-
-                const canvas = document.createElement('canvas');
-                canvas.className = 'pdf-page';
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                if (loadingEl) {
-                    container.insertBefore(canvas, loadingEl);
-                } else {
-                    container.appendChild(canvas);
-                }
-
-                const renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                await page.render(renderContext).promise;
-            }
-            
-            if (loadingEl) loadingEl.remove();
-        }).catch(function (reason) {
-            console.error(reason);
-            const container = document.getElementById('pdf-viewer-container');
-            container.innerHTML = '<div class="pdf-loading">Sorry. Please reload this page.</div>';
-        });
-    </script> -->
 </head>
 <body>
     <div id="wrap">
@@ -71,13 +28,19 @@
         </header>
 
         <main>
-            <h1>IntentSpider Research Paper</h1>
-            <p>IntentSpider Preprint Paper for Conference and Journal Reviewers (Submitted to Arxiv.org)</p>
-            
-            <div id="pdf-viewer-container" style="position: relative; min-height: 800px; width: 100%;">
-                <div class="pdf-loading" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"><img src="assets/spinner.gif" width="60" height="60" alt=""></div>
-                <iframe src="pdfjs/web/viewer.html?file=../../assets/intentspider_paper.pdf" width="100%" height="800px" style="border: none; position: relative; z-index: 1;" onload="const loader = this.previousElementSibling; if(loader && loader.classList.contains('pdf-loading')) loader.remove();"></iframe>
-            </div>
+            <h1>IntentSpider Presentation and Paper</h1>
+            <section id="ihci-presentation" class="document-section" aria-labelledby="presentation-heading">
+                <h2 id="presentation-heading">IHCI 2026 Presentation</h2>
+                <p><a href="assets/IHCI2026.pdf" target="_blank" rel="noopener">Open presentation PDF</a> &nbsp; <a href="assets/IHCI2026.pptx" download>Download PowerPoint</a></p>
+                <iframe class="presentation-viewer" src="pdfjs/web/viewer.html?file=../../assets/IHCI2026.pdf#zoom=page-fit&amp;pagemode=none" title="IHCI 2026 presentation slides" width="100%" height="500" loading="lazy" allowfullscreen></iframe>
+            </section>
+            <section id="research-paper" class="document-section" aria-labelledby="paper-heading">
+                <h2 id="paper-heading">IntentSpider Research Paper</h2>
+                <p><a href="assets/intentspider_paper.pdf?v=acac740823c1" target="_blank" rel="noopener">Open research paper PDF</a></p>
+                <div id="pdf-viewer-container" style="position: relative; min-height: 800px; width: 100%;">
+                    <iframe src="pdfjs/web/viewer.html?file=../../assets/intentspider_paper.pdf%3Fv%3Dacac740823c1" title="IntentSpider research paper" width="100%" height="800" style="border: none;" loading="lazy" allowfullscreen></iframe>
+                </div>
+            </section>
         </main>
 
         <footer>
