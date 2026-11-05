@@ -30,17 +30,94 @@
         </header>
 
         <main>
-        <h1>What's new: </h1>
-            <p style="color: #000000;">I presented this in person at International Human Computer Interaction Conference 2026, hosted by the University of Nottingham. You can download the presentation below.</p>
-            
-             <div style="text-align: left; margin: 40px 0;">
-                
-                <img src="../assets/shenzhen-whatsnew-hero.webp" style="width: 70%; max-width: 100%; height: auto;" alt="China trip memory with Bryce and Song">
-                
-              
+            <h1>What's new</h1>
+            <p><strong>A new research direction for personal prediction inside an existing input system</strong></p>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <img src="../assets/shenzhen-whatsnew-hero.webp" style="width: 70%; max-width: 100%; height: auto;" alt="Shenzhen, China">
+                <p style="margin-top: 15px; font-size: 1em; color: #000000;">Shenzhen, China</p>
             </div>
+
+            <h2>The proposal</h2>
+            <p>I am now exploring IntentSpider as a lightweight local prediction component that could work beside an existing input system such as Huawei Celia Keyboard. It would not replace Celia Keyboard's typing, speech recognition, handwriting recognition, correction, translation, dictionaries or existing prediction systems. It would receive words that those systems have already recognised and add another personal route for deciding what word might come next.</p>
+            <p>This direction is about more than completing a sentence. A personal input system could help somebody recover a name, place, phrase or idea that they have used before. The prediction can become a memory cue instead of only becoming a word that the user has to tap.</p>
+
+            <h2>What the final IHCI system already establishes</h2>
+            <p>The final research system uses a personal intent graph and keeps context construction, graph ranking, suggestion display, graph learning and read only debugging as separate executable processes.</p>
+            <p><strong>Continuous prediction</strong><br>Across 1,000 continuously updated English next word events, IntentSpider produced 13.20% first rank accuracy and 25.4% Top 3 accuracy. The graph was not reset between those events.</p>
+            <p><strong>Controlled context change</strong><br>In a controlled replay from the same saved state and target order, changing the fan dispersion seed from the three most recent words to only the most recent word produced 42.6% displayed Top 3 target accuracy and a calculated 42.6% to 49.2% complete Top 3 ranking range. This was the largest ranking related change in the final experiment. It is a result from that recorded state and sequence. It is not yet a general result for other people or for Celia Keyboard.</p>
+            <p><strong>Ranking and display are separable</strong><br>Opening the suggestion gate left all 500 complete ranked arrays unchanged. It displayed 94 rows that had previously been hidden, and those rows contained another 59 correct Top 3 target words. The current gate therefore needs recalibration, but the experiment demonstrates that display policy can be changed and tested without changing the underlying ranking.</p>
+            <p><strong>Interactive local execution</strong><br>In the measured Playground workload, the median path from keyboard input through C++ prediction and suggestion display was 2.4 milliseconds. The 95th percentile was 3.66 milliseconds and all 50 measured events completed below 16.67 milliseconds. The saved graph occupied 2.209 MiB, the saved temporary state occupied 2.151 MiB and the WebAssembly program occupied 0.205 MiB.</p>
+            <p><strong>Recorded keyboard comparison</strong><br>Under the recorded devices, software versions and existing personalization states, IntentSpider produced higher measured first rank and Top 3 exact target accuracy than the tested versions of Gboard, Samsung Keyboard, Microsoft SwiftKey and OpenBoard. Celia Keyboard was not included in that experiment. A Celia comparison would have to be a new test.</p>
+
+            <h2>Why Celia Keyboard is an important place to test this</h2>
+            <p>Huawei's current documentation describes Celia Keyboard as a complete input environment with next word suggestions, continuous voice input, handwriting, personal dictionaries, common phrases, cloud input, correction, translation and multi device dictionary synchronization. Huawei also documents offline Mandarin voice input for weak network or offline conditions.</p>
+            <p>Those capabilities make Celia Keyboard interesting precisely because IntentSpider does not need to rebuild them. It can be tested as a small experimental personal graph route after a word is typed, recognised from speech or recognised from handwriting.</p>
+            <p>HarmonyOS provides a public IME Kit for building an independent input method application. I have not found a public interface that allows an external project to insert a prediction engine directly into Celia Keyboard. The first prototype can therefore be built as an independent HarmonyOS input method experiment. Any direct Celia integration would require evaluation and support from Huawei.</p>
+
+            <h2>Experiment 1. A memory cue during continuous voice input</h2>
+            <p>Celia Keyboard already supports continuous voice input. IntentSpider could receive each recognised word and place one faint predicted word immediately after the recognised text. The user would not have to stop speaking or tap the prediction. They could ignore it and continue. If it is the name or word they are trying to remember, they could simply say it and keep speaking.</p>
+            <p>Imagine that a person previously typed a rare restaurant name. Days later, while speaking, they pause because they cannot remember it. A local personal graph could show that name as a low opacity cue. This does not replace Huawei's speech recognition. It tests whether personal prediction can reduce word retrieval pauses after recognition has already happened.</p>
+            <p>The experiment should measure pause duration, interrupted utterances, useful cues, distracting cues and the difference between a faint inline cue and a conventional tappable suggestion strip.</p>
+
+            <h2>Experiment 2. A second route for rare personal words</h2>
+            <p>Celia Keyboard already provides dictionaries, common phrases, contact names and contextual suggestions. IntentSpider could add relationships between those personal items. A name would not only exist in a dictionary. It could become connected to the places, projects and phrases that the person repeatedly uses around it.</p>
+            <p>The experiment would merge or compare Celia's existing candidate route with a local IntentSpider route for personal names, project names, places and uncommon terms. The purpose would not be to outperform a general language model on general language. It would be to test whether a compact personal graph recovers words that a general model has little reason to prioritise.</p>
+
+            <h2>Experiment 3. Prediction after handwriting recognition</h2>
+            <p>Celia Keyboard already recognises handwriting and supports handwriting without repeatedly switching keyboards. IntentSpider would not recognise the strokes. It would begin after Celia has converted the handwriting into a word.</p>
+            <p>The recognised word could become the next graph event, and the personal continuation could appear in the existing candidate area before the user begins writing the next word. This would test whether handwriting can gain personal continuation without changing handwriting recognition itself.</p>
+
+            <h2>Experiment 4. Personal phrase memory without manually creating every phrase</h2>
+            <p>Celia Keyboard already lets people save common phrases and synchronise a personal dictionary. IntentSpider could test a different route. Instead of requiring every phrase to be created manually, the graph could learn recurring relationships between words and later surface them as a cue.</p>
+            <p>This requires visible controls. A user should be able to pause learning, remove a word or connection, clear the graph and prevent learning in sensitive fields. Personal memory is only valuable when the person can inspect and control it.</p>
+
+            <h2>Experiment 5. A local route when cloud input is not wanted or not available</h2>
+            <p>Huawei documents cloud input as a route used when suitable local candidates are unavailable. A compact personal graph could be tested as another local route before a cloud request or when the user chooses not to use cloud prediction.</p>
+            <p>The measured IntentSpider system is small and fast enough to justify this experiment. It does not establish phone battery use or native HarmonyOS performance. Those measurements must be repeated on Huawei devices with native clients.</p>
+
+            <h2>Experiment 6. One personal graph across phone, tablet and computer</h2>
+            <p>Huawei already synchronises personal dictionaries and settings across devices. IntentSpider could test whether a compact relationship graph adds continuity beyond a list of known words. A project name learned on a computer could later be recalled beside a related phrase on a phone.</p>
+            <p>The graph could remain entirely on one device or use an explicit encrypted synchronization option. The experiment should compare local only, user initiated transfer and account synchronized versions. The user should always be able to see what state exists and delete it.</p>
+
+            <h2>Experiment 7. Change the candidate budget without retraining the ranking</h2>
+            <p>The final IHCI experiment shows that IntentSpider can keep a complete ranking fixed while changing which suggestions are visible. This separation could support different display experiments for a phone, tablet, computer, voice panel or handwriting panel.</p>
+            <p>Huawei researchers could test one candidate, three candidates, a low opacity cue and no visible cue against the same ranked output. That would make attention cost measurable instead of assuming that showing more predictions is always better. The current IntentSpider necessity gate is not ready for deployment. Its value is that it can be recalibrated without rebuilding the personal ranking process.</p>
+
+            <h2>Experiment 8. Change context depth according to the input mode</h2>
+            <p>The strongest controlled result in the final paper came from using the most recent word as the fan dispersion seed. That does not prove that one word is always the best context. It creates a specific new question.</p>
+            <p>Voice input, handwriting and touch typing may need different context depths. A Huawei experiment could compare one word and three word seeds under the same personal state for each input mode. Context depth could eventually become a measurable interaction decision instead of a fixed global setting.</p>
+
+            <h2>Experiment 9. A read only view of personal prediction state</h2>
+            <p>IntentSpider includes a read only two dimensional graph output. It does not change ranking. An internal research tool could use this separation to inspect why a rare personal word became connected to the current context, compare ranking with display decisions and identify unwanted personal associations.</p>
+            <p>This is not a claim that a two dimensional view explains a human mind. It is a debugging view of the saved prediction state. Its purpose is to make a personal prediction route easier to test and challenge.</p>
+
+            <h2>Experiment 10. Controlled forgetting and correction</h2>
+            <p>A personal predictor also needs to forget. IntentSpider's function typed connections, time dependent values and signed output process create a route for testing decay, correction and suppression separately from positive ranking.</p>
+            <p>A Huawei prototype could compare automatic decay with explicit user actions such as forget this word, forget this connection and do not learn in this application. The result should be measured by unwanted suggestion recurrence as well as prediction accuracy.</p>
+
+            <h2>A practical prototype</h2>
+            <p>The first prototype does not need access to Celia Keyboard's private source code. It can use HarmonyOS IME Kit to build an independent research input method around the existing C++ predict interface.</p>
+            <p><strong>Stage 1</strong><br>Send recognised or typed word events to the local graph and display its independent Top 3 route.</p>
+            <p><strong>Stage 2</strong><br>Add the voice memory cue and handwriting continuation experiments without changing speech or handwriting recognition.</p>
+            <p><strong>Stage 3</strong><br>Measure first rank and Top 3 target accuracy, suggestion coverage, word retrieval pauses, corrections, acceptance, distraction, latency, memory, CPU use and energy use on Huawei devices.</p>
+            <p><strong>Stage 4</strong><br>If the route produces value, compare a standalone implementation with an internal Celia integration under the same event sequence and personal state.</p>
+
+            <h2>What this could give Huawei</h2>
+            <p>It could give Huawei a testable second personalization route that is local, compact, inspectable and independent from the existing candidate generator.</p>
+            <p>It could connect typing, voice and handwriting through one personal word history without asking one model to perform every input task.</p>
+            <p>It could make candidate display an experimentally controlled interface decision rather than an inseparable part of ranking.</p>
+            <p>It could create a research path for personal memory cues, rare word recovery, cross device continuity and user controlled forgetting.</p>
+            <p>None of these outcomes has been demonstrated inside Celia Keyboard. They are specific experiments that can now be built and measured.</p>
+
+            <h2>What I am asking</h2>
+            <p>I am not asking Huawei to replace Celia Keyboard, adopt an untested feature or accept the current results as a Celia comparison. I am asking whether a Huawei researcher working on input methods, on device language systems, personalization or HCI would examine the working engine and challenge this research direction.</p>
+            <p>Even a short technical discussion could identify which experiment is worth building first. I can show the open source system, the final IHCI paper, the controlled result files and the working Research Playground.</p>
+
+            <h2>Evidence and public material</h2>
+            <p><a href="../paper.html">Final IHCI paper</a><br><a href="../playground.html">IntentSpider Research Playground</a><br><a href="https://github.com/IntentSpider/IntentSpiderEngine" target="_blank" rel="noopener">Open source engine</a><br><a href="../git/externalfiles/">Experiment files</a></p>
+            <p><a href="https://consumer.huawei.com/en/support/content/en-us15921295/" target="_blank" rel="noopener">Huawei Celia Keyboard feature documentation</a><br><a href="https://consumer.huawei.com/cn/support/content/zh-cn16081394/" target="_blank" rel="noopener">Huawei HarmonyOS 5 Celia Keyboard documentation</a><br><a href="https://consumer.huawei.com/cn/support/content/zh-cn16088964/" target="_blank" rel="noopener">Huawei Celia Keyboard voice input documentation</a><br><a href="https://consumer.huawei.com/cn/support/content/zh-cn16054603/" target="_blank" rel="noopener">Huawei personal dictionary documentation</a><br><a href="https://developer.huawei.com/consumer/cn/doc/harmonyos-references/js-apis-inputmethod-extension-ability" target="_blank" rel="noopener">HarmonyOS IME Kit documentation</a></p>
         </main>
-        
 
         <footer>
             &copy; 2025-2026 IntentSpider Webnet. Contact: <a href="../contactform/">Contact Form</a>
