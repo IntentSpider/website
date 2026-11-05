@@ -45,7 +45,7 @@
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/1Rw9jsGiOJDf7E0xLTKH5t0Isp53_B4sG/preview" title="IntentSpider RedApplo recorded prediction moments" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Recorded RedApplo prediction moments from the first run.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo appears as the rank 1 suggestion before the next typed token becomes RedApplo. The same personal name also appears in completion and memory cue moments elsewhere in the original run.</figcaption>
     </figure>
     
     <p>One possibility for doing this is extending the personal graph with references to text that the user has actually chosen to include. Pizza can provide one path, the station can provide another path and the conference can provide another one, but all of those separate paths can still arrive into the same personal place. A candidate can also keep the original phrase that is supporting that candidate, because I think it is important that the system can keep the information about why that connection is there. If two different places can satisfy the same remembered information, one more optional clue can be used to separate those two places. But the system also needs to preserve the difference between a connection that is actually remembered from the user's information and a guess that the system is making, because those two things are not the same thing.</p>
@@ -80,18 +80,42 @@
     <p>The published C++ IntentSpider engine already builds and updates a personal word graph, and it separates the context construction, ranking, displaying the suggestions and learning from the user's text. It can also save the graph state and load that state again. There is another part that is particularly useful for this research, and it is that the connection roles distinguish between an association that is retained in the graph and an association that is actually transmitting prediction influence. Because of that, there are already separate places in the current engine where I can change how a memory is reached, whether that memory should affect a candidate, and after that, whether that candidate should actually appear to the user.</p>
 
     <p>In the final IHCI evaluation, IntentSpider produced 25.4% Top 3 exact target accuracy over 1,000 continuously updated events, and that evaluation started from a recorded graph containing 40,096 observations. I also did a separate 50 event desktop measurement, and in that measurement the median time from keyboard input through the prediction and displaying it was 2.4 milliseconds. I need to mention that these are the starting measurements for the existing engine only, and they are not results for the proposed memory system that I am explaining here and they are also not measurements from a Huawei device (final IHCI paper).</p>
+    <h2>What the original run shows</h2>
+    <p>The original recorded run contains 398 distinct stable suggestion states across 434.85 seconds and 8,768 source frames. From the states where the next typed token could be verified directly, four exact immediate next token successes were confirmed. Three were rank 1 and one additional exact success was within the top 3.</p>
+    <p>The strongest personalized result is RedApplo. At 179.205 seconds RedApplo appears as the rank 1 suggestion before RedApplo is typed. The same personal name also appears elsewhere as a completion cue and as a contextual memory cue. This matters because the result is not limited to a common function word. The original run records the engine surfacing a personal name inside a continuous interaction.</p>
+    <p>The significance of the original run is direct evidence of personalized retrieval happening in motion. It shows exact next word success, personal name completion and personal memory cue behavior in the same recorded interaction. It is not being used here as a population level statistical claim.</p>
+    <div style="overflow-x: auto; margin: 20px 9px 25px 0;">
+        <table style="width: 100%; border-collapse: collapse; font: inherit; text-align: left;">
+            <thead>
+                <tr>
+                    <th scope="col" style="padding: 8px; border-bottom: 1px solid #0031A7;">Original run evidence</th>
+                    <th scope="col" style="padding: 8px; border-bottom: 1px solid #0031A7;">Recorded result</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Stable suggestion states</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>398</strong></td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Source frames examined</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>8,768</strong></td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Recorded interaction length</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>434.85 seconds</strong></td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Verified exact rank 1 next token successes</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>3</strong></td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Additional verified exact top 3 success</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>1</strong></td></tr>
+                <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Personalized RedApplo rank 1 success</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>179.205 seconds</strong></td></tr>
+            </tbody>
+        </table>
+    </div>
     <figure style="margin: 25px 9px 25px 0;">
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/14E8jqWnRWvHi-zivPrIN34bQwFXHxS3O/preview" title="IntentSpider source success showcase" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Recorded source-success showcase. The developer-tools pane is excluded from the presentation clips.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. This reel brings together the clearest recorded prediction successes while keeping the suggestion row and typed context visible.</figcaption>
     </figure>
     <p style="margin: 10px 9px 25px 0;">
-        <a href="../assets/whatsnew/prediction_event_ledger.csv" download style="display: inline-flex; align-items: center; gap: 7px; margin-right: 18px;">
-            <img src="../assets/whatsnew/download-link-icon.svg" width="20" height="20" alt="">Prediction event ledger (CSV)
+        <span style="margin-right: 8px;">Prediction event ledger</span>
+        <a href="../assets/whatsnew/prediction_event_ledger.csv" download style="display: inline-flex; align-items: center; gap: 5px; margin-right: 20px;">
+            <img src="../assets/whatsnew/download-link-icon.svg" width="20" height="20" alt="">download
         </a>
-        <a href="../assets/whatsnew/video_analysis_notes.md" download style="display: inline-flex; align-items: center; gap: 7px;">
-            <img src="../assets/whatsnew/download-link-icon.svg" width="20" height="20" alt="">Video analysis notes
+        <span style="margin-right: 8px;">Video analysis notes</span>
+        <a href="../assets/whatsnew/video_analysis_notes.md" download style="display: inline-flex; align-items: center; gap: 5px;">
+            <img src="../assets/whatsnew/download-link-icon.svg" width="20" height="20" alt="">download
         </a>
     </p>
     <details style="margin: 25px 9px 30px 0;">
@@ -102,49 +126,49 @@
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/1D9nXAvM9oHVW6JKr9FFUQ9X1G2wx4wfW/preview" title="RedApplo completion rank 2" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">RedApplo completion — rank 2 while the name is partially typed.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo appears at rank 2 while the name is partially typed.</figcaption>
     </figure>
 
     <figure style="margin: 25px 9px 25px 0;">
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/11XFXMNIj50O44qdi6PBp7Z0AyMZwRSPX/preview" title="Strict rank 1 prediction the" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Strict rank-1 next-token hit: “the”.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact rank 1 next token success for “the”.</figcaption>
     </figure>
 
     <figure style="margin: 25px 9px 25px 0;">
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/1hjIhNpLePWFnUVL1Hg6ZjH27WAtKJ9kE/preview" title="Strict rank 1 RedApplo prediction" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Strict rank-1 next-token hit: “RedApplo”.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact rank 1 next token success for the personal name “RedApplo”.</figcaption>
     </figure>
 
     <figure style="margin: 25px 9px 25px 0;">
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/1eNwAor6-ptlzgNJpu1a0IzV7sfeSRnVj/preview" title="RedApplo memory cue rank 3 to rank 2" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">RedApplo memory cue — rank 3 to rank 2.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo rises from rank 3 to rank 2 as a personal memory cue.</figcaption>
     </figure>
 
     <figure style="margin: 25px 9px 25px 0;">
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/1529lKtfTk4sNfaiqozBuAWeSYf-BLOti/preview" title="Strict top 3 prediction the" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Strict top-3 next-token hit: “the”.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact top 3 next token success for “the”.</figcaption>
     </figure>
 
     <figure style="margin: 25px 9px 25px 0;">
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/1S5riUcvi5jM3vmOIF2qdlqqpwxTQMuLY/preview" title="Strict rank 1 prediction of" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Strict rank-1 next-token hit: “of”.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact rank 1 next token success for “of”.</figcaption>
     </figure>
 
     <figure style="margin: 25px 9px 25px 0;">
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/1mqIiZiLsGYCJgNItvVrcXlUHZrHiy2zB/preview" title="RedApplo contextual memory cue" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">RedApplo contextual memory cue before a later explicit mention.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo appears as a contextual personal memory cue before the later explicit mention.</figcaption>
     </figure>
         </div>
     </details>
@@ -187,7 +211,7 @@
         <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
             <iframe src="https://drive.google.com/file/d/1aM77V-O9VjCm82MemsDvwI4dMQlr9EyW/preview" title="IntentSpider combined demonstration" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
         </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Combined demonstration: recorded prediction moments, voice cue and handwriting cue.</figcaption>
+        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run and proposed input concepts together. The recorded prediction moments are followed by the voice cue and handwriting cue.</figcaption>
     </figure>
 
     <h2>The small first experiment that I want to start with</h2>
