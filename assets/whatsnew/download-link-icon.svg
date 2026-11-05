@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="download-title">
+  <title id="download-title">Download</title>
+  <g fill="none" stroke="#36b8d9" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 9v30"/>
+    <path d="M20 28l12 12 12-12"/>
+    <path d="M13 45v8h38v-8"/>
+  </g>
+</svg>
