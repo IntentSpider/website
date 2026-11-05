@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>What's New | IntentSpider</title>
-    <meta name="description" content="A different route to personal prediction. See how IntentSpider could be tested beside existing input systems.">
+    <title>IntentSpider</title>
     <link rel="shortcut icon" href="../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="../styles.css">
 </head>
@@ -31,67 +30,10 @@
         </header>
 
         <main>
-            <img class="whatsnew-hero" src="../assets/shenzhen-whatsnew-hero.webp" alt="Contemporary architecture in Shenzhen photographed from below">
-            <p class="whatsnew-caption">Shenzhen, November 2026. This page describes the next direction of IntentSpider and the experiments that could make it useful beside an existing input system.</p>
-
-            <h1 style="margin-bottom: 8px;">A Different Route to Personal Prediction</h1>
-            <p class="whatsnew-lede">IntentSpider explores whether a changing personal word graph can make contextual suggestions more useful while keeping prediction and adaptation on the device.</p>
-
-            <div class="whatsnew-callout">
-                <p style="margin-bottom: 0;"><strong>IntentSpider is not intended to replace an existing keyboard or speech recognition system.</strong> It is a lightweight experimental prediction component that could be tested beside them.</p>
+            <div style="text-align: center; margin: 40px 0;">
+                <img src="../assets/shenzhen-whatsnew-hero.webp" style="width: 40%; max-width: 100%; height: auto;" alt="Shenzhen, China">
+                <p style="margin-top: 15px; font-size: 1em; color: #000000;">Shenzhen, China</p>
             </div>
-
-            <h2>What has changed</h2>
-            <p>IntentSpider began as a standalone next word prediction experiment. The new direction is more precise. Instead of asking whether it should become another complete keyboard, the question is whether its prediction process can contribute to an input system that already works.</p>
-            <p>This changes the goal from replacement to integration. The engine can be studied as one additional local prediction route, one experimental personalisation component, or one fallback under constrained conditions. A product team could test it without first accepting every other part of the project.</p>
-
-            <h2>What is technically different</h2>
-            <p><strong>A changing personal word graph.</strong> IntentSpider represents relationships between words as a graph that changes with the user's own writing. Prediction is produced from that evolving structure rather than from one fixed list of phrases.</p>
-            <p><strong>Local adaptation.</strong> The graph, its updates, and the prediction process are designed to remain on the device. This makes local behaviour part of the architecture rather than only a privacy setting added later.</p>
-            <p><strong>Prediction and display are separate decisions.</strong> Producing a possible next word does not mean that it should always be shown. IntentSpider can be studied as a system that also asks whether a suggestion is useful enough to interrupt the user.</p>
-            <p><strong>One component across several forms of input.</strong> The same personal prediction layer could be investigated beside keyboard typing, stylus handwriting, or recognised speech. It does not need to perform handwriting recognition or speech recognition itself.</p>
-
-            <h2>A voice input experiment</h2>
-            <p>The voice experiment is not an attempt to build another voice model. Speech recognition would continue to convert speech into text. IntentSpider would only examine the recognised text and, when appropriate, place one faint predicted word after it as an optional memory cue.</p>
-            <p>The user would not need to stop speaking or touch the prediction. They could ignore it completely. If the word happened to be a name or phrase they were trying to remember, they could simply say it and continue.</p>
-            <p>Imagine that somebody previously wrote, “RedApplo Pizza Shop is amazing.” Several days later they are speaking about the same place but cannot immediately remember its name. If “RedApplo” appears faintly from their own local history, the prediction is not completing the sentence for them. It is helping them recall something they already knew.</p>
-
-            <h2>Why an existing input system could care</h2>
-            <p>The possible value is not one more keyboard. It is one small component that could be evaluated across several devices and input surfaces.</p>
-            <ul class="whatsnew-list">
-                <li>Personal names, specialised terms, and unusual phrases could be ranked from the user's own changing context.</li>
-                <li>Selective display could reduce suggestions that are technically possible but not useful enough to show.</li>
-                <li>Local adaptation could provide an additional route when network access, memory, or computing resources are constrained.</li>
-                <li>The same experimental engine could be reused across keyboard, handwriting, and speech interfaces instead of beginning a separate prediction experiment for each one.</li>
-                <li>A clear local architecture could offer users another form of control over how their personal vocabulary is learned.</li>
-            </ul>
-            <p>These are product hypotheses, not claims of measured commercial impact. Their value should be established through comparison, user testing, and resource measurement.</p>
-
-            <h2>A possible experiment beside Celia Keyboard</h2>
-            <p>Huawei already describes Celia Keyboard as supporting predicted words, voice input, and handwriting (<a href="https://consumer.huawei.com/en/support/content/en-us15914822/" target="_blank" rel="noopener">Huawei support</a>). The question is therefore not whether Celia Keyboard can predict words. It already can.</p>
-            <p>The useful research question is narrower. Could IntentSpider's graph based ranking, local adaptation, or selective display process provide measurable additional value beside a mature input system, especially for personal vocabulary, contextual recall, constrained environments, or experiments that cross more than one form of input?</p>
-            <p>This could begin as a contained prototype. IntentSpider would receive the same completed text history as a baseline local predictor. Both systems would run under the same resource limits. The experiment would then compare what they suggest, when they remain silent, and how people respond.</p>
-
-            <h2>What should be measured</h2>
-            <ul class="whatsnew-list">
-                <li>How often a displayed prediction is accepted or spoken next</li>
-                <li>How often an unwanted prediction is displayed</li>
-                <li>Whether personal names and specialised terms are recalled more successfully</li>
-                <li>Median and high percentile response time</li>
-                <li>Memory, storage, and energy growth as personal history increases</li>
-                <li>Performance when the device has no network connection</li>
-                <li>Whether the same component remains useful across typing, handwriting, and recognised speech</li>
-            </ul>
-            <p>A positive result would not mean that IntentSpider should replace Celia Keyboard. It would mean that one part of the research deserves a deeper integration experiment.</p>
-
-            <h2>Product value to test</h2>
-            <p>If one lightweight personal prediction component can be evaluated across keyboard, handwriting, and speech interfaces, it may reduce repeated experimentation while creating a more consistent form of local personalisation across devices.</p>
-            <p>The commercial value would come only after technical value is demonstrated. That could include lower duplicated integration effort, better support for long tail personal vocabulary, fewer distracting suggestions, and a differentiated local experience. Each of these outcomes must be measured rather than assumed.</p>
-
-            <h2>The next step</h2>
-            <p>I am looking for a short technical discussion with researchers or engineers working on input methods, on device language systems, personalisation, human computer interaction, or efficient computing. The immediate request is not for adoption. It is for a serious evaluation of what is useful, what is incorrect, and what experiment should be built next.</p>
-
-            <p class="whatsnew-links"><a href="../playground.html">Try the Playground</a> <a href="../paper.html">Read the Paper</a> <a href="../git/">View the Source</a> <a href="../contactform/">Contact</a></p>
         </main>
 
         <footer>

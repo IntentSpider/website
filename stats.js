@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         spinnerSrc = '../../assets/spinner.gif';
     } else if (window.location.pathname.includes('/contactform/')) {
         spinnerSrc = '../assets/spinner.gif';
+    } else if (window.location.pathname.includes('/whatsnew/')) {
+        spinnerSrc = '../assets/spinner.gif';
     } else if (window.location.pathname.includes('/git/')) {
          spinnerSrc = '../assets/spinner.gif';
     } else if (window.location.pathname.includes('/research/about/')) {
