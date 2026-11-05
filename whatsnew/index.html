@@ -43,11 +43,33 @@
 
             <h2>Find the name through the connections around it</h2>
             <p>You are writing, “Let us meet at that pizza place near the station, the one we visited after the conference.” You remember the place, but its name has disappeared. I want those fragments to lead back to “RedApplo” while you are still writing. You would not need to leave the conversation and search through old messages.</p>
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/J4WSPMobE4r" title="IntentSpider RedApplo recorded prediction moments" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">Recorded RedApplo prediction moments from the first run.</figcaption>
+            </figure>
             <p>We could extend the personal graph with references to text the user chooses to include. Pizza, the station and the conference could provide separate paths toward the same place. A candidate could carry the original phrase that supports it. If two places fit, one optional clue could help distinguish them. The system would have to preserve the difference between a remembered connection and a guess.</p>
             <p>The larger ambition is to let those paths cross languages. Someone might remember a description in Sinhala, a conversation in English and a place name in Chinese. Linking those expressions to the same personal reference could make the fragments useful together. A student could recover a technical term. An engineer could recover a component name. The words available in the moment would become a route to the words that are missing.</p>
 
             <h2>Let that memory accompany your voice and handwriting</h2>
             <p>While voice typing, you say, “We could go back to...” and “RedApplo” appears faintly beside the recognised text. You remember it, say it and continue. There is no required pause or tap. During handwriting, the same memory could offer a continuation beside the recognised words. The experience I want is simple. Something learned while typing should remain useful when you speak or write.</p>
+            <div style="display: flex; gap: 18px; flex-wrap: wrap; margin: 25px 9px 25px 0;">
+
+                        <figure style="margin: 0; flex: 1 1 320px; min-width: 280px;">
+                            <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                                <iframe src="https://share.descript.com/embed/HZu4Ai5tQj2" title="IntentSpider voice search memory cue" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                            </div>
+                            <figcaption style="font-size: 0.9em; margin-top: 8px;">Voice typing concept: a personal name appears as a low-opacity cue beside recognised text.</figcaption>
+                        </figure>
+
+                        <figure style="margin: 0; flex: 1 1 320px; min-width: 280px;">
+                            <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                                <iframe src="https://share.descript.com/embed/i2oBdMjafRW" title="IntentSpider stylus memory cue" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                            </div>
+                            <figcaption style="font-size: 0.9em; margin-top: 8px;">Handwriting concept: the same personal memory remains available beside handwritten input.</figcaption>
+                        </figure>
+            </div>
             <p>Huawei's existing systems would handle speech and handwriting recognition. IntentSpider would receive text and supply personal candidates. The interface would decide when a cue is useful, how long it stays and when to withdraw it. Users could adjust or disable it. A cue that distracts someone from their sentence would defeat the purpose.</p>
 
             <h2>Make one correction useful wherever the name appears</h2>
@@ -56,6 +78,74 @@
             <h2>What IntentSpider already gives this work</h2>
             <p>The published C++ engine builds and updates a personal word graph. It separates context construction, ranking, suggestion display and learning, and can save and reload its state. Its connection roles distinguish an association that is retained from one that transmits prediction influence. That gives us places to change how a memory is reached, whether it affects a candidate and whether that candidate appears.</p>
             <p>In the final IHCI evaluation, IntentSpider produced 25.4% Top 3 exact target accuracy over 1,000 continuously updated events, starting from a recorded graph with 40,096 observations. A separate 50 event desktop measurement reported a 2.4 millisecond median from keyboard input through prediction and display. These are starting measurements for the existing engine, not results for the proposed memory system or a Huawei device (<a href="../paper.html">final IHCI paper</a>).</p>
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/NIWm0vEmGxM" title="IntentSpider source success showcase" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">Recorded source-success showcase. The developer-tools pane is excluded from the presentation clips.</figcaption>
+            </figure>
+            <p style="margin: 10px 9px 25px 0;">
+                <a href="../assets/whatsnew/prediction_event_ledger.csv" download style="display: inline-flex; align-items: center; gap: 7px; margin-right: 18px;">
+                    <img src="../assets/whatsnew/download-link-icon.svg" width="20" height="20" alt="">Prediction event ledger (CSV)
+                </a>
+                <a href="../assets/whatsnew/video_analysis_notes.md" download style="display: inline-flex; align-items: center; gap: 7px;">
+                    <img src="../assets/whatsnew/download-link-icon.svg" width="20" height="20" alt="">Video analysis notes
+                </a>
+            </p>
+            <details style="margin: 25px 9px 30px 0;">
+                <summary style="cursor: pointer; font-weight: bold;">Recorded source moments</summary>
+                <div style="margin-top: 18px;">
+
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/Fzw6Okg6hw8" title="RedApplo completion rank 2" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">RedApplo completion — rank 2 while the name is partially typed.</figcaption>
+            </figure>
+
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/xbtA8sZSqlQ" title="Strict rank 1 prediction the" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">Strict rank-1 next-token hit: “the”.</figcaption>
+            </figure>
+
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/BFn6BJY0vx0" title="Strict rank 1 RedApplo prediction" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">Strict rank-1 next-token hit: “RedApplo”.</figcaption>
+            </figure>
+
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/k9hpc8nB325" title="RedApplo memory cue rank 3 to rank 2" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">RedApplo memory cue — rank 3 to rank 2.</figcaption>
+            </figure>
+
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/QB2Md3DxTac" title="Strict top 3 prediction the" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">Strict top-3 next-token hit: “the”.</figcaption>
+            </figure>
+
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/maXJ6nwcP2r" title="Strict rank 1 prediction of" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">Strict rank-1 next-token hit: “of”.</figcaption>
+            </figure>
+
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/bzu2wpmq4oM" title="RedApplo contextual memory cue" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">RedApplo contextual memory cue before a later explicit mention.</figcaption>
+            </figure>
+                </div>
+            </details>
             <div style="overflow-x: auto; margin: 20px 9px 20px 0;">
                 <table style="width: 100%; border-collapse: collapse; font: inherit; text-align: left;">
                     <caption style="text-align: left; font-weight: bold; margin-bottom: 8px;">How the existing engine connects to the ambition</caption>
@@ -108,6 +198,12 @@
                 <figcaption style="font-size: 0.9em;">Proposed integration</figcaption>
             </figure>
             <p>A first adapter could supply committed text to the engine and return candidates to an experimental interface. Revised speech transcripts would need careful handling so temporary guesses do not become learned history. Rich memory recovery and multilingual links would be a larger extension beyond that first connection.</p>
+            <figure style="margin: 25px 9px 25px 0;">
+                <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                    <iframe src="https://share.descript.com/embed/towFOmFlvul" title="IntentSpider combined demonstration" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="fullscreen; encrypted-media" allowfullscreen scrolling="no"></iframe>
+                </div>
+                <figcaption style="font-size: 0.9em; margin-top: 8px;">Combined demonstration: recorded prediction moments, voice cue and handwriting cue.</figcaption>
+            </figure>
 
             <h2>A small first experiment with a much larger purpose</h2>
             <p>I would start with personal names in English, an opt in local history and an interface beside recognised text. First, measure whether the existing prediction route helps people continue. Then add retrieval from incomplete clues and compare it with both the existing suggestions and a simple personal history search. Measure successful name recovery, interruptions, repeated corrections and incorrect cues, alongside latency, memory and energy on the target device.</p>
