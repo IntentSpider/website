@@ -36,34 +36,83 @@
                 <p style="margin-top: 15px; font-size: 1em; color: #000000;">Shenzhen, China</p>
             </div>
 
-            <h2>A keyboard that helps you recover what you mean</h2>
-            <p>I want to explore a much larger possibility for IntentSpider inside Huawei Celia Keyboard. A person can know exactly what they want to talk about and still lose the name, the expression or the connection that would let them say it. My ambition is to make their own language history useful at that precise moment.</p>
-            <p><strong>A personal memory that helps you continue expressing yourself, even when you cannot remember the words to search for.</strong></p>
-            <p>This is the research direction I want to build with Huawei. The experiences below are proposed inventions built around IntentSpider's personal graph. They describe what we are aiming to create.</p>
+            <h2>Your own words, available when you cannot find them</h2>
+            <p>I want to explore a much larger possibility for IntentSpider inside Huawei Celia Keyboard. Imagine a keyboard that helps you recover a name through the pieces you still remember, carries that memory into speech and handwriting, and lets one correction improve the way it helps you everywhere.</p>
+            <p><strong>What if remembering enough to describe something became enough to express it?</strong></p>
+            <p>This is the research direction I want to build. The experiences below are proposals. The existing IntentSpider engine and the final IHCI paper provide the starting point.</p>
 
-            <h2>Find the name through the pieces you still remember</h2>
-            <p>Imagine that you cannot remember a restaurant's name. You remember pizza, a station and a person you went with. Today, that can become an interruption while you search through old messages. I want those fragments to become a way back to the name while you are still composing the new message.</p>
-            <p>We could extend IntentSpider with connections to user approved text fragments and their origins. Several weak clues could lead toward the same remembered item. The keyboard could surface a small candidate, and an optional explanation could show the earlier phrase that connects it to those clues. If the first candidate is wrong, touching another remembered clue could redirect the search through the graph.</p>
-            <p>This would make incomplete recollection useful input. A student could recover terminology from their own notes. An engineer could recover a component name from a previous task. Someone writing in a second language could use a familiar fragment to find an expression they have used before. The user would decide which material becomes part of this memory.</p>
+            <h2>Find the name through the connections around it</h2>
+            <p>You are writing, “Let us meet at that pizza place near the station, the one we visited after the conference.” You remember the place, but its name has disappeared. I want those fragments to lead back to “RedApplo” while you are still writing. You would not need to leave the conversation and search through old messages.</p>
+            <p>We could extend the personal graph with references to text the user chooses to include. Pizza, the station and the conference could provide separate paths toward the same place. A candidate could carry the original phrase that supports it. If two places fit, one optional clue could help distinguish them. The system would have to preserve the difference between a remembered connection and a guess.</p>
+            <p>The larger ambition is to let those paths cross languages. Someone might remember a description in Sinhala, a conversation in English and a place name in Chinese. Linking those expressions to the same personal reference could make the fragments useful together. A student could recover a technical term. An engineer could recover a component name. The words available in the moment would become a route to the words that are missing.</p>
 
-            <h2>Let that memory accompany your voice</h2>
-            <p>Now imagine the same thing during voice typing. You say, “We could go back to...” and the name “RedApplo” appears faintly beside the recognised text. You remember it, say it and continue. There is no required tap, no separate question to an assistant and no need to leave the sentence.</p>
-            <p>I want to explore a cue that remains available while the person speaks, with its timing, visibility and persistence designed around the flow of expression. It could offer one likely name, then retreat when the person continues in another direction. People would be able to adjust its visibility or turn it off.</p>
-            <p>Celia's existing speech system would recognise the voice. IntentSpider would work with the recognised text and personal memory. The same memory could offer a continuation after handwriting recognition or during ordinary typing. A word learned in one way could become available when the person needs to express it in another (<a href="https://consumer.huawei.com/cn/support/content/zh-cn16088964/" target="_blank" rel="noopener">Huawei voice input</a>, <a href="https://consumer.huawei.com/cn/support/content/zh-cn16081394/" target="_blank" rel="noopener">Huawei input features</a>).</p>
+            <h2>Let that memory accompany your voice and handwriting</h2>
+            <p>While voice typing, you say, “We could go back to...” and “RedApplo” appears faintly beside the recognised text. You remember it, say it and continue. There is no required pause or tap. During handwriting, the same memory could offer a continuation beside the recognised words. The experience I want is simple. Something learned while typing should remain useful when you speak or write.</p>
+            <p>Huawei's existing systems would handle speech and handwriting recognition. IntentSpider would receive text and supply personal candidates. The interface would decide when a cue is useful, how long it stays and when to withdraw it. Users could adjust or disable it. A cue that distracts someone from their sentence would defeat the purpose.</p>
 
-            <h2>Turn one correction into knowledge the whole input experience can use</h2>
-            <p>Suppose a recognizer repeatedly gets a new project name wrong. The person corrects it once. I want that correction to establish a relationship between the intended name, the mistaken form and the surrounding context. Later, typing, speech and handwriting could consult that relationship before offering the same mistake again.</p>
-            <p>The more ambitious part is precision. A project name might change while its old name remains correct in historical discussions. Two colleagues might have similar names. We could give an association a scope, an origin and a lifetime, so the user can change the relationship that is wrong without discarding everything else the keyboard learned.</p>
-            <p>“Use this name for this project.” “Keep the old name for earlier work.” “Forget this connection.” These could become ordinary controls over personal prediction. An optional transfer between Huawei devices could carry those choices with the person. Private and work memories would have boundaries the user can inspect and control.</p>
+            <h2>Make one correction useful wherever the name appears</h2>
+            <p>Imagine correcting a project name once and having that correction available during typing, speech and handwriting. I want to connect the mistaken form, intended name and relevant context. “Use this name for this project.” “Keep the old name for earlier work.” “Forget this connection.” These could become precise controls over personal memory. The challenge is to carry the correction between input modes while keeping unrelated people, projects and private conversations separate.</p>
 
-            <h2>Why I want to pursue this through IntentSpider</h2>
-            <p>IntentSpider gives us an explicit graph of words and connections to extend. Its connection roles distinguish what is stored from what can transmit prediction influence. Its architecture separates context, ranking, display and learning. These are useful building blocks for exploring memory paths, selective correction and assistance that changes form between input modes.</p>
-            <p>The research opportunity is to bring those parts together into one personal system. New work would add memory origins, scoped associations and recognition correction handling. The existing engine gives that work a starting point (<a href="../paper.html">final IHCI paper</a>, <a href="https://github.com/IntentSpider/IntentSpiderEngine" target="_blank" rel="noopener">engine source</a>).</p>
+            <h2>What IntentSpider already gives this work</h2>
+            <p>The published C++ engine builds and updates a personal word graph. It separates context construction, ranking, suggestion display and learning, and can save and reload its state. Its connection roles distinguish an association that is retained from one that transmits prediction influence. That gives us places to change how a memory is reached, whether it affects a candidate and whether that candidate appears.</p>
+            <p>In the final IHCI evaluation, IntentSpider produced 25.4% Top 3 exact target accuracy over 1,000 continuously updated events, starting from a recorded graph with 40,096 observations. A separate 50 event desktop measurement reported a 2.4 millisecond median from keyboard input through prediction and display. These are starting measurements for the existing engine, not results for the proposed memory system or a Huawei device (<a href="../paper.html">final IHCI paper</a>).</p>
+            <div style="overflow-x: auto; margin: 20px 9px 20px 0;">
+                <table style="width: 100%; border-collapse: collapse; font: inherit; text-align: left;">
+                    <caption style="text-align: left; font-weight: bold; margin-bottom: 8px;">How the existing engine connects to the ambition</caption>
+                    <thead><tr><th scope="col" style="width: 43%; padding: 8px; border-bottom: 1px solid #0031A7;">Existing foundation</th><th scope="col" style="padding: 8px; border-bottom: 1px solid #0031A7;">Research to add</th></tr></thead>
+                    <tbody>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Personal word graph and diffusion</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Memory references, source passages and retrieval from several clues</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Separate ranking and display</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Optional cues timed for speech and handwriting</td></tr>
+                        <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;">Graph updates and saved state</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Scoped corrections, source removal and links across languages</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-            <h2>The value I want Huawei users to feel</h2>
-            <p>“It helped me remember the name.” “I could keep speaking.” “I corrected that once and it stayed corrected.” Those are the experiences I want to create. They concern everyday expression, across personal conversations, study and work. If they succeed across languages and devices, their value could extend far beyond people who regularly tap predictive suggestions.</p>
-            <p>For Huawei, the opportunity is a shared personal memory component across input experiences. Improvements to that memory could benefit several ways of entering text, while local retrieval could handle some personal requests without a cloud round trip. The questions would be how much interruption it removes, how reliably corrections carry forward and what it costs to run.</p>
-            <p>I would be deeply grateful for a technical conversation with a Huawei researcher who wants to explore this direction. I can bring the working IntentSpider engine and my IHCI presentation. I want to start with the moment someone loses a name, build the experience that helps them recover it, and follow that idea as far as it can go (<a href="../playground.html">working Playground</a>, <a href="../presentation.html">IHCI presentation</a>).</p>
+            <h2>How this could sit beside Celia</h2>
+            <p>Huawei already documents contextual word suggestions, handwriting and continuous voice input. The opportunity I want to investigate is a personal memory component shared across those experiences (<a href="https://consumer.huawei.com/cn/support/content/zh-cn16081394/" target="_blank" rel="noopener">Huawei input features</a>, <a href="https://consumer.huawei.com/cn/support/content/zh-cn16088964/" target="_blank" rel="noopener">Huawei voice input</a>).</p>
+            <figure style="margin: 25px 9px 25px 0; text-align: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="integration-title integration-desc" style="display: block; width: 100%; height: auto;">
+                    <title id="integration-title">Proposed integration around the IntentSpider engine</title>
+                    <desc id="integration-desc">The host input system supplies text through a new adapter. An IntentSpider component supplies personal candidates to the host interface. User confirmed text returns to the adapter for learning. Speech and handwriting recognition remain with the host. Memory retrieval and scoped correction are proposed extensions.</desc>
+                    <defs><marker id="memory-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0031A7"/></marker></defs>
+                    <g fill="#fff" stroke="#0031A7" stroke-width="1.5">
+                        <rect x="12" y="16" width="306" height="70" rx="3"/>
+                        <rect x="402" y="16" width="306" height="70" rx="3"/>
+                        <rect x="402" y="140" width="306" height="100" rx="3"/>
+                        <rect x="12" y="140" width="306" height="100" rx="3"/>
+                    </g>
+                    <g fill="#000" font-family="Arial, sans-serif" text-anchor="middle" font-size="16">
+                        <text x="165" y="44" font-weight="bold">Host input system</text>
+                        <text x="165" y="68">Typing, speech, handwriting</text>
+                        <text x="555" y="44" font-weight="bold">New text adapter</text>
+                        <text x="555" y="68">Context and confirmed edits</text>
+                        <text x="555" y="168" font-weight="bold">IntentSpider component</text>
+                        <text x="555" y="194">Existing graph and ranking</text>
+                        <text x="555" y="220">New memory and correction research</text>
+                        <text x="165" y="168" font-weight="bold">Host interface</text>
+                        <text x="165" y="194">Choose whether to show a cue</text>
+                        <text x="165" y="220">User continues or corrects</text>
+                        <text x="555" y="116" font-size="14">Text context</text>
+                        <text x="360" y="171" font-size="14">Candidates</text>
+                        <text x="360" y="287" font-size="14">User confirmed text returns to the adapter for learning</text>
+                        <text x="360" y="321" font-size="14">Proposed connection requires a host integration point</text>
+                    </g>
+                    <g fill="none" stroke="#0031A7" stroke-width="1.5" marker-end="url(#memory-arrow)">
+                        <path d="M 318 51 H 399"/>
+                        <path d="M 555 120 V 137"/>
+                        <path d="M 555 86 V 97" marker-end="none"/>
+                        <path d="M 402 190 H 321"/>
+                        <path d="M 165 240 V 263 H 718 V 105 H 675 V 89"/>
+                    </g>
+                </svg>
+                <figcaption style="font-size: 0.9em;">Proposed integration</figcaption>
+            </figure>
+            <p>A first adapter could supply committed text to the engine and return candidates to an experimental interface. Revised speech transcripts would need careful handling so temporary guesses do not become learned history. Rich memory recovery and multilingual links would be a larger extension beyond that first connection.</p>
+
+            <h2>A small first experiment with a much larger purpose</h2>
+            <p>I would start with personal names in English, an opt in local history and an interface beside recognised text. First, measure whether the existing prediction route helps people continue. Then add retrieval from incomplete clues and compare it with both the existing suggestions and a simple personal history search. Measure successful name recovery, interruptions, repeated corrections and incorrect cues, alongside latency, memory and energy on the target device.</p>
+            <p>For Huawei, the potential value is fewer moments when a person has to stop expressing themselves, and personal learning that becomes useful across several input experiences. Local retrieval could also resolve some personal requests without a cloud round trip. A bounded prototype would let the team evaluate that value before committing to product integration.</p>
+            <p>I would be deeply grateful for a technical discussion about that first experiment. I can bring the engine demonstration and IHCI presentation, prepare the prototype and share the results. The ambition is large. The first question is concrete. Can we help someone recover the word they need without breaking the thought they were trying to express (<a href="../playground.html">research Playground</a>, <a href="../presentation.html">IHCI presentation</a>, <a href="https://github.com/IntentSpider/IntentSpiderEngine" target="_blank" rel="noopener">published source</a>)?</p>
         </main>
 
         <footer>
@@ -72,3 +121,4 @@
     </div>
 <script src="../stats.js"></script></body>
 </html>
+
