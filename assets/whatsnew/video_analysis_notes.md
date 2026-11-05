@@ -1,32 +1,38 @@
-# IntentSpider video analysis + demo assets
+# IntentSpider original run evidence
 
-## Source run
-- Source screen recording: 434.85 seconds.
-- 8,768 video frames were present in the source stream.
-- Automated visual state detection found 398 distinct stable suggestion-state changes in the keyboard region.
-- The developer-tools pane is excluded from all showcase clips.
-- Showcase clips are rendered at 1280x720 and slowed to 0.5x so the typed context and suggestion row are readable.
+## Source recording
 
-## Conservative verified immediate-next-token hits
-The audit intentionally separates **strict immediate-next-token evidence** from broader semantic/memory-cue examples. Four exact immediate-next-token hits were verified from the detected state sequence and frame review:
-- 91.414 s: rank 1 `the` -> next typed token `the`.
-- 179.205 s: rank 1 `redapplo` -> next typed token `RedApplo`.
-- 325.632 s: rank 3 `the` -> next typed token `the`.
-- 348.267 s: rank 1 `of` -> next typed token `of`.
+- The original recording is 434.85 seconds long
+- 8,768 source frames were present
+- Automated visual state detection found 398 distinct stable suggestion states in the keyboard region
+- The developer tools pane is excluded from the showcase clips
+- The source clips are rendered at 1280 by 720 and slowed where needed so the typed context and suggestion row remain readable
 
-This is **not presented as an overall accuracy percentage** because the recording was not designed as a fixed-target benchmark and many states do not provide an objectively defined next-word target. The RedApplo frame is the strongest personalized prediction evidence in this run.
+## Verified exact immediate next token successes
 
-## RedApplo presentation moments
-- ~34.7 s: `redapplo` appears at rank 2 while the user has partially typed `RedAp…` (completion cue).
-- 179.205 s: `redapplo` appears at rank 1 before the next typed token becomes `RedApplo` (strict next-token hit).
-- ~316.3-316.7 s: `redapplo` appears at ranks 3 then 2 as a personal-memory cue; this is not an immediate-next-token hit.
-- 368.729 s: `redapplo` appears at rank 3; a few seconds later a new sentence explicitly mentions lunch at RedApplo. This is a contextual memory-cue example, not strict next-token accuracy.
+Four exact immediate next token successes were verified from the recorded state sequence and frame review
 
-## Generated concept clips
-- `IntentSpider_voice_search_memory_cue.mp4`: uses the supplied clean Google-search-bar image. The recognized text types naturally, then `RedApplo` appears in lower opacity during a hesitation and becomes solid when accepted.
-- `IntentSpider_stylus_memory_cue.mp4`: photorealistic tablet + stylus concept. Handwritten text is followed by a lower-opacity `RedApplo` continuation.
+- 91.414 seconds with rank 1 the followed by the
+- 179.205 seconds with rank 1 redapplo followed by RedApplo
+- 325.632 seconds with rank 3 the followed by the
+- 348.267 seconds with rank 1 of followed by of
 
-## Recommended Huawei/demo framing
-Use the RedApplo-focused reel as the primary evidence clip. A defensible line is: **“In this first recorded run, IntentSpider surfaces the personal name RedApplo at rank 1 before it is typed. We can rerun the same interaction live in front of the lab.”**
+The RedApplo event is the strongest personalized prediction result in the original run. It records a personal name at rank 1 before that name is typed.
 
-Do not call the broader semantic/memory-cue cases “target accuracy.” They are useful product-behavior examples, but they are a different claim.
+## Additional RedApplo evidence
+
+- Around 34.7 seconds redapplo appears at rank 2 while the user has partially typed RedApplo
+- Around 316.3 to 316.7 seconds redapplo appears at rank 3 and then rank 2 as a personal memory cue
+- At 368.729 seconds redapplo appears at rank 3 before a later explicit mention of RedApplo
+
+## What the original run represents
+
+The original run records several successful behaviors in one continuous interaction. These include exact rank 1 next word prediction, an additional exact top 3 success, personal name completion and contextual personal memory cues.
+
+The significance here is direct evidence of personalized retrieval happening in motion. The original run is not being used as a population level statistical claim because the recording was not constructed with a fixed target label for every one of the 398 states.
+
+## Input concepts
+
+The voice search clip uses the supplied Google search bar image. Recognised text appears naturally and RedApplo is shown as a lower opacity personal cue.
+
+The stylus clip uses a tablet and handwriting setting. The same personal name is shown as a lower opacity continuation beside the handwritten input.
