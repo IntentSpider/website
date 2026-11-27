@@ -1,0 +1,796 @@
+{
+  "meta": {
+    "version": 1,
+    "totalQuestions": 110,
+    "methodology": "问题设计参考 Persona Chat 的开放式人物对话提示与 LIWC 相关自由写作诱发方法。中文版本保留原始英文题目，建议使用英文作答以保持当前引擎实验条件。",
+    "clusters": [
+      {
+        "id": "animals",
+        "label": "动物与自然",
+        "count": 40
+      },
+      {
+        "id": "daily",
+        "label": "日常生活",
+        "count": 35
+      },
+      {
+        "id": "hobbies",
+        "label": "兴趣、技能与创造力",
+        "count": 35
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": 1,
+      "cluster": "animals",
+      "text": "描述你最喜欢的动物，并解释它为什么对你很特别。<br><small>当前研究引擎建议使用英文作答<br>Describe your favorite animal and explain what makes it special to you.</small>",
+      "text_en": "Describe your favorite animal and explain what makes it special to you.",
+      "text_zh": "描述你最喜欢的动物，并解释它为什么对你很特别。"
+    },
+    {
+      "id": 2,
+      "cluster": "animals",
+      "text": "你最喜欢的动物通常吃什么，它怎样找到食物。<br><small>当前研究引擎建议使用英文作答<br>What does your favorite animal usually eat and how does it find its food?</small>",
+      "text_en": "What does your favorite animal usually eat and how does it find its food?",
+      "text_zh": "你最喜欢的动物通常吃什么，它怎样找到食物。"
+    },
+    {
+      "id": 3,
+      "cluster": "animals",
+      "text": "描述你最喜欢的动物在野外生活的地方。<br><small>当前研究引擎建议使用英文作答<br>Describe the place where your favorite animal lives in the wild.</small>",
+      "text_en": "Describe the place where your favorite animal lives in the wild.",
+      "text_zh": "描述你最喜欢的动物在野外生活的地方。"
+    },
+    {
+      "id": 4,
+      "cluster": "animals",
+      "text": "当你最喜欢的动物感到开心或兴奋时，它会怎样表现。<br><small>当前研究引擎建议使用英文作答<br>How does your favorite animal behave when it feels happy or excited?</small>",
+      "text_en": "How does your favorite animal behave when it feels happy or excited?",
+      "text_zh": "当你最喜欢的动物感到开心或兴奋时，它会怎样表现。"
+    },
+    {
+      "id": 5,
+      "cluster": "animals",
+      "text": "你最喜欢的动物会发出什么声音，通常在什么时候发出这些声音。<br><small>当前研究引擎建议使用英文作答<br>What sounds does your favorite animal make and when does it make them?</small>",
+      "text_en": "What sounds does your favorite animal make and when does it make them?",
+      "text_zh": "你最喜欢的动物会发出什么声音，通常在什么时候发出这些声音。"
+    },
+    {
+      "id": 6,
+      "cluster": "animals",
+      "text": "描述你最喜欢的动物的外形，包括体型和颜色。<br><small>当前研究引擎建议使用英文作答<br>Describe what your favorite animal looks like including its size and color.</small>",
+      "text_en": "Describe what your favorite animal looks like including its size and color.",
+      "text_zh": "描述你最喜欢的动物的外形，包括体型和颜色。"
+    },
+    {
+      "id": 7,
+      "cluster": "animals",
+      "text": "你最喜欢的动物怎样保护自己免受危险。<br><small>当前研究引擎建议使用英文作答<br>How does your favorite animal protect itself from danger?</small>",
+      "text_en": "How does your favorite animal protect itself from danger?",
+      "text_zh": "你最喜欢的动物怎样保护自己免受危险。"
+    },
+    {
+      "id": 8,
+      "cluster": "animals",
+      "text": "解释你最喜欢的动物怎样睡觉，以及夜晚在哪里休息。<br><small>当前研究引擎建议使用英文作答<br>Explain how your favorite animal sleeps and where it rests at night.</small>",
+      "text_en": "Explain how your favorite animal sleeps and where it rests at night.",
+      "text_zh": "解释你最喜欢的动物怎样睡觉，以及夜晚在哪里休息。"
+    },
+    {
+      "id": 9,
+      "cluster": "animals",
+      "text": "你最喜欢的动物在野外的一天通常会是什么样子。<br><small>当前研究引擎建议使用英文作答<br>What would a typical day look like for your favorite animal in the wild?</small>",
+      "text_en": "What would a typical day look like for your favorite animal in the wild?",
+      "text_zh": "你最喜欢的动物在野外的一天通常会是什么样子。"
+    },
+    {
+      "id": 10,
+      "cluster": "animals",
+      "text": "描述你最喜欢的动物怎样与周围其他动物互动。<br><small>当前研究引擎建议使用英文作答<br>Describe how your favorite animal interacts with other animals around it.</small>",
+      "text_en": "Describe how your favorite animal interacts with other animals around it.",
+      "text_zh": "描述你最喜欢的动物怎样与周围其他动物互动。"
+    },
+    {
+      "id": 11,
+      "cluster": "animals",
+      "text": "如果你可以把任何动物作为宠物，你会选择什么，为什么。<br><small>当前研究引擎建议使用英文作答<br>If you could have any animal as a pet, what would it be and why?</small>",
+      "text_en": "If you could have any animal as a pet, what would it be and why?",
+      "text_zh": "如果你可以把任何动物作为宠物，你会选择什么，为什么。"
+    },
+    {
+      "id": 12,
+      "cluster": "animals",
+      "text": "描述你认为你最喜欢的动物具有哪些性格特点。<br><small>当前研究引擎建议使用英文作答<br>Describe the personality traits you think your favorite animal has.</small>",
+      "text_en": "Describe the personality traits you think your favorite animal has.",
+      "text_zh": "描述你认为你最喜欢的动物具有哪些性格特点。"
+    },
+    {
+      "id": 13,
+      "cluster": "animals",
+      "text": "你最喜欢的动物怎样移动，以及怎样从一个地方前往另一个地方。<br><small>当前研究引擎建议使用英文作答<br>How does your favorite animal move around and travel from place to place?</small>",
+      "text_en": "How does your favorite animal move around and travel from place to place?",
+      "text_zh": "你最喜欢的动物怎样移动，以及怎样从一个地方前往另一个地方。"
+    },
+    {
+      "id": 14,
+      "cluster": "animals",
+      "text": "季节和天气变化时，你最喜欢的动物会发生什么变化。<br><small>当前研究引擎建议使用英文作答<br>What happens to your favorite animal when the weather changes with the seasons?</small>",
+      "text_en": "What happens to your favorite animal when the weather changes with the seasons?",
+      "text_zh": "季节和天气变化时，你最喜欢的动物会发生什么变化。"
+    },
+    {
+      "id": 15,
+      "cluster": "animals",
+      "text": "描述一次你看到有趣动物的经历，以及它当时在做什么。<br><small>当前研究引擎建议使用英文作答<br>Describe a time you saw an interesting animal and what it was doing.</small>",
+      "text_en": "Describe a time you saw an interesting animal and what it was doing.",
+      "text_zh": "描述一次你看到有趣动物的经历，以及它当时在做什么。"
+    },
+    {
+      "id": 16,
+      "cluster": "animals",
+      "text": "你最喜欢的动物幼体与成年个体在行为上有什么不同。<br><small>当前研究引擎建议使用英文作答<br>How do baby versions of your favorite animal behave differently from adults?</small>",
+      "text_en": "How do baby versions of your favorite animal behave differently from adults?",
+      "text_zh": "你最喜欢的动物幼体与成年个体在行为上有什么不同。"
+    },
+    {
+      "id": 17,
+      "cluster": "animals",
+      "text": "你知道的最有趣动物事实是什么，为什么它吸引你。<br><small>当前研究引擎建议使用英文作答<br>What is the most fascinating fact you know about any animal and why does it interest you?</small>",
+      "text_en": "What is the most fascinating fact you know about any animal and why does it interest you?",
+      "text_zh": "你知道的最有趣动物事实是什么，为什么它吸引你。"
+    },
+    {
+      "id": 18,
+      "cluster": "animals",
+      "text": "描述你最喜欢的动物怎样与同类交流。<br><small>当前研究引擎建议使用英文作答<br>Describe how your favorite animal communicates with other members of its group.</small>",
+      "text_en": "Describe how your favorite animal communicates with other members of its group.",
+      "text_zh": "描述你最喜欢的动物怎样与同类交流。"
+    },
+    {
+      "id": 19,
+      "cluster": "animals",
+      "text": "如果让你为最喜欢的动物设计一个栖息环境，你会怎样设计。<br><small>当前研究引擎建议使用英文作答<br>What kind of environment or habitat would you build if you could design one for your favorite animal?</small>",
+      "text_en": "What kind of environment or habitat would you build if you could design one for your favorite animal?",
+      "text_zh": "如果让你为最喜欢的动物设计一个栖息环境，你会怎样设计。"
+    },
+    {
+      "id": 20,
+      "cluster": "animals",
+      "text": "解释为什么一些人害怕某些动物，以及你是否认同这种害怕。<br><small>当前研究引擎建议使用英文作答<br>Explain why some people are afraid of certain animals and whether you agree with them.</small>",
+      "text_en": "Explain why some people are afraid of certain animals and whether you agree with them.",
+      "text_zh": "解释为什么一些人害怕某些动物，以及你是否认同这种害怕。"
+    },
+    {
+      "id": 21,
+      "cluster": "animals",
+      "text": "描述你最喜欢的动物受到威胁或害怕时会做什么。<br><small>当前研究引擎建议使用英文作答<br>Describe what your favorite animal does when it feels threatened or scared.</small>",
+      "text_en": "Describe what your favorite animal does when it feels threatened or scared.",
+      "text_zh": "描述你最喜欢的动物受到威胁或害怕时会做什么。"
+    },
+    {
+      "id": 22,
+      "cluster": "animals",
+      "text": "幼体出生后，你最喜欢的动物怎样照顾它们。<br><small>当前研究引擎建议使用英文作答<br>How does your favorite animal take care of its young ones after they are born?</small>",
+      "text_en": "How does your favorite animal take care of its young ones after they are born?",
+      "text_zh": "幼体出生后，你最喜欢的动物怎样照顾它们。"
+    },
+    {
+      "id": 23,
+      "cluster": "animals",
+      "text": "你最喜欢的动物在所属生态系统中扮演什么角色。<br><small>当前研究引擎建议使用英文作答<br>What role does your favorite animal play in the natural ecosystem it belongs to?</small>",
+      "text_en": "What role does your favorite animal play in the natural ecosystem it belongs to?",
+      "text_zh": "你最喜欢的动物在所属生态系统中扮演什么角色。"
+    },
+    {
+      "id": 24,
+      "cluster": "animals",
+      "text": "描述一种你最近才了解的动物，以及最让你惊讶的地方。<br><small>当前研究引擎建议使用英文作答<br>Describe an animal you recently learned about and what surprised you most.</small>",
+      "text_en": "Describe an animal you recently learned about and what surprised you most.",
+      "text_zh": "描述一种你最近才了解的动物，以及最让你惊讶的地方。"
+    },
+    {
+      "id": 25,
+      "cluster": "animals",
+      "text": "如果对方从未见过你最喜欢的动物，你会怎样向他解释这种动物。<br><small>当前研究引擎建议使用英文作答<br>How would you explain your favorite animal to someone who has never seen one before?</small>",
+      "text_en": "How would you explain your favorite animal to someone who has never seen one before?",
+      "text_zh": "如果对方从未见过你最喜欢的动物，你会怎样向他解释这种动物。"
+    },
+    {
+      "id": 26,
+      "cluster": "animals",
+      "text": "你认为你最喜欢的动物睡着以后会梦到什么。<br><small>当前研究引擎建议使用英文作答<br>What do you think your favorite animal dreams about when it falls asleep?</small>",
+      "text_en": "What do you think your favorite animal dreams about when it falls asleep?",
+      "text_zh": "你认为你最喜欢的动物睡着以后会梦到什么。"
+    },
+    {
+      "id": 27,
+      "cluster": "animals",
+      "text": "描述一种你熟悉动物的野生形态与驯养形态之间的差异。<br><small>当前研究引擎建议使用英文作答<br>Describe the differences between a wild version and a domesticated version of an animal you know.</small>",
+      "text_en": "Describe the differences between a wild version and a domesticated version of an animal you know.",
+      "text_zh": "描述一种你熟悉动物的野生形态与驯养形态之间的差异。"
+    },
+    {
+      "id": 28,
+      "cluster": "animals",
+      "text": "有人靠近时，你最喜欢的动物通常怎样回应。<br><small>当前研究引擎建议使用英文作答<br>How does your favorite animal respond to human beings who approach it?</small>",
+      "text_en": "How does your favorite animal respond to human beings who approach it?",
+      "text_zh": "有人靠近时，你最喜欢的动物通常怎样回应。"
+    },
+    {
+      "id": 29,
+      "cluster": "animals",
+      "text": "解释什么特点让某些动物成为人类的好伙伴，并给出一个例子。<br><small>当前研究引擎建议使用英文作答<br>Explain what makes certain animals good companions for people and describe an example.</small>",
+      "text_en": "Explain what makes certain animals good companions for people and describe an example.",
+      "text_zh": "解释什么特点让某些动物成为人类的好伙伴，并给出一个例子。"
+    },
+    {
+      "id": 30,
+      "cluster": "animals",
+      "text": "描述你见过最美的动物，以及它为什么让你觉得美。<br><small>当前研究引擎建议使用英文作答<br>Describe the most beautiful animal you have ever seen and what made it beautiful.</small>",
+      "text_en": "Describe the most beautiful animal you have ever seen and what made it beautiful.",
+      "text_zh": "描述你见过最美的动物，以及它为什么让你觉得美。"
+    },
+    {
+      "id": 31,
+      "cluster": "animals",
+      "text": "你最喜欢的动物今天在现代世界中面临哪些挑战。<br><small>当前研究引擎建议使用英文作答<br>What challenges does your favorite animal face in the modern world today?</small>",
+      "text_en": "What challenges does your favorite animal face in the modern world today?",
+      "text_zh": "你最喜欢的动物今天在现代世界中面临哪些挑战。"
+    },
+    {
+      "id": 32,
+      "cluster": "animals",
+      "text": "描述不同动物怎样适应极冷或极热的环境。<br><small>当前研究引擎建议使用英文作答<br>Describe how different animals adapt to living in extremely cold or hot environments.</small>",
+      "text_en": "Describe how different animals adapt to living in extremely cold or hot environments.",
+      "text_zh": "描述不同动物怎样适应极冷或极热的环境。"
+    },
+    {
+      "id": 33,
+      "cluster": "animals",
+      "text": "你认为动物体验情绪的方式与人类相比有什么相同和不同。<br><small>当前研究引擎建议使用英文作答<br>How do you think animals experience emotions compared to the way humans do?</small>",
+      "text_en": "How do you think animals experience emotions compared to the way humans do?",
+      "text_zh": "你认为动物体验情绪的方式与人类相比有什么相同和不同。"
+    },
+    {
+      "id": 34,
+      "cluster": "animals",
+      "text": "描述一个自然场景，其中有多种动物彼此互动。<br><small>当前研究引擎建议使用英文作答<br>Describe a scene from nature that involves multiple animals interacting together.</small>",
+      "text_en": "Describe a scene from nature that involves multiple animals interacting together.",
+      "text_zh": "描述一个自然场景，其中有多种动物彼此互动。"
+    },
+    {
+      "id": 35,
+      "cluster": "animals",
+      "text": "如果你发现一个新动物物种，你会给它取什么名字，它会长什么样。<br><small>当前研究引擎建议使用英文作答<br>What would you name a new species of animal if you discovered one and what would it look like?</small>",
+      "text_en": "What would you name a new species of animal if you discovered one and what would it look like?",
+      "text_zh": "如果你发现一个新动物物种，你会给它取什么名字，它会长什么样。"
+    },
+    {
+      "id": 36,
+      "cluster": "animals",
+      "text": "描述你最喜欢的动物怎样捕猎食物或收集生存所需的东西。<br><small>当前研究引擎建议使用英文作答<br>Describe how your favorite animal hunts for food or gathers things it needs to survive.</small>",
+      "text_en": "Describe how your favorite animal hunts for food or gathers things it needs to survive.",
+      "text_zh": "描述你最喜欢的动物怎样捕猎食物或收集生存所需的东西。"
+    },
+    {
+      "id": 37,
+      "cluster": "animals",
+      "text": "随着城市越来越大，人类与动物之间的关系会怎样改变。<br><small>当前研究引擎建议使用英文作答<br>How does the relationship between humans and animals change as cities grow larger?</small>",
+      "text_en": "How does the relationship between humans and animals change as cities grow larger?",
+      "text_zh": "随着城市越来越大，人类与动物之间的关系会怎样改变。"
+    },
+    {
+      "id": 38,
+      "cluster": "animals",
+      "text": "描述一种生活在水中的动物，并解释它怎样在水下生存。<br><small>当前研究引擎建议使用英文作答<br>Describe an animal that lives in water and explain how it survives beneath the surface.</small>",
+      "text_en": "Describe an animal that lives in water and explain how it survives beneath the surface.",
+      "text_zh": "描述一种生活在水中的动物，并解释它怎样在水下生存。"
+    },
+    {
+      "id": 39,
+      "cluster": "animals",
+      "text": "你认为人类可以从观察动物生活方式中学到什么。<br><small>当前研究引擎建议使用英文作答<br>What lessons do you think humans can learn from observing how animals live their lives?</small>",
+      "text_en": "What lessons do you think humans can learn from observing how animals live their lives?",
+      "text_zh": "你认为人类可以从观察动物生活方式中学到什么。"
+    },
+    {
+      "id": 40,
+      "cluster": "animals",
+      "text": "描述一次你难忘的动物相遇，以及它让你产生了什么感受。<br><small>当前研究引擎建议使用英文作答<br>Describe a memorable encounter you had with an animal and how it made you feel.</small>",
+      "text_en": "Describe a memorable encounter you had with an animal and how it made you feel.",
+      "text_zh": "描述一次你难忘的动物相遇，以及它让你产生了什么感受。"
+    },
+    {
+      "id": 41,
+      "cluster": "daily",
+      "text": "描述你每天早晨醒来后的第一个小时通常会做什么。<br><small>当前研究引擎建议使用英文作答<br>Describe what you usually do during the first hour after you wake up each morning.</small>",
+      "text_en": "Describe what you usually do during the first hour after you wake up each morning.",
+      "text_zh": "描述你每天早晨醒来后的第一个小时通常会做什么。"
+    },
+    {
+      "id": 42,
+      "cluster": "daily",
+      "text": "你理想中的早餐是什么样子，你怎样准备它。<br><small>当前研究引擎建议使用英文作答<br>What does your ideal breakfast look like and how do you prepare it?</small>",
+      "text_en": "What does your ideal breakfast look like and how do you prepare it?",
+      "text_zh": "你理想中的早餐是什么样子，你怎样准备它。"
+    },
+    {
+      "id": 43,
+      "cluster": "daily",
+      "text": "描述你从家去工作地点或学校的路程，包括沿途看到的东西。<br><small>当前研究引擎建议使用英文作答<br>Describe your journey from home to work or school including what you see along the way.</small>",
+      "text_en": "Describe your journey from home to work or school including what you see along the way.",
+      "text_zh": "描述你从家去工作地点或学校的路程，包括沿途看到的东西。"
+    },
+    {
+      "id": 44,
+      "cluster": "daily",
+      "text": "你每天怎样决定穿什么衣服，哪些因素会影响这个选择。<br><small>当前研究引擎建议使用英文作答<br>How do you decide what clothes to wear each day and what influences your choice?</small>",
+      "text_en": "How do you decide what clothes to wear each day and what influences your choice?",
+      "text_zh": "你每天怎样决定穿什么衣服，哪些因素会影响这个选择。"
+    },
+    {
+      "id": 45,
+      "cluster": "daily",
+      "text": "描述你白天大部分时间待着的地方。<br><small>当前研究引擎建议使用英文作答<br>Describe the place where you spend most of your time during the day.</small>",
+      "text_en": "Describe the place where you spend most of your time during the day.",
+      "text_zh": "描述你白天大部分时间待着的地方。"
+    },
+    {
+      "id": 46,
+      "cluster": "daily",
+      "text": "你通常午餐吃什么，一般在哪里吃。<br><small>当前研究引擎建议使用英文作答<br>What do you typically eat for lunch and where do you usually have it?</small>",
+      "text_en": "What do you typically eat for lunch and where do you usually have it?",
+      "text_zh": "你通常午餐吃什么，一般在哪里吃。"
+    },
+    {
+      "id": 47,
+      "cluster": "daily",
+      "text": "描述从完成主要责任以后开始的晚间日常安排。<br><small>当前研究引擎建议使用英文作答<br>Describe your evening routine from the moment you finish your main responsibilities.</small>",
+      "text_en": "Describe your evening routine from the moment you finish your main responsibilities.",
+      "text_zh": "描述从完成主要责任以后开始的晚间日常安排。"
+    },
+    {
+      "id": 48,
+      "cluster": "daily",
+      "text": "经历漫长而疲惫的一天后，你通常怎样放松。<br><small>当前研究引擎建议使用英文作答<br>How do you usually relax after a long and tiring day?</small>",
+      "text_en": "How do you usually relax after a long and tiring day?",
+      "text_zh": "经历漫长而疲惫的一天后，你通常怎样放松。"
+    },
+    {
+      "id": 49,
+      "cluster": "daily",
+      "text": "描述一天中不同时间你在家周围听到的声音。<br><small>当前研究引擎建议使用英文作答<br>Describe the sounds you hear around your home at different times of the day.</small>",
+      "text_en": "Describe the sounds you hear around your home at different times of the day.",
+      "text_zh": "描述一天中不同时间你在家周围听到的声音。"
+    },
+    {
+      "id": 50,
+      "cluster": "daily",
+      "text": "你最喜欢在家做什么饭，并一步一步说明怎样做。<br><small>当前研究引擎建议使用英文作答<br>What is your favorite meal to cook at home and how do you make it step by step?</small>",
+      "text_en": "What is your favorite meal to cook at home and how do you make it step by step?",
+      "text_zh": "你最喜欢在家做什么饭，并一步一步说明怎样做。"
+    },
+    {
+      "id": 51,
+      "cluster": "daily",
+      "text": "下雨天和晴天相比，你的日常安排会怎样变化。<br><small>当前研究引擎建议使用英文作答<br>Describe how your daily routine changes when the weather is rainy compared to sunny.</small>",
+      "text_en": "Describe how your daily routine changes when the weather is rainy compared to sunny.",
+      "text_zh": "下雨天和晴天相比，你的日常安排会怎样变化。"
+    },
+    {
+      "id": 52,
+      "cluster": "daily",
+      "text": "你怎样整理每天的任务，并决定先做哪一件。<br><small>当前研究引擎建议使用英文作答<br>How do you organize your tasks and decide which things to do first each day?</small>",
+      "text_en": "How do you organize your tasks and decide which things to do first each day?",
+      "text_zh": "你怎样整理每天的任务，并决定先做哪一件。"
+    },
+    {
+      "id": 53,
+      "cluster": "daily",
+      "text": "描述早晨走出家门时你所在社区的样子。<br><small>当前研究引擎建议使用英文作答<br>Describe what your neighborhood looks like when you step outside in the morning.</small>",
+      "text_en": "Describe what your neighborhood looks like when you step outside in the morning.",
+      "text_zh": "描述早晨走出家门时你所在社区的样子。"
+    },
+    {
+      "id": 54,
+      "cluster": "daily",
+      "text": "你一天中通常喝什么，以及通常在什么时候喝。<br><small>当前研究引擎建议使用英文作答<br>What do you usually drink throughout the day and when do you drink it?</small>",
+      "text_en": "What do you usually drink throughout the day and when do you drink it?",
+      "text_zh": "你一天中通常喝什么，以及通常在什么时候喝。"
+    },
+    {
+      "id": 55,
+      "cluster": "daily",
+      "text": "描述一个典型周末从开始到结束是什么样子，以及它与工作日有什么不同。<br><small>当前研究引擎建议使用英文作答<br>Describe a typical weekend day from start to finish and how it differs from weekdays.</small>",
+      "text_en": "Describe a typical weekend day from start to finish and how it differs from weekdays.",
+      "text_zh": "描述一个典型周末从开始到结束是什么样子，以及它与工作日有什么不同。"
+    },
+    {
+      "id": 56,
+      "cluster": "daily",
+      "text": "你晚上怎样准备睡觉，什么事情最能帮助你入睡。<br><small>当前研究引擎建议使用英文作答<br>How do you prepare yourself to go to sleep at night and what helps you fall asleep?</small>",
+      "text_en": "How do you prepare yourself to go to sleep at night and what helps you fall asleep?",
+      "text_zh": "你晚上怎样准备睡觉，什么事情最能帮助你入睡。"
+    },
+    {
+      "id": 57,
+      "cluster": "daily",
+      "text": "描述一天中你最有生产力的时间，并解释为什么那时最专注。<br><small>当前研究引擎建议使用英文作答<br>Describe the most productive part of your day and explain why you feel most focused then.</small>",
+      "text_en": "Describe the most productive part of your day and explain why you feel most focused then.",
+      "text_zh": "描述一天中你最有生产力的时间，并解释为什么那时最专注。"
+    },
+    {
+      "id": 58,
+      "cluster": "daily",
+      "text": "你吃饭时通常还会做什么，一般和谁一起吃。<br><small>当前研究引擎建议使用英文作答<br>What do you usually do while eating your meals and who do you eat with?</small>",
+      "text_en": "What do you usually do while eating your meals and who do you eat with?",
+      "text_zh": "你吃饭时通常还会做什么，一般和谁一起吃。"
+    },
+    {
+      "id": 59,
+      "cluster": "daily",
+      "text": "与几年前相比，你现在的早晨日常安排发生了什么变化。<br><small>当前研究引擎建议使用英文作答<br>Describe how your morning routine has changed compared to what it was a few years ago.</small>",
+      "text_en": "Describe how your morning routine has changed compared to what it was a few years ago.",
+      "text_zh": "与几年前相比，你现在的早晨日常安排发生了什么变化。"
+    },
+    {
+      "id": 60,
+      "cluster": "daily",
+      "text": "等待某件事或某个人时，你通常怎样度过时间。<br><small>当前研究引擎建议使用英文作答<br>How do you spend your time when you are waiting for something or someone?</small>",
+      "text_en": "How do you spend your time when you are waiting for something or someone?",
+      "text_zh": "等待某件事或某个人时，你通常怎样度过时间。"
+    },
+    {
+      "id": 61,
+      "cluster": "daily",
+      "text": "描述你每次离开家时一定会随身携带的东西。<br><small>当前研究引擎建议使用英文作答<br>Describe the things you always carry with you when you leave your home.</small>",
+      "text_en": "Describe the things you always carry with you when you leave your home.",
+      "text_zh": "描述你每次离开家时一定会随身携带的东西。"
+    },
+    {
+      "id": 62,
+      "cluster": "daily",
+      "text": "开始一天时，你通常最先查看什么。<br><small>当前研究引擎建议使用英文作答<br>What is the first thing you usually check or look at when you start your day?</small>",
+      "text_en": "What is the first thing you usually check or look at when you start your day?",
+      "text_zh": "开始一天时，你通常最先查看什么。"
+    },
+    {
+      "id": 63,
+      "cluster": "daily",
+      "text": "描述一项你经常在家做的家务，以及你通常怎样完成它。<br><small>当前研究引擎建议使用英文作答<br>Describe a regular chore you do at home and how you go about completing it.</small>",
+      "text_en": "Describe a regular chore you do at home and how you go about completing it.",
+      "text_zh": "描述一项你经常在家做的家务，以及你通常怎样完成它。"
+    },
+    {
+      "id": 64,
+      "cluster": "daily",
+      "text": "家里有客人来访时，你的日常安排会怎样变化。<br><small>当前研究引擎建议使用英文作答<br>How does your routine change when you have guests visiting your home?</small>",
+      "text_en": "How does your routine change when you have guests visiting your home?",
+      "text_zh": "家里有客人来访时，你的日常安排会怎样变化。"
+    },
+    {
+      "id": 65,
+      "cluster": "daily",
+      "text": "描述你白天最常坐的位置附近那扇窗户外面的景色。<br><small>当前研究引擎建议使用英文作答<br>Describe the view from the window closest to where you usually sit during the day.</small>",
+      "text_en": "Describe the view from the window closest to where you usually sit during the day.",
+      "text_zh": "描述你白天最常坐的位置附近那扇窗户外面的景色。"
+    },
+    {
+      "id": 66,
+      "cluster": "daily",
+      "text": "一天中不同时间，你喜欢听什么音乐或声音。<br><small>当前研究引擎建议使用英文作答<br>What music or sounds do you like to listen to during different parts of your day?</small>",
+      "text_en": "What music or sounds do you like to listen to during different parts of your day?",
+      "text_zh": "一天中不同时间，你喜欢听什么音乐或声音。"
+    },
+    {
+      "id": 67,
+      "cluster": "daily",
+      "text": "家里所有人同时准备出门时，通常会发生什么。<br><small>当前研究引擎建议使用英文作答<br>Describe what happens in your household when everyone is getting ready at the same time.</small>",
+      "text_en": "Describe what happens in your household when everyone is getting ready at the same time.",
+      "text_zh": "家里所有人同时准备出门时，通常会发生什么。"
+    },
+    {
+      "id": 68,
+      "cluster": "daily",
+      "text": "日常计划突然被打断或发生变化时，你怎样应对。<br><small>当前研究引擎建议使用英文作答<br>How do you handle unexpected changes or interruptions to your daily schedule?</small>",
+      "text_en": "How do you handle unexpected changes or interruptions to your daily schedule?",
+      "text_zh": "日常计划突然被打断或发生变化时，你怎样应对。"
+    },
+    {
+      "id": 69,
+      "cluster": "daily",
+      "text": "描述你每天最喜欢、最期待的一部分日常活动。<br><small>当前研究引擎建议使用英文作答<br>Describe the one part of your daily routine that you enjoy the most and look forward to.</small>",
+      "text_en": "Describe the one part of your daily routine that you enjoy the most and look forward to.",
+      "text_zh": "描述你每天最喜欢、最期待的一部分日常活动。"
+    },
+    {
+      "id": 70,
+      "cluster": "daily",
+      "text": "有什么事情是你每天一定会做的，为什么它对你重要。<br><small>当前研究引擎建议使用英文作答<br>What is something you do every single day without fail and why is it important to you?</small>",
+      "text_en": "What is something you do every single day without fail and why is it important to you?",
+      "text_zh": "有什么事情是你每天一定会做的，为什么它对你重要。"
+    },
+    {
+      "id": 71,
+      "cluster": "daily",
+      "text": "描述睡觉前最后三十分钟你通常怎样度过。<br><small>当前研究引擎建议使用英文作答<br>Describe how you usually spend the last thirty minutes before going to bed.</small>",
+      "text_en": "Describe how you usually spend the last thirty minutes before going to bed.",
+      "text_zh": "描述睡觉前最后三十分钟你通常怎样度过。"
+    },
+    {
+      "id": 72,
+      "cluster": "daily",
+      "text": "节假日或特殊场合时，你的日常安排会怎样变化。<br><small>当前研究引擎建议使用英文作答<br>How does your daily routine change during holidays or special occasions?</small>",
+      "text_en": "How does your daily routine change during holidays or special occasions?",
+      "text_zh": "节假日或特殊场合时，你的日常安排会怎样变化。"
+    },
+    {
+      "id": 73,
+      "cluster": "daily",
+      "text": "描述一个普通日子里你最频繁使用的工具或设备。<br><small>当前研究引擎建议使用英文作答<br>Describe the tools or devices you use most frequently throughout a typical day.</small>",
+      "text_en": "Describe the tools or devices you use most frequently throughout a typical day.",
+      "text_zh": "描述一个普通日子里你最频繁使用的工具或设备。"
+    },
+    {
+      "id": 74,
+      "cluster": "daily",
+      "text": "你喜欢在正餐之间吃什么零食，通常什么时候吃。<br><small>当前研究引擎建议使用英文作答<br>What snacks do you enjoy eating between meals and when do you usually have them?</small>",
+      "text_en": "What snacks do you enjoy eating between meals and when do you usually have them?",
+      "text_zh": "你喜欢在正餐之间吃什么零食，通常什么时候吃。"
+    },
+    {
+      "id": 75,
+      "cluster": "daily",
+      "text": "描述你理想中的慵懒一天，从早到晚你会做什么。<br><small>当前研究引擎建议使用英文作答<br>Describe your perfect lazy day and all the things you would do from morning to night.</small>",
+      "text_en": "Describe your perfect lazy day and all the things you would do from morning to night.",
+      "text_zh": "描述你理想中的慵懒一天，从早到晚你会做什么。"
+    },
+    {
+      "id": 76,
+      "cluster": "hobbies",
+      "text": "描述你最喜欢的爱好，并解释最开始为什么会做这件事。<br><small>当前研究引擎建议使用英文作答<br>Describe your favorite hobby and explain why you started doing it in the first place.</small>",
+      "text_en": "Describe your favorite hobby and explain why you started doing it in the first place.",
+      "text_zh": "描述你最喜欢的爱好，并解释最开始为什么会做这件事。"
+    },
+    {
+      "id": 77,
+      "cluster": "hobbies",
+      "text": "从事你最喜欢的爱好需要哪些材料或工具，你怎样使用它们。<br><small>当前研究引擎建议使用英文作答<br>What materials or tools do you need for your favorite hobby and how do you use them?</small>",
+      "text_en": "What materials or tools do you need for your favorite hobby and how do you use them?",
+      "text_zh": "从事你最喜欢的爱好需要哪些材料或工具，你怎样使用它们。"
+    },
+    {
+      "id": 78,
+      "cluster": "hobbies",
+      "text": "描述你从开始到完成创造一个令自己骄傲作品的过程。<br><small>当前研究引擎建议使用英文作答<br>Describe the process of creating something you are proud of from start to finish.</small>",
+      "text_en": "Describe the process of creating something you are proud of from start to finish.",
+      "text_zh": "描述你从开始到完成创造一个令自己骄傲作品的过程。"
+    },
+    {
+      "id": 79,
+      "cluster": "hobbies",
+      "text": "你最开始是怎样学会最喜欢的爱好所需要的技能。<br><small>当前研究引擎建议使用英文作答<br>How did you first learn the skill that your favorite hobby requires?</small>",
+      "text_en": "How did you first learn the skill that your favorite hobby requires?",
+      "text_zh": "你最开始是怎样学会最喜欢的爱好所需要的技能。"
+    },
+    {
+      "id": 80,
+      "cluster": "hobbies",
+      "text": "描述最近一次与你的爱好有关的项目或活动，以及你完成了什么。<br><small>当前研究引擎建议使用英文作答<br>Describe a recent project or activity related to your hobby and what you accomplished.</small>",
+      "text_en": "Describe a recent project or activity related to your hobby and what you accomplished.",
+      "text_zh": "描述最近一次与你的爱好有关的项目或活动，以及你完成了什么。"
+    },
+    {
+      "id": 81,
+      "cluster": "hobbies",
+      "text": "你最喜欢的爱好中最具挑战性的部分是什么，你怎样克服它。<br><small>当前研究引擎建议使用英文作答<br>What is the most challenging part of your favorite hobby and how do you overcome it?</small>",
+      "text_en": "What is the most challenging part of your favorite hobby and how do you overcome it?",
+      "text_zh": "你最喜欢的爱好中最具挑战性的部分是什么，你怎样克服它。"
+    },
+    {
+      "id": 82,
+      "cluster": "hobbies",
+      "text": "全身心投入爱好时，你通常有什么感受。<br><small>当前研究引擎建议使用英文作答<br>Describe how your hobby makes you feel when you are fully engaged in it.</small>",
+      "text_en": "Describe how your hobby makes you feel when you are fully engaged in it.",
+      "text_zh": "全身心投入爱好时，你通常有什么感受。"
+    },
+    {
+      "id": 83,
+      "cluster": "hobbies",
+      "text": "从刚开始到现在，你在最喜欢的爱好上的技能怎样提高。<br><small>当前研究引擎建议使用英文作答<br>How has your skill level in your favorite hobby improved since you first started?</small>",
+      "text_en": "How has your skill level in your favorite hobby improved since you first started?",
+      "text_zh": "从刚开始到现在，你在最喜欢的爱好上的技能怎样提高。"
+    },
+    {
+      "id": 84,
+      "cluster": "hobbies",
+      "text": "描述你通常练习爱好时所在的空间或环境。<br><small>当前研究引擎建议使用英文作答<br>Describe the space or environment where you usually practice your hobby.</small>",
+      "text_en": "Describe the space or environment where you usually practice your hobby.",
+      "text_zh": "描述你通常练习爱好时所在的空间或环境。"
+    },
+    {
+      "id": 85,
+      "cluster": "hobbies",
+      "text": "如果有人今天想开始学习你的爱好，你会给他什么建议。<br><small>当前研究引擎建议使用英文作答<br>What advice would you give to someone who wants to start learning your hobby today?</small>",
+      "text_en": "What advice would you give to someone who wants to start learning your hobby today?",
+      "text_zh": "如果有人今天想开始学习你的爱好，你会给他什么建议。"
+    },
+    {
+      "id": 86,
+      "cluster": "hobbies",
+      "text": "如果拥有无限时间和资源，你最想完成什么创造性项目。<br><small>当前研究引擎建议使用英文作答<br>Describe a creative project you would love to work on if you had unlimited time and resources.</small>",
+      "text_en": "Describe a creative project you would love to work on if you had unlimited time and resources.",
+      "text_zh": "如果拥有无限时间和资源，你最想完成什么创造性项目。"
+    },
+    {
+      "id": 87,
+      "cluster": "hobbies",
+      "text": "你怎样寻找灵感或新的创作与练习想法。<br><small>当前研究引擎建议使用英文作答<br>How do you find inspiration or new ideas for things to create or practice?</small>",
+      "text_en": "How do you find inspiration or new ideas for things to create or practice?",
+      "text_zh": "你怎样寻找灵感或新的创作与练习想法。"
+    },
+    {
+      "id": 88,
+      "cluster": "hobbies",
+      "text": "一个人做爱好和与其他人一起做相比，有什么不同。<br><small>当前研究引擎建议使用英文作答<br>Describe the difference between doing your hobby alone versus doing it with other people.</small>",
+      "text_en": "Describe the difference between doing your hobby alone versus doing it with other people.",
+      "text_zh": "一个人做爱好和与其他人一起做相比，有什么不同。"
+    },
+    {
+      "id": 89,
+      "cluster": "hobbies",
+      "text": "你自学过最有用的技能是什么，你是怎样学会的。<br><small>当前研究引擎建议使用英文作答<br>What is the most useful skill you have ever taught yourself and how did you learn it?</small>",
+      "text_en": "What is the most useful skill you have ever taught yourself and how did you learn it?",
+      "text_zh": "你自学过最有用的技能是什么，你是怎样学会的。"
+    },
+    {
+      "id": 90,
+      "cluster": "hobbies",
+      "text": "描述一次你练习爱好时犯过的错误，以及你从中学到了什么。<br><small>当前研究引擎建议使用英文作答<br>Describe a mistake you made while practicing your hobby and what you learned from it.</small>",
+      "text_en": "Describe a mistake you made while practicing your hobby and what you learned from it.",
+      "text_zh": "描述一次你练习爱好时犯过的错误，以及你从中学到了什么。"
+    },
+    {
+      "id": 91,
+      "cluster": "hobbies",
+      "text": "你怎样在爱好和其他日常责任之间分配时间。<br><small>当前研究引擎建议使用英文作答<br>How do you balance spending time on your hobby with your other daily responsibilities?</small>",
+      "text_en": "How do you balance spending time on your hobby with your other daily responsibilities?",
+      "text_zh": "你怎样在爱好和其他日常责任之间分配时间。"
+    },
+    {
+      "id": 92,
+      "cluster": "hobbies",
+      "text": "描述一本书、一部电影或一首歌，它曾经启发你尝试新的创造性活动。<br><small>当前研究引擎建议使用英文作答<br>Describe a book or movie or song that inspired you to try something new and creative.</small>",
+      "text_en": "Describe a book or movie or song that inspired you to try something new and creative.",
+      "text_zh": "描述一本书、一部电影或一首歌，它曾经启发你尝试新的创造性活动。"
+    },
+    {
+      "id": 93,
+      "cluster": "hobbies",
+      "text": "如果只能使用你在爱好中掌握的技能给某人做礼物，你会做什么。<br><small>当前研究引擎建议使用英文作答<br>What would you create if you had to make a gift for someone using only your hobby skills?</small>",
+      "text_en": "What would you create if you had to make a gift for someone using only your hobby skills?",
+      "text_zh": "如果只能使用你在爱好中掌握的技能给某人做礼物，你会做什么。"
+    },
+    {
+      "id": 94,
+      "cluster": "hobbies",
+      "text": "描述技术怎样改变人们从事你最喜欢爱好的方式。<br><small>当前研究引擎建议使用英文作答<br>Describe how technology has changed the way people practice your favorite hobby.</small>",
+      "text_en": "Describe how technology has changed the way people practice your favorite hobby.",
+      "text_zh": "描述技术怎样改变人们从事你最喜欢爱好的方式。"
+    },
+    {
+      "id": 95,
+      "cluster": "hobbies",
+      "text": "当进步很慢时，你怎样保持继续练习的动力。<br><small>当前研究引擎建议使用英文作答<br>How do you stay motivated to keep practicing your hobby when progress feels slow?</small>",
+      "text_en": "How do you stay motivated to keep practicing your hobby when progress feels slow?",
+      "text_zh": "当进步很慢时，你怎样保持继续练习的动力。"
+    },
+    {
+      "id": 96,
+      "cluster": "hobbies",
+      "text": "描述完成一个困难项目并第一次展示给别人时的感受。<br><small>当前研究引擎建议使用英文作答<br>Describe the feeling of finishing a difficult project and showing it to someone for the first time.</small>",
+      "text_en": "Describe the feeling of finishing a difficult project and showing it to someone for the first time.",
+      "text_zh": "描述完成一个困难项目并第一次展示给别人时的感受。"
+    },
+    {
+      "id": 97,
+      "cluster": "hobbies",
+      "text": "下一项你最想学习的爱好或技能是什么，它为什么吸引你。<br><small>当前研究引擎建议使用英文作答<br>What new hobby or skill would you love to learn next and what attracts you to it?</small>",
+      "text_en": "What new hobby or skill would you love to learn next and what attracts you to it?",
+      "text_zh": "下一项你最想学习的爱好或技能是什么，它为什么吸引你。"
+    },
+    {
+      "id": 98,
+      "cluster": "hobbies",
+      "text": "描述你最喜欢的爱好怎样让你认识其他拥有相同兴趣的人。<br><small>当前研究引擎建议使用英文作答<br>Describe how your favorite hobby connects you with other people who share the same interest.</small>",
+      "text_en": "Describe how your favorite hobby connects you with other people who share the same interest.",
+      "text_zh": "描述你最喜欢的爱好怎样让你认识其他拥有相同兴趣的人。"
+    },
+    {
+      "id": 99,
+      "cluster": "hobbies",
+      "text": "你怎样判断一个创造性项目已经完成并可以分享。<br><small>当前研究引擎建议使用英文作答<br>How do you decide when a creative project is finished and ready to be shared?</small>",
+      "text_en": "How do you decide when a creative project is finished and ready to be shared?",
+      "text_zh": "你怎样判断一个创造性项目已经完成并可以分享。"
+    },
+    {
+      "id": 100,
+      "cluster": "hobbies",
+      "text": "描述你的爱好从刚开始到现在经历了怎样的变化。<br><small>当前研究引擎建议使用英文作答<br>Describe the evolution of your hobby from when you first started to where you are now.</small>",
+      "text_en": "Describe the evolution of your hobby from when you first started to where you are now.",
+      "text_zh": "描述你的爱好从刚开始到现在经历了怎样的变化。"
+    },
+    {
+      "id": 101,
+      "cluster": "hobbies",
+      "text": "通过练习爱好，你发现过最让自己意外的事情是什么。<br><small>当前研究引擎建议使用英文作答<br>What is the most surprising thing you have discovered through practicing your hobby?</small>",
+      "text_en": "What is the most surprising thing you have discovered through practicing your hobby?",
+      "text_zh": "通过练习爱好，你发现过最让自己意外的事情是什么。"
+    },
+    {
+      "id": 102,
+      "cluster": "hobbies",
+      "text": "如果要一步一步教一个孩子你最喜欢的爱好，你会怎样教。<br><small>当前研究引擎建议使用英文作答<br>Describe how you would teach your favorite hobby to a young child step by step.</small>",
+      "text_en": "Describe how you would teach your favorite hobby to a young child step by step.",
+      "text_zh": "如果要一步一步教一个孩子你最喜欢的爱好，你会怎样教。"
+    },
+    {
+      "id": 103,
+      "cluster": "hobbies",
+      "text": "练习你的爱好怎样帮助你面对压力或困难情绪。<br><small>当前研究引擎建议使用英文作答<br>How does practicing your hobby help you deal with stress or difficult emotions?</small>",
+      "text_en": "How does practicing your hobby help you deal with stress or difficult emotions?",
+      "text_zh": "练习你的爱好怎样帮助你面对压力或困难情绪。"
+    },
+    {
+      "id": 104,
+      "cluster": "hobbies",
+      "text": "描述一次你的爱好给你带来意外经历或机会的情况。<br><small>当前研究引擎建议使用英文作答<br>Describe a time when your hobby led you to an unexpected experience or opportunity.</small>",
+      "text_en": "Describe a time when your hobby led you to an unexpected experience or opportunity.",
+      "text_zh": "描述一次你的爱好给你带来意外经历或机会的情况。"
+    },
+    {
+      "id": 105,
+      "cluster": "hobbies",
+      "text": "关于你的爱好，有什么部分是你希望更多人能够理解或欣赏的。<br><small>当前研究引擎建议使用英文作答<br>What part of your hobby do you wish more people understood or appreciated?</small>",
+      "text_en": "What part of your hobby do you wish more people understood or appreciated?",
+      "text_zh": "关于你的爱好，有什么部分是你希望更多人能够理解或欣赏的。"
+    },
+    {
+      "id": 106,
+      "cluster": "hobbies",
+      "text": "描述真正投入爱好时你听到的声音和身体感受到的感觉。<br><small>当前研究引擎建议使用英文作答<br>Describe the sounds and sensations you experience while actively engaged in your hobby.</small>",
+      "text_en": "Describe the sounds and sensations you experience while actively engaged in your hobby.",
+      "text_zh": "描述真正投入爱好时你听到的声音和身体感受到的感觉。"
+    },
+    {
+      "id": 107,
+      "cluster": "hobbies",
+      "text": "如果你从未发现最喜欢的爱好，你认为自己的生活会有什么不同。<br><small>当前研究引擎建议使用英文作答<br>How would your life be different if you had never discovered your favorite hobby?</small>",
+      "text_en": "How would your life be different if you had never discovered your favorite hobby?",
+      "text_zh": "如果你从未发现最喜欢的爱好，你认为自己的生活会有什么不同。"
+    },
+    {
+      "id": 108,
+      "cluster": "hobbies",
+      "text": "描述你为爱好设定的一个目标，以及实现它的计划。<br><small>当前研究引擎建议使用英文作答<br>Describe a goal you have set for yourself related to your hobby and your plan to achieve it.</small>",
+      "text_en": "Describe a goal you have set for yourself related to your hobby and your plan to achieve it.",
+      "text_zh": "描述你为爱好设定的一个目标，以及实现它的计划。"
+    },
+    {
+      "id": 109,
+      "cluster": "hobbies",
+      "text": "哪些资源或社群对提高你的爱好能力帮助最大。<br><small>当前研究引擎建议使用英文作答<br>What resources or communities have helped you improve at your hobby the most?</small>",
+      "text_en": "What resources or communities have helped you improve at your hobby the most?",
+      "text_zh": "哪些资源或社群对提高你的爱好能力帮助最大。"
+    },
+    {
+      "id": 110,
+      "cluster": "hobbies",
+      "text": "描述一次最理想的爱好练习，从开始到结束会是什么样子。<br><small>当前研究引擎建议使用英文作答<br>Describe what a perfect session of your favorite hobby looks like from beginning to end.</small>",
+      "text_en": "Describe what a perfect session of your favorite hobby looks like from beginning to end.",
+      "text_zh": "描述一次最理想的爱好练习，从开始到结束会是什么样子。"
+    }
+  ]
+}

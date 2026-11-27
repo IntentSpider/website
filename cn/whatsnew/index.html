@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>IntentSpider 最新进展</title>
+<link href="../../assets/intentspider-logo-webnet-icon.png" rel="shortcut icon" type="image/x-icon"/>
+<link href="../styles.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="wrap">
+<header>
+<div id="logo">
+<a href="../index.html"><img alt="IntentSpider 研究资料" src="../../assets/873547485784.png"/></a>
+</div>
+<div id="nav-area">
+<div class="stats">
+</div>
+<nav>
+<a href="../index.html">首页</a>
+<a href="../presentation.html">演示文稿</a>
+<a href="../playground.html">研究预览</a>
+<a href="../paper.html">论文</a>
+<a href="../git/externalfiles/">实验资料</a>
+<a href="../about.html">随笔</a>
+<a href="../git/"><img alt="" src="../../assets/git-icon-logo.svg" width="20px"/>Git</a>
+<a href="./"><img alt="" src="../../assets/lightbulb_on.png" width="16px"/>最新进展</a>
+</nav>
+</div>
+</header>
+<main>
+<h1>最新进展</h1>
+<div style="text-align: left; margin: 40px 0;">
+<img alt="IntentSpider 研究资料" src="../../assets/shenzhen-whatsnew-hero.webp" style="width: 95%; max-width: 100%; height: auto;"/>
+</div>
+<h1>当你想不起那个准确的词时，候选应该比以前更加个性化</h1>
+<p>我一直在研究现代 n-gram 预测技术的预测能力，包括开源和闭源系统。在这个过程中，我越来越关注一个更大的改变机会，也开始认真思考 IntentSpider 与 Huawei Celia Keyboard 结合的可能性。华为官方资料明确说明 Celia Keyboard 支持预测词、语音输入、流畅手写、170 多种输入语言以及 gesture typing，因此它是研究这类技术非常有意思的多输入环境。现代触屏文本输入背后也有一条非常重要的人机交互研究脉络。Google 的 HCI 研究科学家 Shumin Zhai 在 IBM 发起并领导了 SHARK 和 ShapeWriter 相关工作，并与现在担任剑桥大学 Interactive Systems Engineering 教授的 Per Ola Kristensson 共同推进这一路线。Kristensson 在 2007 年共同创办 ShapeWriter, Inc.，将 gesture keyboard 技术商业化。ShapeWriter 在 2008 年获得 Google Android ADC50 Developer Award，并在 2010 年被 Nuance Communications 收购。Zhai 在 2011 年加入 Google。这段历史对我很重要，因为它说明基础 HCI 文本输入研究可以从研究原型走向大规模实际输入技术。对 IntentSpider 来说，我想研究的是，如果一个人仍然记得某个名字周围的很多细节，只是在那个瞬间想不起名字本身，键盘能不能利用这些已经存在的词语连接，在它们确实有助于下一词预测时支持记忆找回。同一份个人记忆还可以在用户进行语音听写或使用手写笔书写时继续发挥作用，而不是只存在于一种键盘输入模式中。如果用户只纠正过一次某个名字，我也希望这次纠正能够在其他真正相关的输入方式中继续有用。这只是其中一个例子。</p>
+<p>如果一个人已经记得某件事周围足够多的信息，这些信息本身是否就足以帮助他重新找到并表达那个暂时想不起的词。</p>
+<h2>利用已经形成的连接做出上下文相关的判断</h2>
+<p>举一个例子。你正在输入这样一句话。“我们去车站附近那家披萨店吧，就是会议结束以后去过的那一家。” 这个时候，你其实记得那个地方，也记得它是一家披萨店，还记得车站和那次会议，只是地点名称恰好从脑中消失了。我希望这些已经存在的记忆碎片能够在你继续输入时把系统带回 RedApplo，而不是要求你退出当前对话，再去翻找旧对话或其他上下文。</p>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1Rw9jsGiOJDf7E0xLTKH5t0Isp53_B4sG/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">我在第一次原始运行中测试了这套系统。目标词 RedApplo 在下一个真正输入的 token 成为 RedApplo 之前，已经以 rank 1 候选出现。我计划在以后展示另一个同样成功的词级预测例子。这些例子都来自这里所描述的同一批测试结果。</figcaption>
+</figure>
+<p>一种实现方式，是扩展个人图，让连接能够引用用户明确选择纳入的文本。IntentSpider 现有的多个部分已经可以为这个方向提供实验基础，其中包括 fan dispersion 算法和 diffusion 过程。正如前面所说，pizza 可以提供一条路径，station 可以提供另一条路径，conference 又可以提供另一条路径，而这些不同路径仍然可以抵达同一个个人地点。候选项也可以保留支持它的原始短语，因为我认为系统应该保存一条连接为什么存在的信息。如果两个不同地点都满足当前记忆线索，可以再使用一个可选线索把它们分开。系统还必须保留一个重要区别。真正来自用户信息的记忆连接，和系统自己的推测，并不是同一种东西。</p>
+<p>我认为还有另一个非常重要的方向。这些路径应该能够跨语言连接。例如，一个人可能用中文记得某段描述，相关对话当时发生在英语里，而真正的地点名称是俄语。虽然这些表达来自三种不同语言，它们仍然可以指向同一个个人意义，而且往往还共享很多其他属性。大型通用 NLP 系统能够处理多语言语义，但在轻量个人记忆系统所需要的微观尺度上，长期维护许多彼此连接的个人图结构，并持续更新跨语言关系，仍然可能带来很高的计算成本。它可能需要明显的计算预算，而每台设备或每位用户对应的成本也会变得重要。因此，一个轻量本地系统有很强的理由保持这些操作高效，并避免让原本简单的操作意外变成昂贵得多的过程。把这些碎片连接到同一个参考对象后，它们就能够共同发挥作用。学生可以用这种技术找回医学教材中的专业术语，工程师也可以用同样的思路找回组件名称。我的核心意思是，一个人在那个瞬间仍然能够想起的词，可以成为寻找暂时缺失词语的路径。</p>
+<h2>涉及不同输入和输出方式的使用场景</h2>
+<p>再考虑语音输入。你说“我们可以再回到……” 这时 RedApplo 可以以较低透明度出现在识别文本旁边。你看到它，想起这就是那个名字，说出它，然后继续原来的句子。我不希望这个过程需要额外暂停，也不希望必须再点击一次。如果人为了操作记忆系统本身而停下句子，这就变成了新的中断。手写也是一样。同一份个人记忆可以在识别出的文字旁边提供后续候选。核心想法很简单。如果某件有价值的信息已经在用户打字时被学到，那么当这个人开始说话或者手写时，这份信息也应该继续有用。</p>
+<figure style="margin: 25px 9px 30px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1bCNJx-d01TJB7ItbKcVcyZsyMlqyXKNc/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px; text-align: left;">语音输入概念体验。视频中的电脑旁白用于说明交互概念。</figcaption>
+</figure>
+<p>华为现有的语音和手写系统可以继续负责真正的语音识别和手写识别。IntentSpider 接收这些系统产生的文本，再返回相关的个人候选。IntentSpider 位于处理层，因此不需要依赖某一个固定的识别模型。宿主系统可以使用基础语音转文字引擎，也可以使用更新的闭源语音模型。IntentSpider 都可以在这些模型输出的识别文本上继续运行。识别模型本身的处理时间仍然会影响端到端用户体验，但它与 IntentSpider 自己的预测运行时间是分开的。我设想建立一个主控制层，并把它称为 Capcom。它负责协调 IntentSpider 与相关语音或手写模型之间的通信，同时处理冲突和错误。Capcom 应该决定某个候选提示，例如低透明度的建议状态，在当前时刻是否有用，它应该保留多久，以及什么时候应该消失。它还应该防止一个预测无限期停留，并检测用户是否主动忽略或拒绝了它。IntentSpider 目前没有一个明确机制，可以把被用户拒绝的建议与一般的不准确预测区分开。未来的集成可以增加一个轻量的拒绝和相关性信号，根据具体设计使用检索或向量相似度，再把这个信号用于调整以后是否显示候选时的置信度。简单的 tokenization 和 metadata gate 可以让这一层保持轻量，而不是不断在系统中传递不必要的复杂对象。这一点很重要。一个本来应该帮助用户继续句子的提示，如果开始把用户从自己的句子里拉走，就已经违背了系统的目的。我认为这是把当前 IntentSpider 键盘研究继续推进到可商业应用产品时的重要下一步。</p>
+<figure style="margin: 25px 9px 30px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/16mSKWDX3zXTiGvPBRlrqifw48YDI5O9w/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px; text-align: left;">手写输入概念体验。笔迹沿着书写轨迹前进，个人提示与真正写入的文字保持分离。</figcaption>
+</figure>
+<h2>让一次纠正在其他位置继续有用，并把它与其他预测事件关联起来</h2>
+<p>这是另一个可以通过完整集成 IntentSpider Webnet 来提升其他模型能力的方向。假设一个 identifier 或名称被错误识别，而用户已经纠正过一次。我想研究的是，这次纠正能否在键盘输入、语音和手写中继续可用，而不是要求用户一遍又一遍地重复同一个纠正。这可以成为由 Capcom 层协调的另一个逻辑过程，但它需要专门的机制去识别重复形式、保存用户真正想表达的名称，并保留纠正发生时的相关上下文。用户可以拥有更细的控制，例如“这个项目使用这个名称”“早期工作继续保留旧名称”“忘记这条连接”。这些控制可以让个人记忆更加精确。这里也存在一个困难边界。一个项目里的纠正不能自动修改无关项目，与一个人相关的纠正不能混入另一个人的上下文，不相关的私人对话也必须继续保持分离。所以，让一次纠正在不同输入方式之间继续有效只是问题的一部分，另一部分是保持这次纠正周围正确的边界。它可以作为一个 context separator，改变当前活跃的 context bucket。因为这同样需要 persistent state，IntentSpider 很适合继续研究这个方向，但这个功能目前还没有在 IntentSpider 中实现。</p>
+<figure style="width: 95%; max-width: 100%; margin: 35px 0;">
+<img alt="IntentSpider 研究资料" height="800" loading="lazy" src="../../assets/whatsnew/media-v2/shenzhen-paper-stars.webp" style="display: block; width: 100%; height: auto;" width="1200"/>
+<figcaption style="text-align: left; font-size: 0.9em; margin-top: 8px;">纸星星</figcaption>
+</figure>
+<h2>IntentSpider 引擎的当前状态，以及进一步实验和验证</h2>
+<p>已经公开的 C++ IntentSpider 引擎会构建并持续更新个人词图，同时把上下文构建、排序、候选显示和从用户文本中学习拆成不同过程。系统能够保存图状态，也能够再次载入。另一个对这项研究特别有价值的设计，是连接角色会区分保留在图中的关联，以及真正传递预测影响的连接。因此，当前引擎中已经存在不同控制位置，可以分别改变一段记忆怎样被找到，它是否应该影响候选，以及这个候选最后是否应该真正出现在用户面前。</p>
+<p>在与 2026 年 International Human Computer Interaction Conference 相关论文中报告的实验验证里，IntentSpider 在 1000 个连续更新事件上取得了 25.4% 的 Top 3 精确目标词准确率。评估从一个包含 40096 次 observation 的已记录图状态开始。我还进行了独立的 50 事件桌面测量，从键盘输入经过预测到候选显示的中位时间是 2.4 毫秒。这里必须说明，这些只是现有引擎的起始测量结果，并不代表本页提出的记忆系统已经取得了这些结果。完整方法和结果请查看论文中的实验与验证部分。(<a href="../paper.html">最终 IHCI 论文</a>)。</p>
+<h2>Runtime RedApplo 测试</h2>
+<p>我把这次运行称为 Runtime RedApplo，因为它包含当前运行中最强的个性化结果。整段记录在 434.85 秒内包含 398 个不同的稳定候选状态和 8768 个源视频帧。</p>
+<p>在录像的 179.205 秒时，RedApplo 在真正被输入之前已经成为 rank 1 候选。这一点很重要，因为结果并不限于常见功能词。原始运行真实记录了引擎在连续交互过程中主动浮现一个个人名称。</p>
+<p>这些片段真正重要的地方，是用户仍在输入时，RedApplo 已经出现在真实候选栏里。这给下一步实验提供了一个具体起点。同一种个人候选能不能在语音或手写旁边同样有用。上面的两个动画展示了我希望继续研究的交互方式。</p>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/14E8jqWnRWvHi-zivPrIN34bQwFXHxS3O/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">原始运行精选。这段视频把最清楚的预测成功集中在一起，同时保留候选栏和真实输入上下文。</figcaption>
+</figure>
+<p style="margin: 10px 9px 10px 0;">预测事件账本 <a download="" href="../../assets/whatsnew/prediction_event_ledger.csv" style="display: inline-flex; align-items: center; gap: 5px;">下载</a></p>
+<p style="margin: 10px 9px 25px 0;">视频分析说明 <a download="" href="../../assets/whatsnew/video_analysis_notes.md" style="display: inline-flex; align-items: center; gap: 5px;">下载</a></p>
+<details open="" style="margin: 25px 9px 30px 0;">
+<summary style="cursor: pointer; font-weight: bold;">原始记录中的具体片段</summary>
+<div style="margin-top: 18px;">
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1D9nXAvM9oHVW6JKr9FFUQ9X1G2wx4wfW/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">原始运行。名称只输入了一部分时，RedApplo 出现在第 2 名。</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/11XFXMNIj50O44qdi6PBp7Z0AyMZwRSPX/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">原始运行。对 the 的精确下一词预测位于第 1 名。</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1hjIhNpLePWFnUVL1Hg6ZjH27WAtKJ9kE/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">原始运行。个人名称 RedApplo 的精确下一词预测位于第 1 名。</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1eNwAor6-ptlzgNJpu1a0IzV7sfeSRnVj/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">原始运行。作为个人记忆提示，RedApplo 从第 3 名上升到第 2 名。</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1529lKtfTk4sNfaiqozBuAWeSYf-BLOti/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">原始运行。对 the 的精确下一词预测位于 Top 3。</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1S5riUcvi5jM3vmOIF2qdlqqpwxTQMuLY/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">原始运行。对 of 的精确下一词预测位于第 1 名。</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1mqIiZiLsGYCJgNItvVrcXlUHZrHiy2zB/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider 研究视频"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">原始运行。RedApplo 在后续明确提到之前，已经作为上下文个人记忆提示出现。</figcaption>
+</figure>
+</div>
+</details>
+<h2>IntentSpider 怎样与 Huawei Celia Keyboard 之类的系统连接</h2>
+<p>华为官方资料明确说明 Celia Keyboard 支持预测词、语音输入、流畅手写、170 多种输入语言以及 gesture typing。这意味着底层输入系统已经存在，对当前阶段来说这是一个很大的优势。我想研究的机会并不是重新制造这些系统，而是一个个人记忆组件能不能跨这些体验被共享，让在一种输入方式中已经学到的有用个人信息，在用户切换到另一种输入方式时不必重新从零开始。我设想的连接方式是，由宿主系统提供文本上下文和已经确认的编辑，Capcom 协调整个过程，IntentSpider 返回个人候选，再由 Capcom 决定是否显示下一词提示以及显示在什么位置。只有人类真正确认的文本才应该回到学习路径。这个边界非常重要。系统显示过某个候选，并不等于用户真的说过它。</p>
+<h2>第一版计划</h2>
+<p>第一版可以先用一个适配层把已经提交的文本送入 IntentSpider，再把候选返回另一个界面。语音需要非常谨慎地处理，因为识别结果在语音系统尚未最终确定内容时可能不断变化。临时猜测不能因为短暂出现，就被当成用户已经确认的个人历史。等这条最基本的连接真正工作以后，再扩展到多个不完整线索共同恢复记忆以及跨语言连接，会更加合理。和图形键盘上的文本输入不同，语音识别和听写可能更适合只在置信度足够时显示候选，或者在 necessity gating 过程判断提示值得显示时再显示。Necessity gate 本来就用于控制已经排序的词是否应该真正出现在用户面前，这与随笔里讨论的问题直接相关。IntentSpider 应该避免因为反复显示配置不佳或低置信度的预测而影响一个人的真实表达。当我们把本地个人系统与在大规模环境中整理上下文、再把预测返回设备的方案比较时，这一点尤其重要。</p>
+<p></p>
+<h2></h2>
+<p></p>
+<figure style="width: 95%; max-width: 100%; margin: 35px 0;">
+<img alt="IntentSpider 研究资料" height="800" loading="lazy" src="../../assets/whatsnew/media-v2/shenzhen-window.webp" style="display: block; width: 100%; height: auto;" width="1200"/>
+<figcaption style="text-align: left; font-size: 0.9em; margin-top: 8px;">深圳记忆</figcaption>
+</figure>
+<h2></h2>
+<p>我会从英语个人名称库、用户主动选择加入的本地历史，以及显示在识别文本旁边的界面开始。第一步先测量现有预测路径在用户一时想不起准确名称时，是否真的能够帮助他们继续表达。然后再加入基于不完整线索的检索，并同时与现有 IntentSpider 候选和用户个人历史中的简单搜索进行比较。我希望测量名称是否成功找回，中断发生了多少次，相同纠正是否必须重复发生，错误提示出现了多少次。同时还需要测量目标设备上的延迟、内存和能耗。</p>
+<p>对华为来说，我认为潜在价值是减少这样的时刻。用户明明知道自己想说什么，却因为一个个人词或名字暂时消失，只能停止表达。同一份个人学习还可以跨多种输入体验继续使用，而不是被锁在单一输入模式里。在任何产品集成之前，我们都需要进行大量测试、安全审查和其他检查。一个专门为 Huawei Celia Keyboard 构建的原型，甚至是在 API 访问得到允许的情况下针对较旧版本构建的原型，也可以组合多个第三方组件。例如，它可以使用 provider A 的语音模型、provider B 的 context separator，再使用自定义 Capcom 层作为协调完整系统的宿主。即使只是已经弃用版本的高层、非机密内部架构文档，也会让原型更加准确。原型可以先证明这种价值是否真实存在，再决定华为团队是否值得投入更大的集成成本。来自华为工程师的支持也会明显加快从研究走向生产质量系统的过程，并且会非常有价值。</p>
+<p>我非常希望能围绕这个第一阶段实验进行一次技术讨论。我可以带来现有 IntentSpider 引擎演示和 International Human Computer Interaction 会议演示视频，准备原型，然后分享实验结果。我的电子邮箱是 nekshadesilva@gmail.com。另一个联系方式是 intentspider.nekshadesilva.com/contactform 上的 IntentSpider 联系表单。IntentSpider 更长期的目的和潜在价值远远不止这个实验，但我现在想回答的第一个问题非常具体，同时在技术上也很复杂。一个本地计算机程序怎样才能帮助人重新找到自己真正想表达的词，同时不打断原有思路，并始终停留在用户已经提供的上下文之内。(<a href="../playground.html">进入 Playground</a>，<a href="../presentation.html">IHCI 演示</a>，<a href="../git/">IntentSpider Engine 源代码</a>)</p>
+<figure style="width: 95%; max-width: 100%; margin: 35px 0;">
+<img alt="IntentSpider 研究资料" height="800" loading="lazy" src="../../assets/whatsnew/shenzhen-whatsnew-hero.webp" style="display: block; width: 100%; height: auto;" width="1200"/>
+<figcaption style="text-align: left; font-size: 0.9em; margin-top: 8px;">纸星星</figcaption>
+</figure>
+</main>
+<footer>© 2025 到 2026 IntentSpider Webnet. <a href="../contactform/">联系表单</a></footer>
+</div>
+<script src="../stats.js"></script></body>
+</html>

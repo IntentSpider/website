@@ -1,187 +1,155 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>IntentSpider</title>
-    <link rel="shortcut icon" href="../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="../styles.css">
+<meta charset="utf-8"/>
+<title>IntentSpider</title>
+<link href="../assets/intentspider-logo-webnet-icon.png" rel="shortcut icon" type="image/x-icon"/>
+<link href="../styles.css" rel="stylesheet"/>
 </head>
 <body>
-    <div id="wrap">
-        <header>
-            <div id="logo">
-                <a href="../index.html"><img src="../assets/873547485784.png" alt="IntentSpider"></a>
-            </div>
-            <div id="nav-area">
-                <div class="stats">
-                    
-                </div>
-                <nav>
-                    <a href="../index.html">Home</a>
-                    <a href="../presentation.html">Presentation</a>
-                    <a href="../playground.html">Playground</a>
-                    <a href="../paper.html">Paper</a>
-                    <a href="../git/externalfiles/">Experiments</a>
-                    <a href="../about.html">Essay</a>
-                    <a href="../git/"><img src="../assets/git-icon-logo.svg" width="20px" alt="">Git</a>
-                    <a href="./"><img src="../assets/lightbulb_on.png" width="16px" alt="">What's New</a>
-                </nav>
-            </div>
-        </header>
-
-        <main>
-            <h1>What's new</h1>
-            <div style="text-align: left; margin: 40px 0;">
-                <img src="../assets/shenzhen-whatsnew-hero.webp" style="width: 70%; max-width: 100%; height: auto;" alt="Shenzhen, China">
-              </div>
-    <h1>Your own words when you cannot remember the exact word</h1>
-    <p>I want to explore a much larger possibility for IntentSpider inside Huawei Celia Keyboard, and what I mean by this is, if a person is already remembering many parts about a name but the actual name itself is not coming into their mind at that moment, the keyboard can use those already remembered pieces to help that person get the name again, and then that same personal memory can also continue to be useful when they speak or handwrite instead of only being useful in one typing mode. And if the user corrects that name one time, I also want that one correction to become useful in the other input methods where the same name is relevant.</p>
-    
-    <p>What if remembering enough information around something is already enough to find and express that word again?</p>
-
-    <h2>Finding the name from the other things that you are already remembering</h2>
-    <p>Let's take this as an example, you are writing, “Let us meet at that pizza place near the station, the one we visited after the conference.” In that case, you are actually remembering the place, and you remember that it is a pizza place, you remember the station and also the conference, but the actual name of that place has disappeared from your mind at that moment. What I want is that those already remembered pieces can lead the system back to “RedApplo” while you are still writing, rather than requiring you to leave that conversation and search through old messages just to find the name.</p>
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/1Rw9jsGiOJDf7E0xLTKH5t0Isp53_B4sG/preview" title="IntentSpider RedApplo recorded prediction moments" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo appears as the rank 1 suggestion before the next typed token becomes RedApplo. The same personal name also appears in completion and memory cue moments elsewhere in the original run.</figcaption>
-    </figure>
-    
-    <p>One possibility for doing this is extending the personal graph with references to text that the user has actually chosen to include. Pizza can provide one path, the station can provide another path and the conference can provide another one, but all of those separate paths can still arrive into the same personal place. A candidate can also keep the original phrase that is supporting that candidate, because I think it is important that the system can keep the information about why that connection is there. If two different places can satisfy the same remembered information, one more optional clue can be used to separate those two places. But the system also needs to preserve the difference between a connection that is actually remembered from the user's information and a guess that the system is making, because those two things are not the same thing.</p>
-
-    <p>There is also another possibility that I think is very important, and it is that those paths should be able to cross languages as well. For an example, a person can remember a description in Sinhala, the relevant conversation may have happened in English, and the actual place name can be in Chinese. Even though those expressions are in three different languages, they can still refer to the same personal thing, and connecting them to that same reference can make all of those fragments useful together. A student can use this to recover a technical term. An engineer can use the same idea to recover a component name. So what I mean here is that the words that are still available in the person's mind at that moment can become the path for finding the words that are currently missing.</p>
-
-    <h2>Making that same memory useful while speaking and handwriting</h2>
-    <p>Now consider voice typing. You say, “We could go back to...” and in that case “RedApplo” can appear faintly beside the recognised text. You remember that this is the name, say it and then continue the sentence. I do not want this to require another pause or another tap, because if the person has to stop the sentence to operate the memory system then that itself can become another interruption. During handwriting, the same personal memory can also offer a continuation beside the recognised words. The main idea here is very simple. If something useful was already learned while the person was typing, I want that same thing to remain useful when that person starts speaking or writing by hand as well.</p>
-    <div style="display: flex; gap: 18px; flex-wrap: wrap; margin: 25px 9px 25px 0;">
-
-        <figure style="margin: 0; flex: 1 1 320px; min-width: 280px;">
-            <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-                <iframe src="https://drive.google.com/file/d/1E9Q_FjPPN8YAv4tnmn2TI7pymdMSya3l/preview" title="IntentSpider voice search memory cue" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-            </div>
-            <figcaption style="font-size: 0.9em; margin-top: 8px;">Voice typing concept where a personal name appears as a low opacity cue beside recognised text.</figcaption>
-        </figure>
-
-        <figure style="margin: 0; flex: 1 1 320px; min-width: 280px;">
-            <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-                <iframe src="https://drive.google.com/file/d/1HTnhZyT-w7PrcXVT07VSyEw0K6rJE6Ps/preview" title="IntentSpider stylus memory cue" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-            </div>
-            <figcaption style="font-size: 0.9em; margin-top: 8px;">Handwriting concept where the same personal memory remains available beside handwritten input.</figcaption>
-        </figure>
-    </div>
-
-    <p>Huawei's existing systems would still handle the actual speech recognition and handwriting recognition, and I am not proposing that IntentSpider will replace those systems. IntentSpider can receive the text that comes from those systems and then supply the relevant personal candidates. The interface can decide whether a cue is useful at that moment, how long that cue should stay and when it should be removed. The user should also be able to adjust this or disable it. This part is also important because if a cue that is supposed to help someone continue their sentence starts distracting that person from the sentence, then it is working against the actual purpose of this system.</p>
-
-    <h2>Making one correction useful in the other places where the same name appears</h2>
-    <p>There is also another part related to correction. Imagine that a project name is recognised incorrectly and the user corrects that name one time. In that case, I want to investigate whether that same correction can become available while typing, speaking and handwriting instead of requiring the person to make the same correction separately again and again. What I want to connect is the mistaken form, the intended name and also the relevant context around that correction. The user can have controls such as “Use this name for this project.” “Keep the old name for earlier work.” “Forget this connection.” These can become much more precise controls over the personal memory. But there is also a difficult part here, because a correction for one project should not automatically change an unrelated project, a correction connected to one person should not be mixed with another person, and private conversations that are unrelated should remain unrelated. So carrying the correction between different input methods is only one part of this, and keeping the correct boundaries around that correction is another part.</p>
-
-    <h2>What the current IntentSpider engine already gives for doing this</h2>
-    <p>The published C++ IntentSpider engine already builds and updates a personal word graph, and it separates the context construction, ranking, displaying the suggestions and learning from the user's text. It can also save the graph state and load that state again. There is another part that is particularly useful for this research, and it is that the connection roles distinguish between an association that is retained in the graph and an association that is actually transmitting prediction influence. Because of that, there are already separate places in the current engine where I can change how a memory is reached, whether that memory should affect a candidate, and after that, whether that candidate should actually appear to the user.</p>
-
-    <p>In the final IHCI evaluation, IntentSpider produced 25.4% Top 3 exact target accuracy over 1,000 continuously updated events, and that evaluation started from a recorded graph containing 40,096 observations. I also did a separate 50 event desktop measurement, and in that measurement the median time from keyboard input through the prediction and displaying it was 2.4 milliseconds. I need to mention that these are the starting measurements for the existing engine only, and they are not results for the proposed memory system that I am explaining here and they are also not measurements from a Huawei device (final IHCI paper).</p>
-    <h2>What the original run shows</h2>
-    <p>The original recorded run contains 398 distinct stable suggestion states across 434.85 seconds and 8,768 source frames. From the states where the next typed token could be verified directly, four exact immediate next token successes were confirmed. Three were rank 1 and one additional exact success was within the top 3.</p>
-    <p>The strongest personalized result is RedApplo. At 179.205 seconds RedApplo appears as the rank 1 suggestion before RedApplo is typed. The same personal name also appears elsewhere as a completion cue and as a contextual memory cue. This matters because the result is not limited to a common function word. The original run records the engine surfacing a personal name inside a continuous interaction.</p>
-    <p>The significance of the original run is direct evidence of personalized retrieval happening in motion. It shows exact next word success, personal name completion and personal memory cue behavior in the same recorded interaction. It is not being used here as a population level statistical claim.</p>
-    <p>Across the original run the recorded evidence includes 398 stable suggestion states, 8,768 examined source frames, 434.85 seconds of continuous interaction, three verified exact rank 1 next token successes and one additional verified exact top 3 success. The personalized RedApplo rank 1 result occurs at 179.205 seconds.</p>
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/14E8jqWnRWvHi-zivPrIN34bQwFXHxS3O/preview" title="IntentSpider source success showcase" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. This reel brings together the clearest recorded prediction successes while keeping the suggestion row and typed context visible.</figcaption>
-    </figure>
-    <p style="margin: 10px 9px 10px 0;">Prediction event ledger <a href="../assets/whatsnew/prediction_event_ledger.csv" download style="display: inline-flex; align-items: center; gap: 5px;"><img src="https://static.vecteezy.com/system/resources/previews/073/364/171/non_2x/download-icon-illustration-aqua-blue-arrow-pointing-down-to-container-box-storage-data-concept-vector.jpg" width="20" height="20" alt="">download</a></p>
-    <p style="margin: 10px 9px 25px 0;">Video analysis notes <a href="../assets/whatsnew/video_analysis_notes.md" download style="display: inline-flex; align-items: center; gap: 5px;"><img src="https://static.vecteezy.com/system/resources/previews/073/364/171/non_2x/download-icon-illustration-aqua-blue-arrow-pointing-down-to-container-box-storage-data-concept-vector.jpg" width="20" height="20" alt="">download</a></p>
-    <details open style="margin: 25px 9px 30px 0;">
-        <summary style="cursor: pointer; font-weight: bold;">Recorded source moments</summary>
-        <div style="margin-top: 18px;">
-
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/1D9nXAvM9oHVW6JKr9FFUQ9X1G2wx4wfW/preview" title="RedApplo completion rank 2" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo appears at rank 2 while the name is partially typed.</figcaption>
-    </figure>
-
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/11XFXMNIj50O44qdi6PBp7Z0AyMZwRSPX/preview" title="Strict rank 1 prediction the" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact rank 1 next token success for “the”.</figcaption>
-    </figure>
-
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/1hjIhNpLePWFnUVL1Hg6ZjH27WAtKJ9kE/preview" title="Strict rank 1 RedApplo prediction" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact rank 1 next token success for the personal name “RedApplo”.</figcaption>
-    </figure>
-
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/1eNwAor6-ptlzgNJpu1a0IzV7sfeSRnVj/preview" title="RedApplo memory cue rank 3 to rank 2" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo rises from rank 3 to rank 2 as a personal memory cue.</figcaption>
-    </figure>
-
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/1529lKtfTk4sNfaiqozBuAWeSYf-BLOti/preview" title="Strict top 3 prediction the" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact top 3 next token success for “the”.</figcaption>
-    </figure>
-
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/1S5riUcvi5jM3vmOIF2qdlqqpwxTQMuLY/preview" title="Strict rank 1 prediction of" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact rank 1 next token success for “of”.</figcaption>
-    </figure>
-
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/1mqIiZiLsGYCJgNItvVrcXlUHZrHiy2zB/preview" title="RedApplo contextual memory cue" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo appears as a contextual personal memory cue before the later explicit mention.</figcaption>
-    </figure>
-        </div>
-    </details>
-
-    <h2>How the current engine can become the starting point for this work</h2>
-    <p>What is already there</p>
-    <p>What I want to research from it</p>
-    <p>Personal word graph and diffusion, Personal memory references, keeping the source passages and finding the same thing using several clues, Ranking and displaying are separated, Optional cues that can appear at the useful time during speech and handwriting, Graph updates and saved state, Corrections that apply to the relevant scope, removing a source and connecting the same memory across languages</p>
-
-    <h2>How I think this can be connected beside Celia</h2>
-    <p>Huawei already documents contextual word suggestions, handwriting and continuous voice input. Because those input systems are already there, the opportunity that I want to investigate is not recreating all of those systems again. It is whether one personal memory component can be shared across those experiences, so that the useful personal information that was learned in one input method does not have to start from zero when the person uses another one (Huawei input features, Huawei voice input).</p>
-
-    <h2>Existing host input system</h2>
-    <p>Typing, speech and handwriting, New text adapter, Text context and confirmed edits, IntentSpider component, Existing graph and ranking, New memory and correction research, Host interface, Decide if the cue should appear, User continues or corrects it, Text context, Personal candidates, Confirmed user text returns to the adapter for learning</p>
-    <p>This proposed connection needs an integration point from the host.</p>
-
-    <h2>The proposed first connection</h2>
-    <p>For the first version, an adapter can supply the committed text to the IntentSpider engine and then return the candidates into an experimental interface. There is something that needs careful handling with speech, because the recognised transcript can change while the speech system is still deciding what was actually said. In that case, temporary guesses should not become learned personal history as if the user had already confirmed those words. The richer memory recovery using several incomplete clues and the multilingual connections can be a larger extension after this first connection is working.</p>
-    <figure style="margin: 25px 9px 25px 0;">
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-            <iframe src="https://drive.google.com/file/d/1aM77V-O9VjCm82MemsDvwI4dMQlr9EyW/preview" title="IntentSpider combined demonstration" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        </div>
-        <figcaption style="font-size: 0.9em; margin-top: 8px;">Original run and proposed input concepts together. The recorded prediction moments are followed by the voice cue and handwriting cue.</figcaption>
-    </figure>
-
-    <h2>The small first experiment that I want to start with</h2>
-    <p>I would start with personal names in English, an opt in local history and an interface that is beside the recognised text. First, I want to measure whether the already existing prediction route actually helps a person continue when the exact name is not coming into their mind. After that, I can add the retrieval from incomplete clues and compare it with both the existing IntentSpider suggestions and a simple search through the person's own history. I want to measure whether the name was successfully recovered, how many interruptions happened, whether the same corrections had to happen repeatedly and how many incorrect cues were shown, and I also need to measure latency, memory use and energy use on the target device.</p>
-
-    <p>For Huawei, I think the potential value is having fewer moments where a person has to stop expressing what they are trying to say only because one specific personal word or name is missing at that moment, and the same personal learning can become useful across several input experiences instead of one input mode only. Local retrieval can also potentially resolve some personal requests without requiring a cloud round trip. But I do not think the first step should be assuming that the entire system has to become a product integration. A bounded prototype can first show whether this value is actually there before the team has to commit to a much larger integration.</p>
-
-    <p>I would be deeply grateful for a technical discussion about this first experiment. I can bring the existing IntentSpider engine demonstration and my IHCI presentation, prepare the prototype and then share the results from it. The larger purpose is much bigger, but the first question that I want to answer is very concrete. Can we help someone recover the word that they need without breaking the thought that they were already trying to express (research Playground, IHCI presentation, published source)?</p>
+<div id="wrap">
+<header>
+<div id="logo">
+<a href="../index.html"><img alt="IntentSpider" src="../assets/873547485784.png"/></a>
+</div>
+<div id="nav-area">
+<div class="stats">
+</div>
+<nav>
+<a href="../index.html">Home</a>
+<a href="../presentation.html">Presentation</a>
+<a href="../playground.html">Playground</a>
+<a href="../paper.html">Paper</a>
+<a href="../git/externalfiles/">Experiments</a>
+<a href="../about.html">Essay</a>
+<a href="../git/"><img alt="" src="../assets/git-icon-logo.svg" width="20px"/>Git</a>
+<a href="./"><img alt="" src="../assets/lightbulb_on.png" width="16px"/>What's New</a>
+</nav>
+</div>
+</header>
+<main>
+<h1>What's new</h1>
+<div style="text-align: left; margin: 40px 0;">
+<img alt="Shenzhen, China" src="../assets/shenzhen-whatsnew-hero.webp" style="width: 95%; max-width: 100%; height: auto;"/>
+</div>
+<h1>When You Are Unable to Remember the Exact Word, Suggestions Should Be Even More Personalized Than Before</h1>
+<p>I have been researching the predictive capabilities of modern n-gram-based predictive technologies, including both open-source and closed-source systems. During that research, I became deeply interested in a much larger opportunity for change and in the possibility of using IntentSpider with Huawei Celia Keyboard. Huawei documents Celia Keyboard as supporting predicted-word suggestions, voice input, smooth handwriting, more than 170 input languages, and gesture typing. That makes it a particularly interesting multi-input environment for research like this. There is also an important HCI lineage behind modern touchscreen text entry. Google HCI research scientist Shumin Zhai originated and led the SHARK/ShapeWriter work at IBM, together with Per Ola Kristensson, who is now Professor of Interactive Systems Engineering at the University of Cambridge. Kristensson co-founded ShapeWriter, Inc. in 2007 to commercialise the gesture-keyboard technology. ShapeWriter won a Google Android ADC50 developer award in 2008 and was acquired by Nuance Communications in 2010. Zhai joined Google in 2011. That history matters to me because it shows how fundamental HCI text-entry research can move from a research prototype into widely deployed input technology. What I mean for IntentSpider is that if a person remembers many details around a name but the actual name does not come to mind at that moment, the keyboard could use those already remembered word connections to support memory recall when they are useful for making the intended next-word prediction. That same personal memory could then continue to be useful when the person speaks through dictation or writes by hand with a stylus, instead of being useful only in one typing mode. If the user corrects a name once, I also want that correction to become useful in the other input methods where the same name is relevant. This is only one example. What if remembering enough information around something is already enough to find and express that word again?</p>
+<p>What if remembering enough information around something is already enough to find and express that word again?</p>
+<h2>Making Context-Aware Decisions from Already Formed Connections</h2>
+<p>Let's take this as an example. You are writing, “Let us meet at that pizza place near the station, the one we visited after the conference.” In that case, you remember the place, you remember that it is a pizza place, and you remember the station and the conference, but the actual name of that place has disappeared from your mind at that moment. What I want is for those already remembered pieces to lead the system back to “RedApplo” while you are still writing, rather than requiring you to leave that conversation and search through old conversations or context.</p>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1Rw9jsGiOJDf7E0xLTKH5t0Isp53_B4sG/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider RedApplo recorded prediction moments"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">I ran this system in the first original run. Our target word RedApplo appears as the rank 1 suggestion before the next typed token becomes RedApplo. Another example, which I plan to demonstrate in the future, also shows a successful word-level prediction. These examples come from the same test results described here.</figcaption>
+</figure>
+<p>One possibility for doing this is extending the personal graph with references to text that the user has actually chosen to include. Several existing parts of IntentSpider, including the fan dispersion algorithm and diffusion processes, already provide mechanisms that can be tested for this purpose. As mentioned before, the word “pizza” can provide one path, the word “station” can provide another path, and the conference can provide another one, while all of those separate paths can still arrive at the same personal place. A candidate can also retain the original phrase that supports it, because I think it is important for the system to preserve information about why a connection exists. If two different places satisfy the same remembered information, one more optional clue can be used to separate them. The system also needs to preserve the difference between a connection that is genuinely remembered from the user's information and a guess that the system is making, because those are not the same thing.</p>
+<p>There is another possibility that I think is very important. Those paths should be able to cross languages as well. For example, a person may remember a description in Chinese, the relevant conversation may have happened in English, and the actual place name may be in Russian. Even though those expressions are in three different languages, they can still refer to the same personal meaning and often share many other properties. Large general NLP systems can address multilingual semantics, but at the micro scale required for a lightweight personal memory system, maintaining many interconnected personal graph structures and continuously updating relationships across languages can become computationally expensive. It may require a significant compute budget, and the cost per device or per user can become important. A lightweight local system therefore has a strong reason to keep these operations efficient and to avoid accidentally turning a simple operation into a much more expensive one. As I mentioned before, connecting all of these fragments to the same reference can make them useful together. A student could use this technology to recover a technical term from a medical textbook. An engineer could use the same idea to recover a component name. What I mean is that the words still available in a person's mind at that moment can become the path for finding the words that are currently missing.</p>
+<h2>Use Cases Involving Different Input and Output Methods</h2>
+<p>Now consider voice typing. You say, “We could go back to...” and in that case “RedApplo” can appear faintly beside the recognised text. You remember that this is the name, say it, and then continue the sentence. I do not want this to require another pause or another tap, because if the person has to stop the sentence to operate the memory system, that itself becomes another interruption. During handwriting, the same personal memory can also offer a continuation beside the recognised words. The main idea is simple. If something useful was already learned while the person was typing, I want that same thing to remain useful when that person starts speaking or writing by hand as well.</p>
+<figure style="margin: 25px 9px 30px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1bCNJx-d01TJB7ItbKcVcyZsyMlqyXKNc/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider RedApplo recorded prediction moments"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px; text-align: left;">Proposed voice input experience with illustrative computer narration.</figcaption>
+</figure>
+<p>Huawei's existing voice and handwriting systems would continue to handle the actual speech recognition and handwriting recognition. IntentSpider can receive the text produced by those systems and then supply the relevant personal candidates. IntentSpider is an engine in the processing layer and does not need to depend on one specific recognition model. A host could use a basic speech-to-text engine or a newer closed-source voice model. IntentSpider can operate on the recognised text produced by either one. The recogniser's processing time still matters to total end-to-end user experience, but it is separate from IntentSpider's own prediction runtime. I would create a master control layer, which I call “Capcom”, to coordinate communication between IntentSpider and the relevant voice or handwriting model, including conflict and error handling. Capcom should decide whether a suggestion cue, such as a low-opacity suggestion state, is useful at that moment, how long it should remain, and when it should disappear. It should also prevent a prediction from remaining visible indefinitely and detect when the user deliberately ignores or rejects it. IntentSpider does not currently contain an explicit mechanism that distinguishes a rejected suggestion from an inaccurate prediction. A future integration could add a lightweight rejection and relevance signal, potentially using retrieval or vector similarity depending on the chosen design, and use that signal to adjust confidence for future display decisions. Simple tokenization and metadata gates could keep this layer lightweight instead of repeatedly passing unnecessarily complex objects through the system. This part matters because if a cue that is supposed to help someone continue a sentence starts distracting that person from the sentence, it is working against the purpose of the system. I see this as one of the next steps for taking the current IntentSpider keyboard research toward a commercially applicable product.</p>
+<figure style="margin: 25px 9px 30px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/16mSKWDX3zXTiGvPBRlrqifw48YDI5O9w/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider RedApplo recorded prediction moments"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px; text-align: left;">Proposed handwriting experience. The pen follows the ink and the personal cue remains separate from written text.</figcaption>
+</figure>
+<h2>Making One Correction Useful in Other Places and Relating It to Other Prediction Events</h2>
+<p>This is another direction that could genuinely improve the capabilities of another model through a complete integration with IntentSpider Webnet. Imagine that an identifier or name is recognised incorrectly and the user corrects it once. I want to investigate whether that same correction can become available while typing, speaking, and handwriting instead of requiring the person to make the same correction repeatedly. This could be another logical process coordinated by the Capcom layer, but it would require a specialised mechanism that can detect repeated forms, retain the intended name, and preserve the relevant context around the correction. The user could have controls such as “Use this name for this project.” “Keep the old name for earlier work.” “Forget this connection.” These can become much more precise controls over personal memory. There is also a difficult boundary here. A correction for one project should not automatically change an unrelated project. A correction connected to one person should not be mixed with another person, and unrelated private conversations should remain unrelated. Carrying a correction between input methods is therefore only one part of the problem. Keeping the correct boundaries around that correction is another part. This could act as a context separator that changes the active context bucket. Because this also requires persistent state, IntentSpider is well equipped to explore this direction, but this feature is not currently available in IntentSpider.</p>
+<figure style="width: 95%; max-width: 100%; margin: 35px 0;">
+<img alt="Paper stars and their shadows photographed in Shenzhen" height="800" loading="lazy" src="../assets/whatsnew/media-v2/shenzhen-paper-stars.webp" style="display: block; width: 100%; height: auto;" width="1200"/>
+<figcaption style="text-align: left; font-size: 0.9em; margin-top: 8px;">paper stars</figcaption>
+</figure>
+<h2>The Current State of the IntentSpider Engine and Further Experimentation and Validation</h2>
+<p>The published C++ IntentSpider engine already builds and updates a personal word graph, and it separates context construction, ranking, suggestion display, and learning from the user's text. It can also save the graph state and load that state again. Another part that is particularly useful for this research is that the connection roles distinguish between an association retained in the graph and an association that actually transmits prediction influence. Because of that, there are already separate places in the current engine where I can change how a memory is reached, whether that memory should affect a candidate, and after that, whether that candidate should actually appear to the user.</p>
+<p>In the experimental validation reported in the paper associated with the International Human Computer Interaction Conference 2026, IntentSpider produced 25.4% Top 3 exact target accuracy over 1,000 continuously updated events. That evaluation started from a recorded graph containing 40,096 observations. I also conducted a separate 50-event desktop measurement, where the median time from keyboard input through prediction and suggestion display was 2.4 milliseconds. I need to mention that these are starting measurements for the existing engine only, and they do not represent results for the proposed memory system described here. Please see the complete experiments and validation section in the paper. (<a href="../assets/intentspider_paper.pdf">final IHCI paper</a>).</p>
+<h2>Runtime RedApplo Test</h2>
+<p>This run, which I nickname “Runtime RedApplo” because it contains the strongest personalised result in this runtime, contains 398 distinct stable suggestion states across 434.85 seconds and 8,768 source frames.</p>
+<p>At 179.205 seconds in the recording, RedApplo appears as the rank 1 suggestion before RedApplo is typed. This matters because the result is not limited to a common function word. The original run records the engine surfacing a personal name inside a continuous interaction.</p>
+<p>What matters to me in these selected moments is that the name RedApplo appears inside the actual suggestion row while text is being entered. That gives us a concrete starting point for the next experiment. Can the same kind of personal candidate become useful beside speech or handwriting as well? The two animations above show the interaction that I want to investigate.</p>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/14E8jqWnRWvHi-zivPrIN34bQwFXHxS3O/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="IntentSpider source success showcase"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. This reel brings together the clearest recorded prediction successes while keeping the suggestion row and typed context visible.</figcaption>
+</figure>
+<p style="margin: 10px 9px 10px 0;">Prediction event ledger <a download="" href="../assets/whatsnew/prediction_event_ledger.csv" style="display: inline-flex; align-items: center; gap: 5px;"><img alt="" height="20" src="../assets/whatsnew/download-link-icon.svg" width="20"/>download</a></p>
+<p style="margin: 10px 9px 25px 0;">Video analysis notes <a download="" href="../assets/whatsnew/video_analysis_notes.md" style="display: inline-flex; align-items: center; gap: 5px;"><img alt="" height="20" src="../assets/whatsnew/download-link-icon.svg" width="20"/>download</a></p>
+<details open="" style="margin: 25px 9px 30px 0;">
+<summary style="cursor: pointer; font-weight: bold;">Recorded source moments</summary>
+<div style="margin-top: 18px;">
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1D9nXAvM9oHVW6JKr9FFUQ9X1G2wx4wfW/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="RedApplo completion rank 2"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo appears at rank 2 while the name is partially typed.</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/11XFXMNIj50O44qdi6PBp7Z0AyMZwRSPX/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="Strict rank 1 prediction the"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact rank 1 next-token success for “the”.</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1hjIhNpLePWFnUVL1Hg6ZjH27WAtKJ9kE/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="Strict rank 1 RedApplo prediction"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact rank 1 next-token success for the personal name “RedApplo”.</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1eNwAor6-ptlzgNJpu1a0IzV7sfeSRnVj/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="RedApplo memory cue rank 3 to rank 2"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo rises from rank 3 to rank 2 as a personal memory cue.</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1529lKtfTk4sNfaiqozBuAWeSYf-BLOti/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="Strict top 3 prediction the"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact Top 3 next-token success for “the”.</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1S5riUcvi5jM3vmOIF2qdlqqpwxTQMuLY/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="Strict rank 1 prediction of"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. Exact rank 1 next-token success for “of”.</figcaption>
+</figure>
+<figure style="margin: 25px 9px 25px 0;">
+<div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+<iframe allow="autoplay; fullscreen" allowfullscreen="" loading="lazy" src="https://drive.google.com/file/d/1mqIiZiLsGYCJgNItvVrcXlUHZrHiy2zB/preview" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;" title="RedApplo contextual memory cue"></iframe>
+</div>
+<figcaption style="font-size: 0.9em; margin-top: 8px;">Original run. RedApplo appears as a contextual personal memory cue before the later explicit mention.</figcaption>
+</figure>
+</div>
+</details>
+<h2>How IntentSpider Can Be Connected to Systems Such as Huawei Celia Keyboard</h2>
+<p>Huawei documents Celia Keyboard features including predicted-word suggestions, voice input, smooth handwriting, more than 170 input languages, and gesture typing. That means the underlying input systems already exist, which is a significant advantage at this stage. The opportunity I want to investigate is not recreating all of those systems. It is whether one personal memory component can be shared across those experiences so that useful personal information learned in one input method does not have to start from zero when the person uses another one. The proposed connection is that the host supplies text context and confirmed edits, Capcom coordinates the process, IntentSpider returns personal candidates, and Capcom decides whether and where to show a next-word cue. Only text that the human confirms should return to the learning path. That last part matters because showing a suggestion should not teach the system that the user actually said it.</p>
+<h2>Plans for the First Version</h2>
+<p>For the first version, an adapter can supply committed text to the IntentSpider engine and return candidates into another interface. Speech requires careful handling because the recognised transcript can change while the speech system is still deciding what was actually said. Temporary guesses should not become learned personal history as if the user had already confirmed those words. Richer memory recovery using several incomplete clues and multilingual connections can become a larger extension after this first connection is working. Unlike text entry on a graphical keyboard, voice recognition and dictation may benefit from showing suggestion cues only when confidence is sufficient or when the necessity gating process indicates that a cue is worth displaying. The necessity gate was designed to control whether ranked words should actually be shown, which is directly relevant to the concern described in the essay. IntentSpider should avoid influencing a person's expression by repeatedly showing poorly configured or low-confidence predictions. This becomes especially important when comparing a local personal system with approaches that curate context at large scale and then serve predictions back to devices.</p>
+<p></p>
+<h2></h2>
+<p></p>
+<figure style="width: 95%; max-width: 100%; margin: 35px 0;">
+<img alt="A window and writing photographed in Shenzhen" height="800" loading="lazy" src="../assets/whatsnew/media-v2/shenzhen-window.webp" style="display: block; width: 100%; height: auto;" width="1200"/>
+<figcaption style="text-align: left; font-size: 0.9em; margin-top: 8px;">Shenzhen memories</figcaption>
+</figure>
+<h2></h2>
+<p>I would start with a personal library of names in English, an opt-in local history, and an interface positioned beside the recognised text. First, I want to measure whether the existing prediction route actually helps a person continue when the exact name is not coming to mind. After that, I can add retrieval from incomplete clues and compare it with both the existing IntentSpider suggestions and a simple search through the person's own history. I want to measure whether the name was successfully recovered, how many interruptions occurred, whether the same corrections had to be repeated, and how many incorrect cues were shown. I also need to measure latency, memory use, and energy use on the target device.</p>
+<p>For Huawei, I think the potential value is reducing the number of moments when a person has to stop expressing what they are trying to say only because one specific personal word or name is missing at that moment. The same personal learning could also become useful across several input experiences instead of one input mode only. We would need extensive testing, security review, and other checks before any product integration. A prototype made specifically for Huawei Celia Keyboard, or even an older version if API access were available and permitted, could also combine several third-party components. For example, it could use a voice model from provider A, a context separator from provider B, and a custom Capcom layer as the host that coordinates the complete system. High-level, non-confidential documentation of Huawei's internal architecture, even for a deprecated version, would make prototyping more accurate. A prototype could first show whether this value is genuinely present before the Huawei team commits to a much larger integration. Support from Huawei engineers would also accelerate the path from research to a production-quality system and would be extremely valuable.</p>
+<p>I would be deeply grateful for a technical discussion about this first experiment. I can bring the existing IntentSpider engine demonstration and my International Human Computer Interaction conference presentation video, prepare the prototype, and then share the results. My email is nekshadesilva@gmail.com. An alternative contact route is the IntentSpider contact form at intentspider.nekshadesilva.com/contactform. The wider purpose and potential benefit of IntentSpider are much larger, but the first question I want to answer is very specific, even though it is technically complex. How can a local computer program help a person recover the word they intend without breaking the context of their thought and while staying within the context they have already provided? (<a href="../playground.html">click here to enter the playground</a>, <a href="../presentation.html">IHCI presentation</a>, <a href="../git/">IntentSpider Engine Source Code</a>)?</p>
+<figure style="width: 95%; max-width: 100%; margin: 35px 0;">
+<img alt="Paper stars and their shadows photographed in Shenzhen" height="800" loading="lazy" src="../assets/whatsnew/shenzhen-whatsnew-hero.webp" style="display: block; width: 100%; height: auto;" width="1200"/>
+<figcaption style="text-align: left; font-size: 0.9em; margin-top: 8px;">paper stars</figcaption>
+</figure>
 </main>
-
-
-        <footer>
-            &copy; 2025 to 2026 IntentSpider Webnet. <a href="../contactform/">Contact Form</a>
-        </footer>
-    </div>
+<footer>© 2025 to 2026 IntentSpider Webnet. <a href="../contactform/">Contact Form</a></footer>
+</div>
 <script src="../stats.js"></script></body>
 </html>
-

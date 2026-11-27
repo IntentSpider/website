@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<title>IntentSpider 中文研究预览</title>
+<link href="../assets/intentspider-logo-webnet-icon.png" rel="shortcut icon" type="image/x-icon"/>
+<link href="styles.css?v=11" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/ui-darkness/jquery-ui.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/virtual-keyboard/1.30.4/css/keyboard.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/virtual-keyboard/1.30.4/js/jquery.keyboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/wc-bubble"></script>
+</link></head>
+<body>
+<div id="wrap">
+<!-- Notification banner moved -->
+<header>
+<div id="logo">
+<a href="index.html"><img alt="IntentSpider" src="../assets/873547485784.png"/></a>
+</div>
+<div id="nav-area">
+<div class="stats">
+</div>
+<nav>
+<a href="index.html">首页</a>
+<a href="presentation.html">演示文稿</a>
+<a href="playground.html">研究预览</a>
+<a href="paper.html">论文</a>
+<a href="git/externalfiles/">实验资料</a>
+<a href="about.html">随笔</a>
+<a href="git/"><img alt="" src="../assets/git-icon-logo.svg" width="20px"/>Git</a>
+<a href="whatsnew/"><img alt="" src="../assets/lightbulb_on.png" width="16px"/>最新进展</a>
+</nav>
+</div>
+</header>
+<div id="notification-banner" style="display: none; width: 100%; clear: both; box-sizing: border-box; background: #0031A7; color: #FFFFFF; padding: 5px 10px; align-items: center; justify-content: flex-start; margin-bottom: 10px;">
+<img alt="Info" src="../assets/static/info-icon.png" style="width: 20px; height: auto; margin-right: 10px;"/>
+<span id="notification-text"></span>
+</div>
+<style>.avatar{
+  visibility: hidden !important;
+  display: none !important;
+}</style>
+<main>
+<h1>研究预览与 Playground</h1>
+<div id="profile-controls" style="margin: 15px 0;">
+<p id="profile-mode-text" style="font-size: 15px; margin-bottom: 10px; line-height: 1.5;">当前从一个新的个人状态开始。通常需要自然回答约 30 到 40 个问题，让图逐步获得足够的个人上下文。<a href="about.html#heating-initial-start" id="heat-graph-link">了解初始状态</a></p>
+<a href="#" id="global-person-toggle" style="display: inline-flex; align-items: center; text-decoration: none; color: inherit; font-size: 15px;">
+<img alt="Toggle" id="global-toggle-icon" src="../assets/static/toggleoff-playground-23.png" style="width: 40px; margin-right: 10px;"/>
+<span id="global-toggle-text">开启 Global Person 模式</span>
+</a>
+</div>
+<br/>
+<div class="playground-container">
+<div class="phone-frame">
+<img alt="Phone" class="phone-bg" src="../assets/intetnspiderframe-67584.png"/>
+<div class="phone-screen">
+<div id="quiz-terminal">
+<div id="chat-loading">
+<img alt="Loading Chat..." src="../assets/wc-bubble.png"/>
+</div>
+<div id="chat-messages" style="display: none;"></div>
+</div>
+<div class="keyboard-area">
+<div class="input-display" id="input-display"></div>
+<div class="suggestion-bar">
+<button id="sug-1"></button>
+<button id="sug-2"></button>
+<button id="sug-3"></button>
+</div>
+<div id="mottie-keyboard-container"></div>
+<input id="mottie-hidden-input" style="position: absolute; left: -9999px;" type="text"/>
+</div>
+</div>
+</div>
+<div style="width: 100%; text-align: left; display: flex; justify-content: center; align-items: flex-start; flex-direction: column; margin-top: 20px;">
+<h3 style="color: #000; margin-bottom: 5px; font-size: 16px;">输出与交互终端</h3>
+<br/>
+<img alt="" src="https://emscripten.org/_static/Emscripten_logo_full.svg" style="background-color: black;" width="100px"/>
+<div class="terminal-panel" id="terminal-panel"></div>
+</div>
+</div>
+<br/>
+<br/>
+<span>
+<h3 style="color: #000; margin-bottom: 5px; font-size: 16px;">用于构建 Global Webnet 图的公开数据集</h3>
+<a href=" https://archive.ics.uci.edu/dataset/228/sms+spam+collection">UC Irvine SMS Spam Collection 数据集</a>
+<br/>
+<a href="https://www.gutenberg.org/files/11/11-h/11-h.htm">Lewis Carroll 的 Alice's Adventures in Wonderland，Project Gutenberg</a>
+<br/>
+<a href="https://www.kaggle.com/datasets/syncoraai/customer-support-conversations">Syncora AI 客户支持对话数据集，MIT License</a>
+<br/>
+</span>
+<span>
+<h3 style="color: #000; margin-bottom: 5px; font-size: 16px;">研究预览 Webview 使用的开源软件与第三方软件</h3>
+
+                Mottie UI Keyboard (2013) - <a href="https://www.jqueryscript.net/other/jQuery-Virtual-Keyboard-Plugin-Keyboard.html">项目链接</a>
+<br/>
+                Emscripten C++ Engine - <a href="https://emscripten.org/">https://emscripten.org/</a>
+<br/>
+                Xterm.js Web Terminal - <a href="http://xtermjs.org/">http://xtermjs.org/</a>
+<br/>
+                WC Bubble Chat UI - <a href="https://www.webcomponents.org/element/wc-bubble">https://webcomponents.org/element/wc-bubble</a>
+</span>
+<br/>
+<span>
+<h3 style="color: #000; margin-bottom: 5px; font-size: 16px;">用于设计本演示 110 个问题的研究参考</h3>
+<a href="https://aclanthology.org/P18-1205/">https://aclanthology.org/P18-1205/</a>
+<br/>
+<a href="https://www.liwc.app/">LIWC psychological model - https://www.liwc.app/</a>
+<br/>
+</span>
+</main>
+<footer>© 2025-2026 IntentSpider Webnet. 联系方式 <a href="contactform/" style="color: #0031A7;">联系表单</a></footer>
+</div>
+<script src="wasm/intentspider.js?v=15"></script>
+<script src="playground.js?v=15"></script>
+<script src="stats.js?v=15"></script></body>
+</html>

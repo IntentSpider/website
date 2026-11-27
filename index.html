@@ -44,11 +44,45 @@
             </div>
 
             <section id="ihci-presentation" class="document-section" aria-labelledby="presentation-heading">
-               <h1>IHCI 2026 Presentation</h1>
+               <img src="./assets/logo.svg" width="60px" alt="IHCI">
+                <h1>IHCI 2026 Presentation</h1>
             <p style="color: #000000;">I presented this in person at International Human Computer Interaction Conference 2026, hosted by the University of Nottingham. You can download the presentation below.</p>
          <p><a href="assets/IHCI2026.pdf" target="_blank" rel="noopener">Download pdf</a> &nbsp; <a href="assets/IHCI2026.pptx" download>Download pptx</a></p>
                 <iframe class="presentation-viewer" src="pdfjs/web/viewer.html?file=../../assets/IHCI2026.pdf#zoom=page-fit&amp;pagemode=none" title="International Human Computer Interaction Conference 2026 presentation slides" width="100%" height="500" loading="lazy" allowfullscreen></iframe>
             </section>
+
+            <div style="margin: 45px 0;">
+                <p>IntentSpider is built using <span class="high">C++</span> and uses the Standard Template Library. It is a novel approach from the ngram models used by Google Gboard, Microsoft SwiftKey, Apple QuickType, and Samsung Keyboard. <span class="high">This is an on-device engine with a runtime snapshot with no network egress or ingress.</span> This system is not based on any Natural Language Processing technology or any type of artificial intelligence model. Processes are built from graph algorithms, dynamic programming, vectors, sets, arrays, and everything in general data structures. These algorithms were created and developed over several months and the passion of understanding how these extraordinarily complex communication patterns and word connections behave, manipulate other vectors, and change dynamics, and properties of them. The name IntentSpider came from a careful observation of the nature in the early days of this research. Information about this is available here. (<a href="about.html">about</a>)</p>
+
+                <div style="display: flex; gap: 10px; align-items: stretch; margin: 24px 0 30px;">
+                    <img src="assets/orb-weaver-web.png" alt="Orb-weaver spider web" style="width: calc(50% - 5px); height: auto; object-fit: cover;">
+                    <img src="assets/wandering-spider.png" alt="Wandering spider" style="width: calc(50% - 5px); height: auto; object-fit: cover;">
+                </div>
+
+                <p>The first IntentSpider legacy version, which is also referred to in the paper (<a href="paper.html">paper</a>), was a single main.cpp file which contained all systems. Later, after learning how to include header files in order to migrate code and separate code files, I created the IntentSpider system as you would now see in the Git repository. The repository's source folder includes C++ files with header files. This folder also includes datasets and text files used for testing IntentSpider, including Project Gutenberg text used for testing the IntentSpider Legacy version. These are no longer used in version 1. The compiled intentspider.exe file is included.</p>
+
+                Predictive keyboards are a general and de facto part of a normal device keyboard. Even wearable technologies are capable of handling typing inputs. But there is an underlying consequence of this predictive typing in its current form. It is not only about the quality of the prediction or the software, but the possible cognitive consequences of repeatedly consuming those predictions, to the human. The human using a predictive keyboard is receiving predictions shaped by a large amount of typing patterns learned from multiple human users, or human nodes, through a collective predictive model. The end user's (human) typing behaviours are unique to them, and by using this method, we are inviting cumulative and algorithmically filtered choices, sometimes less personalized because privacy and data protection requirements such as GDPR restrict how personal data can be handled, and sometimes anonymized, dull, or flattened, to influence the subconscious and sensitive decision making processes.
+<br><br>
+*Note about the Global Person Mode<br>
+This includes one collective human user called the "Global Person" and creates a git based cloud system where all users who have turned on the Global Person Mode can contribute into the same shared state in real time. We used the Cloudflare KV database for this purpose. In addition to that, this dataset is used in order to insert a large amount of text data as if that data came from multiple such users. This process was also executed with the use of multiple Google Colab Tesla T4 GPUs. <br>Please note - <span class="high">This is separate from the IntentSpider Engine. The IntentSpider Engine itself is on device, local, and does not depend on an external cloud for prediction or graph updates.</span> This process can instead be defined as an effort to demonstrate the informational handling ability and performance of the IntentSpider Engine when the intent graph contains a much larger amount of data.</div>
+
+                     
+            <div id="remarks"></div>
+            <script src="https://giscus.app/client.js"
+                data-repo="intentspider/website"
+                data-repo-id="R_kgDOTyP9aQ"
+                data-category="General"
+                data-category-id="DIC_kwDOTyP9ac4DC_0l"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="noborder_light"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+            </script>
 
             <div style="text-align: center; margin: 40px 0;">
                  <p style="margin-top: 15px; font-size: 1em; color: #000000;">Images</p>

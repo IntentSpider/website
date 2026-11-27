@@ -1,0 +1,9 @@
+These two videos are animated interface concepts, not live speech recognition, handwriting recognition or Huawei integration.
+The voice clip includes illustrative narration generated with the installed Windows speech voice.
+The waveform follows the narration amplitude. The cue is scheduled for the concept sequence.
+The stylus position follows the handwritten paths. The cue is scheduled for the concept sequence.
+No accuracy measurements were derived from either animation.
+Photographs are the user's IMG_20261105_135552.jpg and IMG_20261105_135606.jpg from the Files email.
+The map photograph IMG_20261105_192511.jpg was excluded.
+The search surface and tablet photograph were supplied by the user.
+Existing source recording clips and prediction ledger were preserved.

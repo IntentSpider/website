@@ -1,0 +1,415 @@
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #ebebeb;
+  margin: 0;
+  font: 16px/24px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: #000000;
+  text-align: center;
+}
+
+/* Centered container with blue top strip */
+#wrap {
+  margin: 9px auto;
+  width: 770px;
+  padding: 0px 10px;
+  text-align: left;
+  border-top: 5px solid #0031A7;
+  background-color: rgb(255, 255, 255);
+  min-height: 100vh;
+  box-shadow: 0 30px 15px rgb(159, 159, 159);
+}
+
+/* Header: logo left, nav right */
+header {
+  height: 90px;
+  margin-bottom: 30px;
+}
+
+header::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#logo {
+  float: left;
+  width: 200px;
+  padding-top: 0;
+}
+
+#logo img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+#nav-area {
+  float: right;
+  text-align: right;
+  color: #000000;
+  font-size: 15px;
+  margin-top: 43px;
+  margin-right: 10px;
+  padding-right: 10px;
+  width: 480px;
+}
+
+.stats {
+  color: #000000;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+nav {
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: #0031A7;
+  text-decoration: none;
+  margin-left: 15px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+footer a {
+  color: #0031A7 !important;
+  text-decoration: none;
+  margin-left: 15px;
+  font-weight: bold;
+}
+nav a:hover, nav a:active {
+  color: rgba(0, 49, 167, 0.5) !important;
+}
+footer a:hover, footer a:active {
+  color: rgba(0, 49, 167, 0.5) !important;
+}
+/* Global links */
+a {
+  color: #0031A7 !important;
+  text-decoration: none;
+}
+a:hover, a:active {
+  color: rgba(0, 49, 167, 0.5) !important;
+}
+
+/* Main content */
+main {
+  margin-top: 50px;
+  padding-top: 20px;
+  width: 760px;
+}
+
+h1 {
+  font-size: 22px;
+  color: #000000;
+  margin: 0 0 15px 0;
+}
+
+h2 {
+  font-size: 18px;
+  color: #000000;
+  margin: 20px 0 7px 0;
+}
+
+p {
+  margin-bottom: 15px;
+      margin-right: 9px;
+}
+
+strong {
+  color: #000000;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  font-size: 12px;
+  padding: 40px 0 20px;
+  margin-top: 40px;
+  width: 100%;
+}
+
+
+/* ============================================ */
+/* Playground                                   */
+/* ============================================ */
+
+.playground-container {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.phone-frame {
+  width: 650px;
+  height: 906px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.phone-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.phone-screen {
+  position: absolute;
+  top: 14%;
+  left: 22.5%;
+  width: 45%;
+  height: 56%;
+  z-index: 1;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Quiz Terminal — now a chat bubble container */
+#quiz-terminal {
+  flex: 1;
+  overflow: hidden;
+  background: #FFFFFF;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  /* Retro 2003-2007 embedded text area styling */
+  border: none;
+  box-shadow: inset 0 0 6px black;
+  margin: 4px;
+  border-radius: 3px;
+}
+
+#chat-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+#chat-loading img {
+  width: 150px;
+  border-radius: 15px; /* Rounded borders */
+}
+#chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+#chat-messages chat-bubble {
+  --chat-bubble-color: #F0F0F0;
+  --chat-bubble-right-color: #0031A7;
+  --chat-bubble-font-color: #000;
+  --chat-bubble-font-right-color: #fff;
+  --chat-bubble-delay: 0.15s;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+/* Keyboard area */
+.keyboard-area {
+  background: #FFFFFF;
+  /* Removed border-top */
+}
+
+.input-display {
+  min-height: 28px;
+  /* max-height: 60px; */
+  /* Removed border-bottom */
+  padding: 8px 10px;
+  font-size: 15px;
+  background: #FFFFFF; /* Was #F9FAFB */
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  cursor: text;
+}
+.input-display .cursor {
+  display: inline-block;
+  min-width: 2px;
+  background-color: black;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.suggestion-bar {
+  display: flex;
+  /* Removed border-bottom */
+  flex-shrink: 0;
+  background: #FFFFFF;
+}
+.suggestion-bar button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  background: #FFFFFF;
+  color: #0031A7;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  /* Removed border-right */
+}
+.suggestion-bar button:hover {
+  text-decoration: underline; /* Added underline instead of background change */
+}
+
+#mottie-keyboard-container {
+  width: 100%;
+  text-align: center;
+  background: transparent;
+  overflow: hidden;
+  font-size: 11px; /* Scale down Mottie keyboard which uses em sizing */
+}
+#mottie-keyboard-container .ui-keyboard {
+  position: static !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  top: auto !important;
+  left: auto !important;
+  padding: 5px !important;
+  box-sizing: border-box;
+}
+#mottie-keyboard-container .ui-keyboard-button:active {
+  background: #f6a828 !important; /* ui-darkness orange */
+  color: white !important;
+}
+
+/* Debug terminal (bottom panel) */
+.terminal-panel {
+  width: 100%;
+  background: #000000;
+  border-radius: 0;
+  padding: 10px;
+  text-align: left;
+  box-sizing: border-box;
+  min-height: 250px;
+}
+
+/* Question methodology citation */
+.methodology-citation {
+  font-size: 11px;
+  color: #666;
+  margin-top: 15px;
+  line-height: 1.5;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+}
+.methodology-citation strong {
+  color: #333;
+}
+
+/* ============================================ */
+/* PDF Viewer                                   */
+/* ============================================ */
+
+#pdf-viewer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+.pdf-page {
+  border: 1px solid #000000;
+  margin-bottom: 20px;
+  max-width: 100%;
+  background-color: white;
+}
+.pdf-loading {
+  font-weight: bold;
+  padding: 40px;
+}
+#sidebarContainer{
+  display: none !important;
+  visibility:  hidden !important;
+}
+
+/* Presentation and research documents */
+.document-section {
+  margin: 40px 0;
+  width: 100%;
+}
+.presentation-viewer {
+  display: block;
+  width: 100%;
+  height: 500px;
+  border: 0;
+}
+
+/* Chinese edition */
+html[lang="zh-CN"] body,
+html[lang="zh-CN"] input,
+html[lang="zh-CN"] button,
+html[lang="zh-CN"] textarea,
+html[lang="zh-CN"] select {
+  font-family: "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
+}
+html[lang="zh-CN"] main p,
+html[lang="zh-CN"] main li {
+  line-height: 1.85;
+}
+.cn-paper h2 {
+  margin-top: 34px;
+}
+.cn-paper h3 {
+  margin-top: 24px;
+}
+.cn-paper .equation {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  font-family: "Cambria Math", "Times New Roman", serif;
+  background: #f8f8f8;
+  padding: 12px;
+}
+.cn-paper table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0 28px;
+  font-size: 0.92em;
+}
+.cn-paper th,
+.cn-paper td {
+  border: 1px solid #bbb;
+  padding: 7px 8px;
+  vertical-align: top;
+  text-align: left;
+}
+.cn-paper .figure-note {
+  font-size: 0.92em;
+  color: #333;
+}
+
+.high{
+  background-color: yellow;
+}
+
+.note-box{
+  display:block;
+  border:1px solid #000;
+  padding:10px;
+  margin:14px 0;
+}
