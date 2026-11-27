@@ -1,99 +1,107 @@
-﻿<!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>IntentSpider 中文版</title>
-<link href="../assets/intentspider-logo-webnet-icon.png" rel="shortcut icon" type="image/x-icon"/>
-<link href="styles.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <title>IntentSpider 中文版</title>
+        <link rel="shortcut icon" href="../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="wrap">
-<header>
-<div id="logo"><a href="index.html"><img alt="IntentSpider" src="../assets/873547485784.png"/></a></div>
-<div id="nav-area">
-<div class="stats"></div>
-<nav>
-<a href="index.html">首页</a>
-<a href="presentation.html">演示文稿</a>
-<a href="playground.html">研究预览</a>
-<a href="paper.html">论文</a>
-<a href="git/externalfiles/">实验资料</a>
-<a href="about.html">随笔</a>
-<a href="git/"><img alt="" src="../assets/git-icon-logo.svg" width="20px"/>Git</a>
-<a href="whatsnew/"><img alt="" src="../assets/lightbulb_on.png" width="16px"/>最新进展</a>
-</nav>
-</div>
-</header>
-<main>
-<h1 style="margin-bottom:0">IntentSpider Webnet</h1>
-<p>面向文本张力与预测的流动语言网络。<br/><a href="about.html">阅读完整随笔</a></p>
+    <div id="wrap">
+        <header>
+            <div id="logo">
+                <a href="index.html"><img src="../assets/873547485784.png" alt="IntentSpider"></a>
+            </div>
+            <div id="nav-area">
+                <div class="stats">
+                    
+                </div>
+                <nav>
+                    <a href="index.html">首页</a>
+                    <a href="presentation.html">演示文稿</a>
+                    <a href="playground.html">研究预览</a>
+                    <a href="paper.html">论文</a>
+                    <a href="git/externalfiles/">实验</a>
+                    <a href="about.html">随笔</a>
+                                        <a href="git/"><img src="../assets/git-icon-logo.svg" width="20px" alt="">Git</a>
+                    <a href="whatsnew/"><img src="../assets/lightbulb_on.png" width="16px" alt="">最新进展</a>
 
-<div style="text-align:center;margin:40px 0">
-<p style="margin-top:15px;font-size:1.4em;color:#000">一种新颖而先进的下一词预测引擎</p>
-<img alt="IntentSpider 预测界面" src="../assets/9283928392384.png" style="width:100%;max-width:100%;height:auto"/>
-<p style="margin-top:15px;font-size:1.4em;color:#000">无需自然语言处理模型即可实现个性化。系统保留多样且彼此相关的上下文候选，目标不仅是让人选择词语，也帮助人重新想起原本想表达的词语。</p>
-<img alt="IntentSpider 个性化预测界面" src="../assets/9283928392384-1.png" style="width:100%;max-width:100%;height:auto"/>
-</div>
-<section class="document-section" id="ihci-presentation">
-<img alt="IHCI" src="../assets/logo.svg" width="60px"/>
-<h1>IHCI 2026 会议演示</h1>
-<p>我在 2026 年 International Human Computer Interaction Conference 现场完成了这次演示。会议由诺丁汉大学主办。下面可以查看或下载原始演示文稿。</p>
-<p><a href="../assets/IHCI2026.pdf" rel="noopener" target="_blank">下载 PDF</a>   <a download="" href="../assets/IHCI2026.pptx">下载 PPTX</a></p>
-<iframe allowfullscreen="" class="presentation-viewer" height="500" loading="lazy" src="../pdfjs/web/viewer.html?file=../../assets/IHCI2026.pdf#zoom=page-fit&amp;pagemode=none" title="IHCI 2026 IntentSpider 演示文稿" width="100%"></iframe>
-</section>
+                </nav>
+            </div>
+        </header>
 
-<div style="margin:45px 0">
-<p>IntentSpider 使用 <span class="high">C++</span> 和标准模板库构建。它与 Google Gboard、Microsoft SwiftKey、Apple QuickType 和 Samsung Keyboard 常见的 n-gram 路线不同。<span class="high">IntentSpider 是面向设备本地执行的引擎。运行时快照不要求网络输入或网络输出。</span>系统本身并不建立在自然语言处理技术或人工智能模型之上。主要过程来自图算法、动态规划、向量、集合、数组和一般数据结构。</p>
+        <main>
+            <h1 style="margin-bottom: 0;">IntentSpider Webnet</h1>
+            <p>面向文本张力与预测的流动语言网络。 <br><a href="about.html">阅读随笔</a></p>
+            
+            <div style="text-align: center; margin: 40px 0;">
+                                <p style="margin-top: 15px; font-size: 1.4em; color: #000000;">新颖、先进的下一词预测引擎</p>
 
-<p>这些算法经过数月设计和迭代。研究重点是理解复杂的人类表达模式和词语连接如何改变其他连接、向量和系统状态。IntentSpider 这个名字来自研究早期对自然界蜘蛛网行为的观察。完整背景可以在这里阅读。（<a href="about.html">随笔</a>）</p>
+                <img src="../assets/9283928392384.png" style="width: 100%; max-width: 100%; height: auto;  " alt="IntentSpider 预测截图">
+                           <p style="margin-top: 15px; font-size: 1.4em; color: #000000;">完全不使用自然语言处理即可实现个性化。它保留多样且相关的上下文候选，帮助人类回想，而不仅仅是选择。</p>
+                <img src="../assets/9283928392384-1.png"  style="width: 100%; max-width: 100%; height: auto;  " alt="">
+            </div>
 
-<div style="display:flex;gap:10px;align-items:stretch;margin:24px 0 30px">
-<img src="../assets/orb-weaver-web.png" alt="织圆网蜘蛛网" style="width:calc(50% - 5px);height:auto;object-fit:cover"/>
-<img src="../assets/wandering-spider.png" alt="游猎蛛" style="width:calc(50% - 5px);height:auto;object-fit:cover"/>
-</div>
+            <section id="ihci-presentation" class="document-section" aria-labelledby="presentation-heading">
+               <img src="../assets/logo.svg" width="60px" alt="IHCI">
+                <h1>IHCI 2026 演示文稿</h1>
+            <p style="color: #000000;">我在诺丁汉大学主办的 2026 年国际人机交互会议（International Human Computer Interaction Conference 2026）上亲自进行了演示。您可以在下方下载演示文稿。</p>
+         <p><a href="../assets/IHCI2026.pdf" target="_blank" rel="noopener">下载 PDF</a> &nbsp; <a href="../assets/IHCI2026.pptx" download>下载 PPTX</a></p>
+                <iframe class="presentation-viewer" src="../pdfjs/web/viewer.html?file=../../assets/IHCI2026.pdf#zoom=page-fit&amp;pagemode=none" title="2026 年国际人机交互会议演示幻灯片" width="100%" height="500" loading="lazy" allowfullscreen></iframe>
+            </section>
 
-<p>最早的 IntentSpider Legacy 版本在论文中也有提到（<a href="paper.html">论文</a>）。当时整个系统放在一个 main.cpp 文件中。后来代码被拆分成多个源文件和头文件，逐步形成现在 Git 仓库中的结构。源代码目录包含 C++ 文件和头文件。仓库也保留了项目不同阶段使用的数据集和测试资料，其中包括早期测试阶段使用的 Project Gutenberg 文本。版本 1 已经不再依赖这些早期文本。编译后的 intentspider.exe 也包含在项目资料中。</p>
-<div class="note-box"><p>预测键盘已经成为普通设备输入法的一部分，甚至可穿戴设备也会处理文本输入。真正让我担心的是另一个问题。预测文本的影响不只取决于算法是否准确，也取决于人类长期反复消费这些预测之后会发生什么。一个用户看到的预测往往来自很多其他人的输入模式，或者来自一个由大量人类节点共同形成的模型。每个人自己的表达习惯其实非常独特。当系统不断提供由群体模式过滤出来的选项时，匿名化、隐私限制和规模化处理有可能让这些候选变得更平、更平均，也更远离一个人的真实表达。</p><p>这就带来一个认知层面的问题。反复出现的预测会不会慢慢影响人的潜意识选择和敏感决策。它会不会让语言变得更简单、更趋同，甚至改变人原本会使用的表达方式。IntentSpider Webnet 是我针对这个仍然没有完全解决的问题提出的一种路线。</p></div>
+            <div style="margin: 45px 0;">
+                <p>IntentSpider 使用 <span class="high">C++</span> 构建，并使用标准模板库。它采用了一种不同于 Google Gboard、Microsoft SwiftKey、Apple QuickType 和 Samsung Keyboard 所使用的 n-gram 模型的新颖方法。<span class="high">这是一个在设备端运行的引擎，其运行时快照没有网络数据流出或流入。</span> 本系统不基于任何自然语言处理技术，也不基于任何类型的人工智能模型。其处理过程由图算法、动态规划、向量、集合、数组以及一般数据结构构建而成。这些算法历经数月的创建和开发，源于对理解这些极其复杂的交流模式和词语连接如何运作、如何操纵其他向量，以及如何改变其动态行为和属性的热情。IntentSpider 这个名字源于本研究早期对自然界的仔细观察。有关这方面的信息可在此处获取。（<a href="about.html">关于</a>）</p>
 
-<div class="note-box">关于 Global Person 模式<br><p>Global Person 模式把一个共享的人类用户定义为 Global Person。所有开启该模式的用户都可以实时向同一个共享状态贡献数据。这个共享状态使用 Cloudflare KV。为了让系统在较大的 Intent Graph 上进行研究，我们也使用公开数据模拟多个用户持续输入文本的过程。部分处理过程使用了 Google Colab 上的 Tesla T4 GPU。</p><p><span class="high">需要特别强调的是，这个共享研究状态和 IntentSpider Engine 本身不是同一个东西。IntentSpider Engine 的核心预测与图更新仍然可以在设备本地运行，并不依赖外部云服务。</span>Global Person 更适合被理解为一个研究工具。它用来展示当 Intent Graph 含有更大量信息时，IntentSpider 的信息处理能力和性能表现。</p></div>
+                <div style="display: flex; gap: 10px; align-items: stretch; margin: 24px 0 30px;">
+                    <img src="../assets/orb-weaver-web.png" alt="圆网蛛的蛛网" style="width: calc(50% - 5px); height: auto; object-fit: cover;">
+                    <img src="../assets/wandering-spider.png" alt="游猎蛛" style="width: calc(50% - 5px); height: auto; object-fit: cover;">
+                </div>
 
-<p>当个人模式从一个新的空状态开始时，图还没有足够的个人上下文。研究预览通常会让用户自然回答约 30 到 40 个问题，逐步形成可用的个人连接。这个过程在研究预览中被称为让图升温。</p>
+                <p>论文（<a href="paper.html">论文</a>）中也提到的第一个 IntentSpider 旧版（Legacy），是一个包含所有系统的 main.cpp 文件。后来，在学习了如何包含头文件以迁移代码和拆分代码文件之后，我创建了现在您在 Git 仓库中所看到的 IntentSpider 系统。仓库的源代码文件夹包含 C++ 文件和头文件。该文件夹还包含用于测试 IntentSpider 的数据集和文本文件，包括用于测试 IntentSpider Legacy 版本的古腾堡计划（Project Gutenberg）文本。这些文件在第 1 版中已不再使用。编译后的 intentspider.exe 文件也包含在内。</p>
 
-<p>我也非常感谢自己在 USACO、Codeforces、AtCoder、Kattis、USACO Guide、CSES、Calico 和 MITIT Spring 上投入的大量时间。这些训练让我从 USACO Bronze 参赛者一路走到 USACO Gold Qualifier，也进入 National Olympiad in Informatics 决赛，并在同一年参加了于台湾举行的 Asia Pacific Olympiad in Informatics。</p>
-</div>
+                预测键盘是普通设备键盘中普遍存在且事实上已成为其组成部分的功能。即使是可穿戴技术也能够处理打字输入。但是，现有形式的预测输入存在一种潜在的后果。这不仅涉及预测或软件的质量，还涉及人类反复接收和使用这些预测可能产生的认知后果。使用预测键盘的人所接收的预测，是由一个集体预测模型从多个人类用户（或人类节点）中学习到的大量打字模式所塑造的。最终用户（人类）的打字行为具有其自身的独特性，而采用这种方法，我们是在让累积而来并经算法筛选的选择影响人的潜意识和敏感的决策过程；这些选择有时因为 GDPR 等隐私及数据保护要求限制了个人数据的处理方式而缺乏个性化，有时则经过匿名化处理，变得平淡或扁平化。
+<br><br>
+*关于 Global Person 模式的说明<br>
+其中包含一个称为“Global Person”的集体人类用户，并建立了一个基于 Git 的云系统，所有开启 Global Person 模式的用户都可以实时向同一个共享状态作出贡献。我们为此使用了 Cloudflare KV 数据库。此外，该数据集用于插入大量文本数据，就如同这些数据来自多个这样的用户一样。此过程还使用了多个 Google Colab Tesla T4 GPU 执行。<br>请注意——<span class="high">这与 IntentSpider Engine 是分开的。IntentSpider Engine 本身在设备端、本地运行，并不依赖外部云来进行预测或更新图。</span> 相反，这一过程可以定义为一种尝试：展示当意图图包含数量大得多的数据时，IntentSpider Engine 的信息处理能力和性能。</div>
 
-<script src="https://giscus.app/client.js"
-data-repo="intentspider/website"
-data-repo-id="R_kgDOTyP9aQ"
-data-category="General"
-data-category-id="DIC_kwDOTyP9ac4DC_0l"
-data-mapping="pathname"
-data-strict="0"
-data-reactions-enabled="1"
-data-emit-metadata="0"
-data-input-position="bottom"
-data-theme="noborder_light"
-data-lang="zh-CN"
-crossorigin="anonymous"
-async>
-</script>
+                     
+            <div id="remarks"></div>
+            <script src="https://giscus.app/client.js"
+                data-repo="intentspider/website"
+                data-repo-id="R_kgDOTyP9aQ"
+                data-category="General"
+                data-category-id="DIC_kwDOTyP9ac4DC_0l"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="noborder_light"
+                data-lang="zh-CN"
+                crossorigin="anonymous"
+                async>
+            </script>
 
-<div style="text-align:center;margin:40px 0">
-<p style="margin-top:15px;font-size:1em;color:#000">照片</p>
-<img alt="中国行程照片" src="../assets/bryce-song-china.webp" style="width:70%;max-width:100%;height:auto"/>
-<p style="margin-top:15px;font-size:1em;color:#000">Song 在左边，Nex 在中间，Bryce 在右边</p>
-<br/>
-<img alt="演示现场" src="../assets/mer.png" style="width:70%;max-width:100%;height:auto"/>
-<p style="margin-top:15px;font-size:1em;color:#000">演示</p>
-<br/>
-<img alt="阅读照片" src="../assets/HUiEEuSW4AA8WhF.jpg" style="width:70%;max-width:100%;height:auto"/>
-<p style="margin-top:15px;font-size:1em;color:#000">阅读</p>
-</div>
-</main>
-<footer>© 2025-2026 IntentSpider Webnet. 联系方式 <a href="contactform/">联系表单</a></footer>
-</div>
-<script src="stats.js"></script>
-</body>
+            <div style="text-align: center; margin: 40px 0;">
+                 <p style="margin-top: 15px; font-size: 1em; color: #000000;">照片</p>
+                <img src="../assets/bryce-song-china.webp" style="width: 70%; max-width: 100%; height: auto;" alt="与 Bryce 和 Song 一起的中国之行回忆">
+                <p style="margin-top: 15px; font-size: 1em; color: #000000;">Song（左）、Nex（中）和 Bryce（右）:)</p>
+               <br>
+                <img src="../assets/mer.png" style="width: 70%; max-width: 100%; height: auto;" alt="与 Bryce 和 Song 一起的中国之行回忆">
+                <p style="margin-top: 15px; font-size: 1em; color: #000000;">演示</p>
+               <br>
+               <img src="../assets/HUiEEuSW4AA8WhF.jpg" style="width: 70%; max-width: 100%; height: auto;" alt="与 Bryce 和 Song 一起的中国之行回忆">
+                <p style="margin-top: 15px; font-size: 1em; color: #000000;">读书</p>
+               
+            </div>
+
+        </main>
+
+        <footer>
+            &copy; 2025-2026 IntentSpider Webnet. 联系方式： <a href="contactform/">联系表单</a>
+        </footer>
+    </div>
+<script src="stats.js"></script></body>
 </html>

@@ -1,49 +1,64 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IntentSpider Git 与开源代码</title>
-<link rel="shortcut icon" href="../../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
-<link rel="stylesheet" href="../styles.css">
+    <meta charset="UTF-8">
 
+    <title>IntentSpider 中文版</title>
+    <link rel="shortcut icon" href="../../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-<div id="wrap">
+    <div id="wrap">
+        <header>
+            <div id="logo">
+                <a href="../index.html"><img src="../../assets/873547485784.png" alt="IntentSpider"></a>
+            </div>
+            <div id="nav-area">
+                <div class="stats">
+                    
+                </div>
+                <nav>
+                    <a href="../index.html">首页</a>
+                    <a href="../playground.html">研究预览</a>
+                    <a href="../paper.html">论文</a>
+                    <a href="../git/externalfiles/">实验</a>
+                    <a href="../about.html">随笔</a>
+                    <a href="../git/"><img src="../../assets/git-icon-logo.svg" width="20px" alt="">Git</a>
+                    <a href="../whatsnew/"><img src="../../assets/lightbulb_on.png" width="16px" alt="">最新进展</a>
+                </nav>
+            </div>
+        </header>
 
-<header>
-<div id="logo"><a href="../index.html"><img src="../../assets/873547485784.png" alt="IntentSpider"></a></div>
-<div id="nav-area">
-<div class="stats"></div>
-<nav>
-<a href="../index.html">首页</a>
-<a href="../presentation.html">演示文稿</a>
-<a href="../playground.html">研究预览</a>
-<a href="../paper.html">论文</a>
-<a href="../git/externalfiles/">实验资料</a>
-<a href="../about.html">随笔</a>
-<a href="../git/"><img src="../../assets/git-icon-logo.svg" width="20px" alt="">Git</a>
-<a href="../whatsnew/"><img src="../../assets/lightbulb_on.png" width="16px" alt="">最新进展</a>
-</nav>
-</div>
-</header>
-<main>
+        <main>
+            <h1>Git 仓库与开源</h1>
+            <br>
+            <p>
+              <img src="../../assets/git-icon-logo.svg" width="20px" alt="">  <a href="https://github.com/intentspider/intentspiderengine">https://github.com/intentspider/intentspiderengine</a>
+<br><br><br>
 
-<h1>Git 仓库与开源代码</h1>
-<br>
-<p><img src="../../assets/git-icon-logo.svg" width="20px" alt=""> <a href="https://github.com/intentspider/intentspiderengine">IntentSpider Engine GitHub 仓库</a></p>
-<p>IntentSpider 使用 C++ 和标准模板库构建。它与 Google Gboard、Microsoft SwiftKey、Apple QuickType 和 Samsung Keyboard 常见的 n-gram 路线不同。IntentSpider 是面向设备本地执行的引擎。运行时快照不要求网络输入或网络输出。系统本身并不建立在自然语言处理技术或人工智能模型之上。主要过程来自图算法、动态规划、向量、集合、数组和一般数据结构。</p>
-<p>这些算法经过数月设计和迭代。研究重点是理解复杂的人类表达模式和词语连接如何改变其他连接、向量和系统状态。IntentSpider 这个名字来自研究早期对自然界蜘蛛网行为的观察。完整背景可以在<a href="../about.html">中文随笔</a>中阅读。</p>
-<p>最早的 IntentSpider Legacy 版本在论文中也有提到。当时整个系统放在一个 main.cpp 文件中。后来代码被拆分成多个源文件和头文件，逐步形成现在 Git 仓库中的结构。源代码目录包含 C++ 文件和头文件。仓库也保留了项目不同阶段使用的数据集和测试资料，其中包括早期测试阶段使用的 Project Gutenberg 文本。版本 1 已经不再依赖这些早期文本。编译后的 intentspider.exe 也包含在项目资料中。</p>
-<p><a href="https://github.com/intentspider/intentspiderengine">查看 IntentSpider Engine 源代码</a></p>
+       IntentSpider 使用 C++ 和标准模板库构建。当前核心是一个个人意图图引擎，而非预训练神经语言模型或云推理服务。其处理过程使用图算法、动态规划及包括向量、集合和数组在内的普通数据结构。核心引擎本身不需要网络推理路径，其学习到的状态可以序列化为运行时快照。公开的研究预览与该架构是分开的，并且可以围绕 WebAssembly 构建使用共享的远程状态服务。IntentSpider 这一名称源于项目历史中所描述的对蜘蛛网行为的观察。 <a href="../about.html">更多信息</a>
 
-<h3 style="color:#000;margin-bottom:5px;font-size:16px">研究预览 Webview 使用的开源软件</h3>
-<a href="https://emscripten.org/">Emscripten</a>
+论文中也提到的第一个 IntentSpider 旧版将系统置于单个 <code>main.cpp</code> 文件中。当前仓库将引擎拆分到 C++ 源文件和头文件中，并包含研究预览使用的 WebAssembly 桥接代码。该项目还将数据集以及评估或演示文件与引擎源代码分开保存，包括较早的文本语料库和后续的实验资源。
 
-</main>
-<footer>&copy; 2025-2026 IntentSpider Webnet. 联系方式 <a href="../contactform/">联系表单</a></footer>
-</div>
-<script src="../stats.js"></script>
+            <br><a href="https://github.com/intentspider/intentspiderengine">https://github.com/intentspider/intentspiderengine</a>
+<br><br>
 
+</p>
+        
+            
+        <br>
+
+            <span>
+                <h3 style="color: #000; margin-bottom: 5px; font-size: 16px;">构建研究预览 Webview 所使用的开源许可证及第三方软件</h3>
+               
+            <a href="https://emscripten.org/">https://emscripten.org/</a>
+            </span>
+        </main>
+
+        <footer>
+            &copy; 2025-2026 IntentSpider Webnet. 联系方式： <a href="../contactform/index.html">联系表单</a>
+        </footer>
+    </div>
+    <script src="../stats.js"></script>
 </body>
 </html>

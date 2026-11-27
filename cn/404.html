@@ -1,44 +1,113 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IntentSpider 中文页面未找到</title>
-<link rel="shortcut icon" href="../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
-<link rel="stylesheet" href="styles.css">
-
+    <meta charset="UTF-8">
+    <title>IntentSpider 中文版</title>
+    <script>
+      (function() {
+        var baseHref = '/';
+        if (window.location.hostname.includes('github.io')) {
+          var segment = window.location.pathname.split('/').filter(Boolean)[0];
+          baseHref = segment ? '/' + segment + '/' : '/';
+        }
+        document.write('<base href="' + baseHref + 'cn/">');
+      })();
+    </script>
+    <link rel="shortcut icon" href="../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      /* Embedded style fallback */
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        background: #ebebeb;
+        margin: 0;
+        font: 16px/24px 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        color: #000000;
+        text-align: center;
+      }
+      #wrap {
+        margin: 9px auto;
+        width: 770px;
+        padding: 0px 10px;
+        text-align: left;
+        border-top: 5px solid #0031A7;
+        background-color: rgb(255, 255, 255);
+        min-height: 100vh;
+        box-shadow: 0 30px 15px rgb(159, 159, 159);
+      }
+      header { height: 90px; margin-bottom: 30px; }
+      header::after { content: ""; display: table; clear: both; }
+      #logo { float: left; width: 200px; padding-top: 0; }
+      #logo img { width: 150px; height: 150px; object-fit: contain; }
+      #nav-area {
+        float: right;
+        text-align: right;
+        color: #000000;
+        font-size: 15px;
+        margin-top: 43px;
+        margin-right: 10px;
+        padding-right: 10px;
+        width: 480px;
+      }
+      .stats { color: #000000; font-size: 12px; margin-bottom: 5px; }
+      nav { margin: 0; padding: 0; }
+      nav a, footer a, a {
+        color: #0031A7 !important;
+        text-decoration: none;
+        margin-left: 15px;
+        font-weight: bold;
+      }
+      nav a:hover, nav a:active, footer a:hover, footer a:active, a:hover, a:active {
+        color: rgba(0, 49, 167, 0.5) !important;
+      }
+      main { margin-top: 50px; padding-top: 20px; width: 760px; }
+      h1 { font-size: 22px; color: #000000; margin: 0 0 15px 0; }
+      p { margin-bottom: 15px; margin-right: 9px; }
+      footer {
+        text-align: center;
+        font-size: 12px;
+        padding: 40px 0 20px;
+        margin-top: 40px;
+        width: 100%;
+      }
+    </style>
 </head>
 <body>
-<div id="wrap">
+    <div id="wrap">
+        <header>
+            <div id="logo">
+                <a href="index.html"><img src="../assets/873547485784.png" alt="IntentSpider"></a>
+            </div>
+            <div id="nav-area">
+                <div class="stats">
+                    
+                </div>
+                <nav>
+                    <a href="index.html">首页</a>
+                    <a href="playground.html">研究预览</a>
+                    <a href="paper.html">论文</a>
+                    <a href="git/externalfiles/">实验</a>
+                    <a href="about.html">随笔</a>
+                    <a href="git/"><img src="../assets/git-icon-logo.svg" width="20px" alt="">Git</a>
+                    <a href="whatsnew/"><img src="../assets/lightbulb_on.png" width="16px" alt="">最新进展</a>
+                </nav>
+            </div>
+        </header>
 
-<header>
-<div id="logo"><a href="index.html"><img src="../assets/873547485784.png" alt="IntentSpider"></a></div>
-<div id="nav-area">
-<div class="stats"></div>
-<nav>
-<a href="index.html">首页</a>
-<a href="presentation.html">演示文稿</a>
-<a href="playground.html">研究预览</a>
-<a href="paper.html">论文</a>
-<a href="git/externalfiles/">实验资料</a>
-<a href="about.html">随笔</a>
-<a href="git/"><img src="../assets/git-icon-logo.svg" width="20px" alt="">Git</a>
-<a href="whatsnew/"><img src="../assets/lightbulb_on.png" width="16px" alt="">最新进展</a>
-</nav>
-</div>
-</header>
-<main>
+        <main>
+            <h1 style="margin-bottom: 0;">IntentSpider Webnet</h1>
+            <p>面向文本张力与预测的流动语言网络。 </p><br><a href="about.html">阅读随笔</a>
 
-<h1>IntentSpider Webnet</h1>
-<p>面向文本张力与预测的流动语言网络。</p>
-<p>这个中文页面不存在，或者链接已经移动。</p>
-<p><a href="index.html">返回中文首页</a></p>
-<p><a href="playground.html">打开研究预览</a></p>
+            <br>
+            <p><a href="playground.html">点击此处访问研究预览</a></p>
+            <br><br>
 
-</main>
-<footer>&copy; 2025-2026 IntentSpider Webnet. 联系方式 <a href="contactform/">联系表单</a></footer>
-</div>
+        </main>
+
+        <footer>
+            &copy; 2025-2026 IntentSpider Webnet. 联系方式： <a href="contactform/">联系表单</a>
+        </footer>
+    </div>
 <script src="stats.js"></script>
-
 </body>
 </html>

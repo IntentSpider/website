@@ -1,236 +1,48 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>IntentSpider 研究论文中文版</title>
-<link href="../assets/intentspider-logo-webnet-icon.png" rel="shortcut icon" type="image/x-icon"/>
-<link href="styles.css" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <title>IntentSpider 中文版</title>
+    <link rel="shortcut icon" href="../assets/intentspider-logo-webnet-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div id="wrap">
-<header>
-<div id="logo"><a href="index.html"><img alt="IntentSpider" src="../assets/873547485784.png"/></a></div>
-<div id="nav-area"><div class="stats"></div><nav>
-<a href="index.html">首页</a>
-<a href="presentation.html">演示文稿</a>
-<a href="playground.html">研究预览</a>
-<a href="paper.html">论文</a>
-<a href="git/externalfiles/">实验资料</a>
-<a href="about.html">随笔</a>
-<a href="git/"><img alt="" src="../assets/git-icon-logo.svg" width="20px"/>Git</a>
-<a href="whatsnew/"><img alt="" src="../assets/lightbulb_on.png" width="16px"/>最新进展</a>
-</nav></div>
-</header>
-<main class="cn-paper">
-<h1>IntentSpider 研究论文中文版</h1>
-<h2>IntentSpider 面向文本张力与预测的流动语言网络</h2>
-<p>Neksha V. DeSilva</p>
-<p>FIA Operating Systems，Colombo，LK</p>
+    <div id="wrap">
+        <header>
+            <div id="logo">
+                <a href="index.html"><img src="../assets/873547485784.png" alt="IntentSpider"></a>
+            </div>
+            <div id="nav-area">
+                <div class="stats">
+                    
+                </div>
+                <nav>
+                    <a href="index.html">首页</a>
+                    <a href="presentation.html">演示文稿</a>
+                    <a href="playground.html">研究预览</a>
+                    <a href="paper.html">论文</a>
+                    <a href="git/externalfiles/">实验</a>
+                    <a href="about.html">随笔</a>
+                    <a href="git/"><img src="../assets/git-icon-logo.svg" width="20px" alt="">Git</a>
+                    <a href="whatsnew/"><img src="../assets/lightbulb_on.png" width="16px" alt="">最新进展</a>
+                </nav>
+            </div>
+        </header>
 
-<p><a href="../assets/intentspider_paper.pdf?v=acac740823c1" rel="noopener" target="_blank">下载原始英文 PDF</a></p>
-<div id="pdf-viewer-container" style="position:relative;min-height:680px;width:100%">
-<iframe allowfullscreen="" height="680" loading="lazy" src="../pdfjs/web/viewer.html?file=../../assets/intentspider_paper.pdf%3Fv%3Dacac740823c1" style="border:none" title="IntentSpider 英文研究论文" width="100%"></iframe>
-</div>
-<h2>摘要</h2>
-<p>IntentSpider 是一个下一词预测引擎。它围绕单个用户的 function typed personal intent graph 构建。系统通过 transmission fidelity，也就是 TF 值保留连接，并根据预测结果持续改变 TF。历史词语和上下文由 fan dispersion 算法形成。候选词按照 positive diffusion value 排序。排序之后执行 block and release 过程。系统还提供只读二维输出，用于显示已经保存的图状态。</p>
-<p>当前实现基于 C++17，并通过 WebAssembly 驱动开源研究 Playground。公开系统提供下一词预测、候选插入和内置终端。实验包含连续更新、10 组固定状态 replay 测量、4 款键盘对比、运行时间测量，以及两套彼此独立的 display state 系统。</p>
-<p>在大约 1000 个连续下一词事件上，IntentSpider 的第 1 名精确目标词准确率为 13.2%，Top 3 精确目标词准确率为 25.4%。独立桌面测量的中位延迟为 2.4 毫秒。把输入 seed 改为只使用最近一个词时，得到最大的排序相关变化，计算得到 Top 3 排名范围为 42.6% 到 49.2%。在论文记录的设备和技术条件下，IntentSpider 的实测第 1 名和 Top 3 精确目标词准确率高于所测试版本的 Google Gboard、Microsoft SwiftKey、Samsung Keyboard 和 OpenBoard。</p>
-<p>打开 block and release 过程之后，全部 500 个事件的排序保持不变，同时从 94 个原本没有显示的候选行中恢复出 59 个 Top 3 正确预测。两个独立系统在 33000 组配对行和状态上再次验证了这种分离。系统同时把个人排序、显示、学习和图状态变化拆成独立执行过程。</p>
-<p><b>关键词</b> 人机交互，图论，Intent Graph，下一词预测，设备本地处理，机器学习</p>
-<h2>1 引言</h2>
-<p>在信息系统中，预测文本并不是一个孤立的算法输出。它是一组由系统产生、由人类阅读、忽略、选择或继续加工的交互。预测一旦显示，就会占用人的注意力。个性化的下一词预测也可能影响人怎样采纳、形成或组合后续表达。因此，一个完整的预测界面不仅需要候选排序，还需要稳定的个人数据状态、历史和上下文输入构建、显示控制以及调试能力。</p>
-<p>IntentSpider Webnet 使用个人 Human Intent Graph 处理这个端到端的人机交互问题。同一个 C++ 核心负责处理人的持续输入，生成最多三个下一词候选，允许用户选择候选，继续更新图状态，同时让研究人员在不改变排序的前提下检查同一个已保存状态、事件记录和二维嵌入。</p>
-<p><b>RQ1</b> 在连续数值评分和自适应过程中，这个完整系统怎样处理数据。相对于公开参考系统、商业键盘和运行时间，它表现如何。</p>
-<p><b>RQ2</b> 当同一个已保存状态和同一目标序列被重复播放，只改变一个受控过程时，哪些 IntentSpider 过程最显著地改变排序或显示。</p>
-<p><b>RQ3</b> 排序后的 necessity gating 和只读调试是否能在可执行系统中保持与排序过程的分离。两个独立 display state 系统是否也能保持同样的条件。</p>
-<p>系统的 visibility invariance 来自明确的学习顺序。它允许研究者移除 necessity gate，同时不改变剩余预测过程。论文中的目标词来自已经释放的对话数据，而不是由研究参与者为了实验临时编写的消息。</p>
-<h2>2 与 IntentSpider 相关的工作</h2>
-<p>当前预测键盘通常使用 n gram、back off、设备本地神经模型或联邦神经模型来进行个性化。部分写作辅助系统还加入生成式人工智能，用于语法修正或写作辅助。IntentSpider 的不同点在于，它把上下文构建、数据点排序、候选显示、递归运行过程和调试分开执行，而不是把这些步骤压缩成单一调用。</p>
-<p>显示候选本身会产生存储和处理成本，也可能改变人的选择、使用和写作行为。在人机交互研究中，action confidence 和 action cost 应该被分开讨论。IntentSpider 在 necessity gating 之前已经完成排序。Replay 键盘评估在 HCI 研究中已有使用。直接词语推荐实验也会把显示本身作为独立改变。PageRank 或 local push 类过程在 fan dispersion seed 创建之后执行。二维嵌入只用于回答固定图状态的调试问题，不用于识别任何医学或心理状态。</p>
-<p>IntentSpider 的新颖性来自完整 Webnet 架构。它包括 function typed personal intent graph、上下文构建、先排序后 necessity gating、持续更新动作，以及二维只读调试。</p>
-<h2>3 带有 function typed edges 的个人 Intent Graph</h2>
-<p>个人 Intent Graph 保存单个用户在事件 t 之后的预测数据状态。记为 Gt = (Vt, Et)。当词 v 在词 u 之后被加入时，普通连接权重按时间衰减，并在观察到 u 到 v 的连接时增加。</p>
-<div class="equation">wuv(t + Δt) = wuv(t)e^(−Δt/τw) + ηw 1[u→v]</div>
-<p>raw coefficient 保存普通连接强度。但真正决定 diffusion 是否可以沿边向前传播的是 transmission fidelity，也就是 TF。对于 pending prediction state，只有真正带有 diffusion mass 的边参与 TF 更新。超过 push 阈值的被选中词得到 outcome 1，其余已排序词得到 outcome 0。没有参与当前 diffusion 的边不使用 outcome 值。</p>
-<div class="equation">TFuv(t + 1) = TFuv(t) + ηTF (ouv(t) − TFuv(t))</div>
-<p>每条新连接从 TF 0.5 开始。系统使用 θTF 0.35 作为 transmission margin。高于该值的连接允许传播 diffusion mass。低于或等于该值的连接仍然保留在图中，但作为 capture type，不继续传播 diffusion mass。学习过程无论候选行是否真正显示，都使用完整 ranked row 更新 TF。因此 raw coefficient、TF、signed value 和是否显示候选四件事彼此分离。</p>
-<h3>表 1 工作配置与受控改变</h3>
-<table>
-<tr><th>过程</th><th>参考配置</th><th>受控改变</th></tr>
-<tr><td>Function type</td><td>TF0 = 0.5，θTF = 0.35</td><td>参考配置不改变</td></tr>
-<tr><td>Context</td><td>k = 3，fan dispersion seed</td><td>只使用最近一个词</td></tr>
-<tr><td>Local push process</td><td>ε = 10^-4，cap 200000</td><td>LocalPush 值固定</td></tr>
-<tr><td>Growing radius</td><td>αeffective ≥ 0.02</td><td>diffusion radius 固定</td></tr>
-<tr><td>Residue choosing</td><td>ρ = 0.5，ccal = 1</td><td>不使用第 1 和第 2 名词选择</td></tr>
-<tr><td>Negative output</td><td>τsupp = 7 天，τshock = 30 天</td><td>移除 negative response</td></tr>
-<tr><td>Grace period</td><td>Tgrace = 60 秒</td><td>移除 grace period</td></tr>
-<tr><td>Necessity gating</td><td>保存的 β1,3 与 κN，排序后执行</td><td>不要求通过 display gate，直接返回 ranked words</td></tr>
-</table>
-<h3>Fan dispersion seed 与 diffusion</h3>
-<p>评估配置从最近 k = 3 个已经提交的词开始下一词预测。对每个最近词 u，系统读取它的 normalized outgoing transmission edge distribution。使用 Shannon entropy 得到 dispersion 值。</p>
-<div class="equation">φ(u) = H(πT(u, ·)) / log dT(u)
+        <main>
+            <h1>IntentSpider 研究论文</h1>
+            <section id="research-paper" class="document-section" aria-labelledby="paper-heading">
+                <h2 id="paper-heading">IntentSpider 研究论文</h2>
+                <p><a href="../assets/intentspider_paper.pdf?v=971ff0280b84" target="_blank" rel="noopener">下载原始 PDF</a> &nbsp; <a href="paper/translation.html">阅读现有中文译文</a></p>
+                <div id="pdf-viewer-container" style="position: relative; min-height: 800px; width: 100%;">
+                    <iframe src="../pdfjs/web/viewer.html?file=../../assets/intentspider_paper.pdf%3Fv%3D971ff0280b84" title="IntentSpider 研究论文" width="100%" height="800" style="border: none;" loading="lazy" allowfullscreen></iframe>
+                </div>
+            </section>
+        </main>
 
-s0 = norm Σ(i=1..k) (1 − φ(ut−i+1)) e^(−(i−1)/τseed) e_ut−i+1</div>
-<p>只有一个词至少拥有两条外部 transmission connections 时才计算 fan dispersion。若只有 0 或 1 条连接，这个词不会向 diffusion seed 添加输入质量。剩余预测位置仍允许使用最近词的直接外部连接。如果 seed 输入总量为 0，diffusion 执行会被阻止，同时剩余位置仍可从最近词的直接外部连接得到候选。这样 log 1 不会产生虚假的 forwarding value。</p>
-<p>对于 transmission connections，系统使用 personalized distribution。</p>
-<div class="equation">p = αs0 + (1 − α) PTᵀ p</div>
-<p>实现中使用 local push。最近的上下文词会从候选中移除。其余正值词按照 diffusion value 排名。当可排名词少于三个时，剩余位置可以使用最近词的直接外部关联。这些直接关联不会传播 diffusion。</p>
-<h3>输入速度差值与附加运行过程</h3>
-<p>键入间隔和纠正率用于形成 tone grade。Tone grade 是单次选择事件的 −1 到 1 有符号值，并根据这个人的 rolling typing reference 计算。它不是词语情绪意义的直接测量。</p>
-<div class="equation">gtone(ct) = val′(ct) = tanh(a(Δtavg − Δtref) − bκ)
-
-suv(t + 1) = clip(suv(t)e^(−Δt/τv) + ηs gtone(ct), −1, 1)</div>
-<p>signed value 可以保留以前选择事件形成的负历史。raw coefficient 在被选择连接上单独更新。同一个选择事件可以同时修改两种值。</p>
-<p>系统还单独计算当前 typing rate 相对于个人普通 typing rate 的无符号差值。这个值用于 hexarousal 轴，并不表示正向或负向情绪。这里的 hexarousal 不是 Russell 研究中的 arousal 轴。当 typing difference 超过边界时，growing radius 会增加 diffusion radius。系统还执行 compounding reinforcement 和 sudden negative response 检查。History Based Task Scheduling 对第 1 和第 2 名候选应用 residue 或 support 条件。随后进入 grace period，下一个 engine event 可以修正临时值、清除 active state，并重置 typing rate streak。</p>
-<h3>可执行架构</h3>
-<p>C++17 核心直接执行这些过程。新词序列以 string 形式在本地保存。predict() 构建 fan dispersion seed，执行 local push，保存完整 ranked row，然后执行 necessity gating。accept() 对用户真正选择的词执行与普通输入相同的 coefficient、signed value 和输出更新。save 和 load 保存并恢复当前 Intent Graph 状态。因此论文中描述的变量对应真正可执行系统中的状态变化。</p>
-<h2>4 Necessity Gating Algorithm 与候选显示</h2>
-<p>对第 1 名词 w，necessity value 结合 diffusion 输出置信度、tone grade priority 和 x(w,t)。</p>
-<div class="equation">N(w,t) = β1(1 − Hnorm(p)) + β2 max(0, −gtone(ct)) − β3 x(w,t)</div>
-<p>只有 N(w,t) 大于 κN 时系统才显示 ranked array。x(w,t) 来自最近上下文与第 1 名候选之间的连接。这个过程不会删除边，也不会改变 raw coefficient。signed update 在下一词预测之前处理 typing interval 和 correction 数据，所以后续 necessity calculation 中 tone grade priority 会回到 neutral。Necessity gating 在图排序之后执行，这个顺序就是排序与显示能够被分开的基础。</p>
-<p>运行顺序也让 suggestion display 与 graph learning 分开。对事件 t，St 是当前图状态，xt 是当前文本输入，yt 是最终选择的词。</p>
-<div class="equation">rt = F(St, xt)
-gt = G(rt, St)
-St+1 = U(St, yt, rt)</div>
-<p>图更新直接使用 rt。显示结果 gt 不进入图更新。Gate open control 把 gt 改成只要 ranked row 非空就显示。500 事件受控 replay 从同一个 S0 开始，使用相同目标词顺序。因为相同状态和相同文本输入会产生相同 ranked array，再结合相同目标词又会产生相同下一状态，所以整个 500 事件 replay 中 St 和 rt 可以保持一致。这样研究者可以只改变显示而不改变排序序列。</p>
-<h3>Graph learning process</h3>
-<p>论文还测试另一个条件。这个条件让学习过程从实际 displayed result 更新，而不是从完整 ranked array 更新。这样一来，显示发生变化后，后续系统状态也会发生变化。这一条件用来证明，显示与学习是否真正被分开。</p>
-<h3>Display state check</h3>
-<p>受控执行从同一个状态开始，并按照同一目标词顺序运行。完整 ranked arrays 和每个事件后的 ranking state 也保持相同。这些检查直接证明候选显示可以改变，而排序序列保持不变。</p>
-<h3>二维几何路径调试</h3>
-<p>排序过程读取有向 transmission graph。二维嵌入使用另一套独立图计算。Transmission graph 首先被转换为对称形式。</p>
-<div class="equation">A = (WT + WTᵀ) / 2</div>
-<p>系统使用最大连通分量。DA 是它的 degree matrix，LA = DA − A。广义特征问题 LAf = λDAf 的两个最小非恒定解，为每个词节点产生固定二维坐标 zv。这个二维计算不会修改排序使用的有向 transmission graph。</p>
-<p>在步骤 i，mi 是当前 diffusion mass 在这个连通分量内的总量。每个 pi(v) 先除以 mi，然后再计算二维位置。</p>
-<div class="equation">mi = Σ(v∈L) pi(v)
-
-p̂i(v) = pi(v) / mi
-
-z(i) = Σv p̂i(v) zv
-
-Δz(i) = z(i) − z(i−1)</div>
-<p>按顺序连接 z(1) 到 z(n) 就形成几何路径。如果两个词序列共享相同历史、图状态和二维嵌入，那么在共享部分它们会得到相同的 pi 和 z(i)。当两个序列使用不同后续词后，二维位置开始分离。后面再次出现共同词时，两条路径可能重新靠近同一图区域，这就是 reconvergence。两个 diffusion output 可以拥有相同 entropy，同时位于不同二维位置，因为它们的质量可能分布在不同词节点上。</p>
-<h2>5 最终 IntentSpider 系统与公开结果</h2>
-<p>同一个 C++ 核心同时支持写作路径和研究路径。写作路径从 raw keypress 开始，经过 tokenization、predict()、Top 3、可选选择和持续更新。研究人员则可以在同一个 predictor 上读取实时调试值、保存状态、执行 replay，并查看二维嵌入。</p>
-<h3>设备本地数据处理</h3>
-<p>IntentSpider Web Research Preview 的 Personal Mode 与 Global Person Mode 使用同一个 C++ 核心。Global Person Mode 会载入提前准备好的图，因此系统开始时已经拥有图数据。公开研究分支通过 Cloudflare KV 保存该共享图。图状态由公开对话材料准备，部分处理使用 Google Colab 上的 NVIDIA T4 GPU。</p>
-<p>Personal Mode 不会载入这个共享预制图。它从基础词表和当前用户的输入交互开始建立个人图。远端状态过程是可选的，可以载入或保存图状态。一旦状态载入完成，C++ 引擎会在客户端设备内继续执行排序和图更新。</p>
-<h3>词表与前端支持</h3>
-<p>词元处理函数会把输入文本转换成小写字母词、数值和带 apostrophe 的词。新词字符串在本地保存。图更新和排序使用词 identifier，而不是依赖永久固定词表。因此引擎可以加入新词，也不被绑定到单一界面。论文评估使用英语词元。其他 native 或 web 前端可以调用相同 predict() 接口，而不改变图计算。西班牙语和德语等其他语言被列为后续正式评估方向。</p>
-<h3>开源代码与结果文件</h3>
-<p>评估数据和 Playground 的训练材料彼此分开。Excel 工作簿保存 IntentSpider、Gboard、Samsung Keyboard、Microsoft SwiftKey 和 OpenBoard 的事件行。支持文件包含处理结果、受控条件结果、重复上下文结果以及独立实现输出。公开项目也保留失败或放弃的执行。Source line 和 event ID 把论文中的测量连接到具体事件行。受控配置和脚本再把这些事件行连接到被改变的具体过程。这样，公开源代码、保存状态、事件行、输出文件和论文表格共同形成可审查的实现链路。</p>
-<h2>6 实验与验证</h2>
-<h3>6.1 评估数据与受控事件执行</h3>
-<p>评估数据由一个固定顺序的短形式英语词序列组成。每一个受控改变都使用完全相同的顺序。字母词、数值和带 apostrophe 的词分别作为单独词元。包含项目脱敏标记或 emoji 的行不进入评估。第一个词建立上下文，从第二个词开始，IntentSpider 在每个事件预测下一个词，再把目标词与候选比较，然后处理真正输入的目标词并继续更新图。</p>
-<p>1000 个 prediction events 来自源对话的 65 个部分，这些部分位于原始数据的 9 个连续区段内。每个部分包含 2 到 150 个预测事件，中位数为 11。一个人按照预先确定的目标序列输入文本，在受控事件执行期间不选择候选，因此 suggestion display 不会改变后续真正输入的词。</p>
-<p>EV0001 到 EV1000 连续执行，中间不重置图。EV0001 到 EV0500 和 EV0501 到 EV1000 是两个连续测量区段，不是训练集和验证集。第二段直接继承第一段后的图状态。EV1001 到 EV1052 单独保存。起始状态包含 40096 次 observation。前 500 个目标没有提前作为评估事件写入这个起始状态。</p>
-<p>前后两个 500 事件区段分别包含 241 和 245 种不同目标词。其中 154 和 150 种只出现一次。两词上下文中有 94.3% 和 93.5% 只出现一次。三词上下文中有 98.4% 和 99.0% 只出现一次。与此同时，重复出现的最近词往往会被多个不同目标词跟随。这正是论文需要测试 context depth 改变的原因。</p>
-<h3>商业键盘采集</h3>
-<p>键盘对比记录 Gboard、Samsung Keyboard、Microsoft SwiftKey 和 OpenBoard 在它们现有个性化状态下的候选。Samsung Keyboard 使用 Galaxy A01、Android 10 和 Samsung Keyboard 3.5.45.2。Gboard、Microsoft SwiftKey 和 OpenBoard 使用 Pixel 4 XL 和 Android 10。Microsoft SwiftKey 版本为 9.13.14.5。</p>
-<p>Samsung predictive text 开启，auto replace 和 spell correction 关闭。Gboard suggestions 开启，autocorrection 关闭，cloud personalization 和 synchronization 保持开启，作为特殊测试。Microsoft SwiftKey prediction 开启，autocorrect 和 emoji prediction 关闭。OpenBoard prediction 开启。相同目标词序列由人类输入到每一款键盘。在目标词真正被输入之前记录最前面的三个可见候选。没有候选的行仍然是有效事件。无法读取或出现 system error 的输出不会进入对应键盘比较。</p>
-<h3>排序与显示指标</h3>
-<p>论文把 complete row prior words、display gt 和 target yt 分开定义。Rk 表示 gate 之前的 ranking hit rate。Dk 表示考虑 display 之后的 hit rate。C 表示 coverage。Qk 表示已经显示候选中的正确率。</p>
-<div class="equation">Dk ≤ Rk ≤ min(1, Dk + 1 − C)</div>
-<p>如果隐藏候选行不可见，这个范围就是可以得到的 sharp bound。每一个 displayed hit 一定也是 ranking hit，隐藏行最多增加 1 − C。</p>
-<p>显示成本使用两种计算。第一种给每一次显示候选行分配成本 λ。第二种只给显示但没有包含正确词的行分配成本 μ。</p>
-<div class="equation">Uk(λ) = Hk − λE
-
-UkW(μ) = Hk − μWk</div>
-<p>IntentSpider 每一次受控执行都重新载入同一个已记录状态和配置，然后只改变一个系统过程，再重新输入 500 个评估事件。这样每一种 process change 都拥有共同起始图状态。</p>
-<p>reference condition 和 gate open condition 在 500 个事件中产生完全相同的 complete ranked arrays。Gate open 会显示 499 个有 ranked words 的数组。Reference condition 隐藏其中 94 个。因此 gate open 的 ranking result 可以直接给出 reference condition 的 Rk。</p>
-<p>另外两个完全独立的小系统用于测试 suggestion display 与 graph learning 的分离，不使用任何 IntentSpider 代码、状态、参数或图过程。第一个系统基于最近词后的 continuation counts 预测下一词。第二个系统根据平滑后的 alert count 选择提醒。两者都比较完整 ranked arrays 和每个事件前后的 system state。另一个 control 刻意把显示结果连接到后续更新，从而产生不同后续状态。</p>
-<h3>完整评估规模</h3>
-<p>完整评估包含 1000 个连续更新事件和单独的 52 事件区段。同时还包含 online references、Kneser Ney references、10 个受控 process executions、3198 个对齐键盘事件、来自两个独立系统的 33000 个配对事件、处理时间测量，以及 Playground 执行。</p>
-<h2>7 完整系统与受控改变的结果</h2>
-<h3>键盘结果</h3>
-<p>在 EV0001 到 EV1000 中，IntentSpider 得到 132 次第 1 名正确事件和 254 次 Top 3 正确事件。因此第 1 名准确率为 13.20%，Top 3 准确率为 25.4%。系统在 89.6% 的事件中显示候选。MRR@3 为 0.1825。</p>
-<p>EV0001 到 EV0500 的第 1 名准确率为 14.4%，Top 3 为 27.80%。EV0501 到 EV1000 的第 1 名准确率为 12.00%，Top 3 为 23.00%。图在连续四个 250 事件区段中持续更新。四个区段的 Top 3 准确率从 12.4% 到 33.6% 不等。</p>
-<p>最近词 continuation count reference 的第 1 名和 Top 3 分别为 4.50% 和 6.50%。Unigram backoff reference 为 4.90% 和 9.4%。拥有评估 continuation counts 的 count reference 为 7.4% 和 13.6%。Online Kneser Ney 为 6.6% 和 11.70%。去掉当前 scored event 并使用其余 continuation 的 Kneser Ney reference 为 8.50% 和 15.00%。这些参考系统并不是从 IntentSpider 的已记录图状态开始，因此它们是 reference measurements，不是同一起点的 process change comparisons。</p>
-<h3>表 2 相邻区段的 Top 3</h3>
-<table>
-<tr><th>分层</th><th>EV0001 到 0500</th><th>EV0501 到 1000</th></tr>
-<tr><td>位置</td><td>早期 83/250，33.20%<br/>后期 56/250，22.4%</td><td>早期 31/250，12.4%<br/>后期 84/250，33.6%</td></tr>
-<tr><td>目标复现</td><td>单次 17/154，11.04%<br/>重复 122/346，35.26%</td><td>单次 40/150，26.67%<br/>重复 75/350，21.43%</td></tr>
-<tr><td>最近词</td><td>分支型 65/338，19.23%<br/>其他 74/162，45.68%</td><td>分支型 82/330，24.85%<br/>其他 33/170，19.41%</td></tr>
-</table>
-<h3>表 3 IntentSpider 与商业键盘对比</h3>
-<table>
-<tr><th>产品</th><th>N</th><th>第 1 名 IntentSpider / 键盘</th><th>第 1 名百分点差</th><th>Top 3 IntentSpider / 键盘</th><th>Top 3 百分点差</th></tr>
-<tr><td>Gboard</td><td>394</td><td>17.77 / 7.61</td><td>+10.15</td><td>33.25 / 14.47</td><td>+18.78</td></tr>
-<tr><td>Samsung Keyboard</td><td>934</td><td>14.03 / 0.64</td><td>+13.38</td><td>27.52 / 2.25</td><td>+25.27</td></tr>
-<tr><td>Microsoft SwiftKey</td><td>955</td><td>14.14 / 2.20</td><td>+11.94</td><td>27.33 / 6.18</td><td>+21.15</td></tr>
-<tr><td>OpenBoard</td><td>915</td><td>14.75 / 0.44</td><td>+14.32</td><td>28.09 / 5.68</td><td>+22.4</td></tr>
-</table>
-<h3>表 4 从同一起始状态执行的 10 个受控条件</h3>
-<table>
-<tr><th>条件</th><th>D1</th><th>D3</th><th>C</th><th>Q1</th><th>Q3</th><th>R1</th><th>R3</th></tr>
-<tr><td>Full reference</td><td>8.4</td><td>12.8</td><td>81.0</td><td>10.37</td><td>15.80</td><td>16.8</td><td>24.6</td></tr>
-<tr><td>No loaded temporary state</td><td>8.2</td><td>12.8</td><td>81.0</td><td>10.12</td><td>15.80</td><td>[8.2, 27.2]</td><td>[12.8, 31.8]</td></tr>
-<tr><td>Fixed keypress timing</td><td>8.8</td><td>13.2</td><td>81.8</td><td>10.76</td><td>16.14</td><td>[8.8, 27.0]</td><td>[13.2, 31.4]</td></tr>
-<tr><td>No runtime tone grade update</td><td>8.6</td><td>13.2</td><td>80.2</td><td>10.72</td><td>16.46</td><td>[8.6, 28.4]</td><td>[13.2, 33.0]</td></tr>
-<tr><td>Fixed diffusion radius</td><td>8.4</td><td>12.8</td><td>81.0</td><td>10.37</td><td>15.80</td><td>[8.4, 27.4]</td><td>[12.8, 31.8]</td></tr>
-<tr><td>One word seed</td><td>31.4</td><td>42.6</td><td>93.4</td><td>33.62</td><td>45.61</td><td>[31.4, 38.0]</td><td>[42.6, 49.2]</td></tr>
-<tr><td>No compounding reinforcement</td><td>8.6</td><td>12.8</td><td>80.2</td><td>10.72</td><td>15.96</td><td>[8.6, 28.4]</td><td>[12.8, 32.6]</td></tr>
-<tr><td>No residue/support choosing</td><td>8.6</td><td>12.8</td><td>80.8</td><td>10.64</td><td>15.84</td><td>[8.6, 27.8]</td><td>[12.8, 32.0]</td></tr>
-<tr><td>Gate open</td><td>16.8</td><td>24.6</td><td>99.8</td><td>16.83</td><td>24.65</td><td>16.8</td><td>24.6</td></tr>
-<tr><td>No signed/suppression process</td><td>7.8</td><td>11.2</td><td>55.8</td><td>13.98</td><td>20.07</td><td>[7.8, 52.0]</td><td>[11.2, 55.4]</td></tr>
-</table>
-<h3>排序与候选显示的变化</h3>
-<p>Reference condition 的 D1、D3、C 分别为 8.4%、12.8% 和 81.0%。Gate open condition 保持 complete ranked arrays 完全不变，同时得到 R1 16.8% 和 R3 24.6%。One word context condition 把 fan dispersion 使用的最近词数量从三个改成一个，得到 D1 31.4%、D3 42.6%、C 93.4%，并得到 R3 42.6% 到 49.2%。这个 R3 范围的最低值仍然比 reference 的三词 R3 24.6% 高 18.0 个百分点。因此只改变候选显示无法解释这个增长，真正的 ranking result 也发生了变化。</p>
-<p>k = 1 条件只改变 fan dispersion 的输入深度。TF、diffusion、signed value 和后续系统过程仍然运行。评估数据也证明，最近词本身并不唯一决定下一个词。在前 500 事件中，89 个重复最近词上下文有 84 个会被不止一个目标词跟随。后 500 事件中，91 个重复最近词上下文有 85 个满足同样条件。因此 k = 1 的结果不能被解释成某个重复最近词总是对应同一个目标。</p>
-<p>Reference condition 显示的 405 个数组包含 42 个第 1 名正确词和 64 个 Top 3 正确词。没有显示的 94 个数组却包含 42 个第 1 名正确词和 59 个 Top 3 正确词。换算以后，未显示组的第 1 名正确词率是显示组的 4.31 倍，Top 3 正确词率是 3.97 倍。当前 necessity gate 隐藏了全部可用第 1 名正确结果中的 50.0%，也隐藏了全部可用 Top 3 正确结果中的 47.97%。在论文所记录的图状态和直接目标词匹配方法下，当前 necessity gate 对正确 ranked results 的移除比例高于对错误结果的移除比例。</p>
-<p>运行顺序会在下一次 prediction 之前处理 typing interval 和 correction data。因此后续 necessity calculation 中 tone grade priority 为 neutral。与 reference 相比，这一部分造成的最大 Top 3 差异只有 0.4 个百分点，最大 display 差异为 0.8 个百分点。</p>
-<p>Gate open 额外显示了 94 个数组。其中 42 个数组的第 1 名就是正确词，另外 17 个数组的正确词位于第 2 或第 3 名，因此总共恢复 59 个额外 Top 3 正确结果。其余 35 个数组没有在 Top 3 中包含目标词。</p>
-<div class="equation">B(ω) = 42 + 17ω
-
-λ* = B(ω) / 94 ∈ [0.447, 0.628]</div>
-<p>第二种 display cost 计算只考虑额外显示但没有相应正确词的行。第 1 名位置有 52 个错误行，因此得到 42/52 = 0.808。Top 3 中有 35 个错误行，因此得到 59/35 = 1.686。</p>
-<p>移除 signed value 和 negative output process 后，suggestion display 从 81.0% 下降到 55.8%。R1 范围为 7.8% 到 52.0%，R3 范围为 11.2% 到 55.4%。因此只看 displayed suggestions 仍然无法解释该条件下全部 ranking change。No loaded temporary state 只改变了一个可见 prediction row。</p>
-<h3>两个独立系统的结果</h3>
-<p>最近词 count predictor 在全部 1000 个配对事件中产生相同 ranked arrays 和相同 system states。只有在刻意把 display 与 update 连接起来的 control 中，配对状态从第 2 个事件开始出现差异。Displayed group 中 Top 3 命中率为 18.82%，non displayed group 为 8.61%。五个测量事件组中有四个保持同一方向。</p>
-<p>第二个独立系统使用带平滑先验 count 的 alert selection process，处理 32 条预先生成且频率随时间变化的 alert sequences。两种 display conditions 在全部 32000 个配对事件上产生相同输出和相同系统状态。Display linked update control 则在 32 条序列中全部产生不同后续状态。这个系统的 displayed result density 为 76.32%，non displayed result density 为 61.83%。它的方向与 IntentSpider 结果相反，这也说明显示组和隐藏组谁更好并不是一个必然规律。</p>
-<h3>键盘输入与下一词预测处理时间</h3>
-<p>处理时间测量使用 Windows 11 Pro 上的 Microsoft Edge，处理器为 Intel i7 1165G7。90 秒 Playground 输入任务包含 50 个 word boundary prediction events。从键盘输入经过 C++ prediction 到候选显示的中位处理时间为 2.4 毫秒。95 百分位为 3.66 毫秒，99 百分位为 8.08 毫秒，最大值为 11.8 毫秒。全部 50 个事件都低于 16.67 毫秒。</p>
-<p>第二次测量使用一个 30 分钟人类输入任务，并在独立 Microsoft Edge 环境中运行。完整 Edge process 平均使用机器 CPU 的 0.281%。95 百分位为 1.342%，最大值为 2.458%。保存后的图占用 2.209 MiB。临时 IntentSpider state 占用 2.151 MiB。WebAssembly program 占用 0.205 MiB。</p>
-<h2>8 结论</h2>
-<p>IntentSpider 是围绕单个用户 function typed personal intent graph 构建的下一词预测引擎。在 EV0001 到 EV1000 中，它得到 13.20% 的第 1 名准确率和 25.4% 的 Top 3 准确率。One word context condition 产生最大的排序相关变化，并给出 42.6% 到 49.2% 的 Top 3 ranking range。</p>
-<p>Gate open condition 再次从 94 个原本没有显示的 ranked arrays 中恢复 59 个内部隐藏的 Top 3 正确词，同时 500 个事件中的 complete ranked arrays 始终保持一致。两个独立系统又在 33000 个配对行和状态上保持了显示与 graph learning 的分离，而它们刻意连接 display 与 update 的 control 都产生不同后续状态。</p>
-<p>未来工作包括使用真实参与者研究持续的人机适应，在其他个人图状态上重复测量，在 native client 上测量处理时间和能耗，在运行时改变 context depth，重新校准 necessity margin，并通过真实人类任务评估二维调试过程。</p>
-<p>因此，IntentSpider 提供的是一个完整的个人下一词 HCI 系统，其中个人图状态、上下文输入、图排序、候选显示、图学习和调试都保持为可独立执行的过程。公开 C++ engine、Research Playground、保存状态、事件行和输出文件共同提供这些过程的实现和结果数据。</p>
-<h2>参考文献</h2>
-<ol>
-<li>Andersen, R. 等，Local graph partitioning using pagerank vectors，FOCS，2006</li>
-<li>Arnold, K.C. 等，Sentiment bias in predictive text recommendations results in biased writing，Graphics Interface，2018</li>
-<li>Belkin, M. 和 Niyogi, P.，Laplacian eigenmaps for dimensionality reduction and data representation，Neural Computation，2003</li>
-<li>Bi, X. 等，Octopus，Evaluating touchscreen keyboard correction and recognition algorithms via remulation，CHI，2013</li>
-<li>Buschek, D. 等，The impact of multiple parallel phrase suggestions on email input and composition behaviour，CHI，2021</li>
-<li>Chen, M.X. 等，Gmail Smart Compose，Real time assisted writing，KDD，2019</li>
-<li>El Yaniv, R. 和 Wiener, Y.，On the foundations of noise free selective classification，JMLR，2010</li>
-<li>Fowler, A. 等，Effects of language modeling and its personalization on touchscreen typing performance，CHI，2015</li>
-<li>Goodman, J. 等，Language modeling for soft keyboards，IUI，2002</li>
-<li>Horvitz, E.，Principles of mixed initiative user interfaces，CHI，1999</li>
-<li>IntentSpider，IntentSpider C++ engine source code，GitHub，2026</li>
-<li>IntentSpider，IntentSpider evaluation data, workbooks, and supporting outputs，GitHub，2026</li>
-<li>IntentSpider Webnet，Conversational data used to initialize the Global Person research preview state，GitHub data，2026</li>
-<li>IntentSpider Webnet，IntentSpider interactive research preview，Research Playground，2026</li>
-<li>IntentSpider Webnet，IntentSpider research playground source and state service，GitHub，2026</li>
-<li>Jeh, G. 和 Widom, J.，Scaling personalized web search，WWW，2003</li>
-<li>Kneser, R. 和 Ney, H.，Improved backing off for m gram language modeling，ICASSP，1995</li>
-<li>Lee, M. 等，A design space for intelligent and interactive writing assistants，CHI，2024</li>
-<li>Lim, B.Y. 等，Why and why not explanations improve the intelligibility of context aware intelligent systems，CHI，2009</li>
-<li>Page, L. 等，The PageRank citation ranking，Bringing order to the web，Stanford Digital Library Technologies Project，1999</li>
-<li>Quinn, P. 和 Zhai, S.，A cost benefit study of text entry suggestion interaction，CHI，2016</li>
-<li>Reza, M. 等，Co writing with AI, on human terms，PACM HCI，2025</li>
-<li>Roy, Q. 等，Typing efficiency and suggestion accuracy influence the benefits and adoption of word suggestions，CHI，2021</li>
-<li>Schnabel, T. 等，Recommendations as treatments，Debiasing learning and evaluation，ICML，2016</li>
-<li>Shannon, C.E.，A mathematical theory of communication，Bell System Technical Journal 27，1948</li>
-<li>Xu, Z. 等，Federated learning of Gboard language models with differential privacy，ACL Industry Track，2023</li>
-</ol>
-</main>
-<footer>© 2025-2026 IntentSpider Webnet. 联系方式 <a href="contactform/">联系表单</a></footer>
-</div>
-<script src="stats.js"></script>
-</body>
+        <footer>
+            &copy; 2025-2026 IntentSpider Webnet. 联系方式： <a href="contactform/">联系表单</a>
+        </footer>
+    </div>
+<script src="stats.js"></script></body>
 </html>
