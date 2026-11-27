@@ -1,0 +1,64 @@
+name: Sync and publish IntentSpider website
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sync-website-pages.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: intent-spider-website-pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: target
+      - uses: actions/checkout@v4
+        with:
+          repository: IntentSpider/website-intentspider-webnet
+          ref: main
+          path: source
+          persist-credentials: false
+      - name: Prepare identical static files
+        shell: bash
+        run: |
+          mkdir site
+          git -C source archive HEAD | tar -x -C site
+          rm -rf site/.github site/.vscode site/.wrangler site/cloudflare-worker
+          rm -f site/.gitignore site/DEPLOY_INTENTSPIDER.bat
+          touch site/.nojekyll
+          test -s site/index.html
+          test -s site/cn/index.html
+          test -s site/cn/whatsnew/index.html
+          test -s site/playground.html
+          test -s site/wasm/intentspider.wasm
+      - name: Mirror static website to existing website repository
+        shell: bash
+        run: |
+          rsync -a --delete --exclude='/.git/' --exclude='/.github/' --exclude='/.vscode/' --exclude='/.wrangler/' --exclude='/cloudflare-worker/' --exclude='/.gitignore' site/ target/
+          cd target
+          git add -A
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m "Sync static website from Webnet $(git -C ../source rev-parse --short HEAD)"
+            git push origin HEAD:main
+          fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - uses: actions/deploy-pages@v4
+        id: deployment
